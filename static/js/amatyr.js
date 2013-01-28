@@ -84,13 +84,16 @@ on_resize(function() {
         var width = $('#main').css('width').split('px')[0];
         var height = 180;
 
+        /* Line graphs */
         drawlines('#temp', source, 'temp', colorscale, 'Temperature (°C)', width, height);
         drawlines('#pressure', source, 'barometer',colorscale,  'Air pressure (hPa)', width, height);
         drawlines('#wind', source, 'avg_speed', colorscale, 'Average wind speed (knot)', width, height);
         drawlines('#rain', source, 'daily_rain',colorscale,  'Daily rain (mm)', width, height);
+        drawlines('#winddir', source, 'winddir',colorscale,  'Daily wind direction (°)', width, height);
+        /* Bar graphs */
         bartender('#rain', 'daily_rain', 'Daily Rain', width, height);
         bartender('#temp', 'temp', 'Daily Max Temp', width, height);
-        bartender('#wind', 'avg_speed', 'Daily Max Wind', width, height);
+        bartender('#wind', 'wind', 'Daily Max Wind', width, height);
 
     });
 })(); // these parenthesis does the trick

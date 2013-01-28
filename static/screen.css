@@ -48,5 +48,8 @@ svg text.score {
 .bar {
     fill: steelblue;
 }
+.bar:hover {
+    fill: #002147;
+}
 
 
