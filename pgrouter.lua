@@ -1,6 +1,14 @@
-local cjson = require "cjson"
+-- 
+-- A simple API adapter for using postgresql internal subreq in a reusable manner
+--
+-- Copyright Tor Hveem <thveem> 2013
+--
+
+--local cjson = require "cjson"
 
 
+-- The function sending subreq to nginx postgresql location with rds_json on
+-- returns json body to the caller
 local function dbreq(sql)
     ngx.log(ngx.ERR, 'SQL: ' .. sql)
     local dbreq = ngx.location.capture("/pg", { args = { sql = sql } })
@@ -26,13 +34,14 @@ local function index()
     return ngx.HTTP_OK
 end
 
--- mapping patterns to views
+-- mapping patterns to queries
 local routes = {
     ['max']  = max,
-    ['']     = index,
+    ['$']    = index,
 }
 -- Set the content type
 ngx.header.content_type = 'application/json';
+-- Our URL base, must match location in nginx config
 local BASE = '/api/'
 -- iterate route patterns and find view
 for pattern, view in pairs(routes) do
