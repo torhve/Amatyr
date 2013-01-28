@@ -1,0 +1,37 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,600italic);
+
+body {
+    color: #222;
+    font: 15px/22px 'Open Sans',Arial,Helvetica,sans-serif;
+    background-color: #fdfdfd;
+    padding-top: 40px;
+}
+@media (max-width: 979px) {
+    body {
+        padding-top: 0;
+    }
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #d4d4d4;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    stroke: #d4d4d4;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.line.positive {
+}
+
+.line.negative {
+  fill: black;
+}
+
