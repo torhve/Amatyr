@@ -30,12 +30,33 @@ rivets.configure({
   }
 })
 
-
 // Helps out with the bars
 var bartender = function(target, key, legend, width, height) {
     // Fetch new json data
     d3.json("/api/max?key="+key, function(source) { 
-        drawbars(target, source, key, null, null, legend, width, height);
+        
+        valfmt = function(d) { return d.val }
+        if (key == 'temp') {
+            valfmt = function(d) { 
+                return rivets.formatters.temp(d.val)
+            }
+        }
+        else if (key == 'daily_rain') {
+            valfmt = function(d) { 
+                return rivets.formatters.rain(d.val)
+            }
+        }
+        else if (key == 'avg_speed') {
+            valfmt = function(d) { 
+                return rivets.formatters.wind(d.val)
+            }
+        }
+        else if (key == 'wind') {
+            valfmt = function(d) { 
+                return rivets.formatters.wind(d.val)
+            }
+        }
+        drawbars(target, source, key, null, valfmt, legend, width, height);
     });
 
 }

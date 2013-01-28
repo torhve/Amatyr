@@ -18,6 +18,9 @@ svg {
 svg text {
     color: #ccc;
 }
+svg text.score {
+    fill: white;
+}
 
 .axis path,
 .axis line {

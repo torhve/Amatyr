@@ -60,7 +60,20 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
       .attr("x", function(d) { return x(d.date); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.val); })
-      .attr("height", function(d) { return height - y(d[attr]); });
+      .attr("height", function(d) { return height - y(d[attr]); })
+      ;
 
+
+    svg.selectAll("text.score")
+        .data(data)
+        .enter().append("text")
+        .attr("x", function(d) { return x(d.date) + x.rangeBand()/2})
+        .attr("y", function(d){ return y(d.val) + 10 } )
+        .attr("dx", 0)
+        .attr("dy", ".36em")
+        .attr("text-anchor", "end")
+        .attr('class', 'score')
+        .style("text-anchor", "middle")
+        .text(valfmt);
 }
 
