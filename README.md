@@ -19,13 +19,13 @@ A weather display with a JavaScript frontend and Postgresql + Lua backend.
 
 ### Installation
 
-#. Clone repostory
-#. Add bootstrap resources
-#. Add fontawesome resources
-#. Compile and install openresty
-#. Set up postgresql database with user
-#. Set up the datalogger
-#. Set up nginx:
+1. Clone repostory
+1. Add bootstrap resources
+1. Add fontawesome resources
+1. Compile and install openresty
+1. Set up postgresql database with user
+1. Set up the datalogger
+1. Set up nginx:
 
     
     upstream database {
