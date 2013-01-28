@@ -14,7 +14,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom")
-        .tickFormat(d3.time.format("%m-%d"))
+        .tickFormat(d3.time.format("%A"))
 
     var yAxis = d3.svg.axis()
         .scale(y)

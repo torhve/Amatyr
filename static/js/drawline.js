@@ -39,6 +39,19 @@ var drawlines = function(el, json, attr, linecolorfunc, yaxisleg, width, height)
     x.domain(d3.extent(json, function(d) { return d.date; }));
     y.domain(d3.extent(json, function(d) { return d.val; }));
 
+    var yrule = svg.selectAll("g.y")
+        .data(y.ticks(10))
+        .enter().append("g")
+        .attr("class", "y axis")
+      .append("svg:line")
+        .attr("class", "yLine")
+        .style("stroke", "#eee")
+        .style("shape-rendering", "crispEdges")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", y)
+        .attr("y2", y);
+
     svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
@@ -54,18 +67,6 @@ var drawlines = function(el, json, attr, linecolorfunc, yaxisleg, width, height)
       .style("text-anchor", "end")
       .text(yaxisleg);
 
-    var yrule = svg.selectAll("g.y")
-        .data(y.ticks(10))
-        .enter().append("g")
-        .attr("class", "y axis")
-      .append("svg:line")
-        .attr("class", "yLine")
-        .style("stroke", "#eee")
-        .style("shape-rendering", "crispEdges")
-        .attr("x1", 0)
-        .attr("x2", width)
-        .attr("y1", y)
-        .attr("y2", y);
 
 
     pathos = svg.append("path")

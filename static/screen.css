@@ -12,6 +12,13 @@ body {
     }
 }
 
+svg {
+    font-size: 13px;
+}
+svg text {
+    color: #ccc;
+}
+
 .axis path,
 .axis line {
     fill: none;
