@@ -117,7 +117,7 @@ rivets.configure({
 on_resize(function() {
 
     // Fetch new json data
-    d3.json("/pg/", function(source) { 
+    d3.json("/api/", function(source) { 
         /* First remove any existing svg */
         $('#main svg').remove();
 
