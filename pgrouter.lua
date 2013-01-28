@@ -23,7 +23,7 @@ local function max(match)
     keytest = ngx.re.match(key, '[a-z]+', 'oj')
     if not keytest then ngx.exit(403) end
 
-    local sql = "SELECT date_trunc('day', timestamp) AS day, MAX("..key..") FROM wd GROUP BY 1"
+    local sql = "SELECT date_trunc('day', timestamp) AS timestamp, MAX("..key..") AS "..key.." FROM wd GROUP BY 1"
     
     ngx.print(dbreq(sql))
     return ngx.HTTP_OK
