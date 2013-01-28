@@ -14,9 +14,9 @@ body {
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #d4d4d4;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #d4d4d4;
+    shape-rendering: crispEdges;
 }
 
 .x.axis path {
@@ -24,14 +24,19 @@ body {
 }
 
 .line {
-  fill: none;
-  stroke-width: 2px;
+    fill: none;
+    stroke-width: 2px;
 }
 
 .line.positive {
 }
 
 .line.negative {
-  fill: black;
+    fill: black;
 }
+
+.bar {
+    fill: steelblue;
+}
+
 
