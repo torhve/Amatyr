@@ -23,11 +23,14 @@ A weather display with a JavaScript frontend and Postgresql + Lua backend.
 1. Add bootstrap resources
 1. Add fontawesome resources
 1. Compile and install openresty
+    [Openresty](http://openresty.org)
 1. Set up postgresql database with user
+    createdb yr ...
 1. Set up the datalogger
+    Cronjob wdparser.py
 1. Set up nginx:
 
-    
+
     upstream database {
         postgres_server 127.0.0.1 dbname=yr user=yr password=yr;
     }
