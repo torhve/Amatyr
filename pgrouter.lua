@@ -23,20 +23,39 @@ local function max(match)
     keytest = ngx.re.match(key, '[a-z]+', 'oj')
     if not keytest then ngx.exit(403) end
 
-    local sql = "SELECT date_trunc('day', timestamp) AS timestamp, MAX("..key..") AS "..key.." FROM wd GROUP BY 1"
+    local sql = "SELECT date_trunc('day', timestamp) AS timestamp, MAX("..key..") AS "..key.." FROM wd WHERE date_part('year', timestamp) < 2013 GROUP BY 1"
     
     ngx.print(dbreq(sql))
     return ngx.HTTP_OK
 end
 
 local function index()
-    ngx.print(dbreq('SELECT * FROM wd'))
+    ngx.print(dbreq("SELECT * FROM wd WHERE date_part('year', timestamp) >= 2013 ORDER BY timestamp"))
+    return ngx.HTTP_OK
+end
+
+local function year(match)
+    local year = match[1]
+    ngx.print(dbreq([[
+        SELECT 
+            date_trunc('day', timestamp) AS timestamp,
+            AVG(temp) as temp,
+            MAX(daily_rain) as daily_rain,
+            AVG(avg_speed) as avg_speed,
+            AVG(winddir) as winddir,
+            AVG(barometer) as barometer
+        FROM wd 
+        WHERE date_part('year', timestamp) = ]]..year..[[
+        GROUP BY 1
+        ORDER BY 1
+        ]]))
     return ngx.HTTP_OK
 end
 
 -- mapping patterns to queries
 local routes = {
     ['max']  = max,
+    ['year/([0-9]{4})'] = year,
     ['$']    = index,
 }
 -- Set the content type
