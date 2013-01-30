@@ -50,9 +50,31 @@ svg text.score {
 
 .bar {
     fill: steelblue;
+    stroke: white;
 }
 .bar:hover {
     fill: #002147;
 }
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+svg:not(:hover) .focus {
+  display: none;
+}
+
+.focus line {
+  stroke: red;
+  shape-rendering: crispEdges;
+}
+
+.focus circle {
+  fill: #fff;
+  fill-opacity: .5;
+  stroke: red;
+  stroke-width: 1.5px;
+}
+
 
 

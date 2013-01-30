@@ -32,6 +32,21 @@ rivets.configure({
     }
   }
 })
+function hover(d, i) {
+    console.log(d,i, this);
+    var num = 0,
+        color = 'black';
+    if (d.daily_rain > 0) {
+      color = 'green';
+      num = "+" + d.daily_rain;
+    } else if (d.change < 0) {
+      color = 'red';
+      num = d.daily_rain;
+    }
+    d3.select("#tooltip")
+      .html(d.item + "<span style='color:" + color + "'>" + num + "</span>");
+  }
+
 
 // Helps out with the bars
 var bartender = function(target, key, legend, width, height) {
@@ -64,48 +79,51 @@ var bartender = function(target, key, legend, width, height) {
 
 }
 
-var fetch_and_draw = function() {
-    // Fetch new json data
-    d3.json(apiurl, function(source) { 
-        console.log(source);
-        /* First remove any existing svg */
-        $('#main svg').remove();
-        /* Remove any spinners */
-        $('.svgholder').empty();
+var draw = function(source) {
+    gsource = source;
+    console.log(source);
+    /* First remove any existing svg */
+    $('#main svg').remove();
+    /* Remove any spinners */
+    $('.svgholder').empty();
 
-        // Get the last element and populate rivets bindings with it
-        rivets.bind(document.getElementById('main'), {current: source.slice(-1)[0]});
+    // Get the last element and populate rivets bindings with it
+    rivets.bind(document.getElementById('main'), {current: source.slice(-1)[0]});
 
-        var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+    var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
-        source.forEach(function(d) {
-            d.date = parseDate(d.timestamp);
-        });
-        var width = $('#main').css('width').split('px')[0];
-        var height = 180;
-
-        /* Line graphs */
-        drawlines('#temp', source, 'temp', xformat, 'Temperature (°C)', width, height);
-        drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
-        drawlines('#wind', source, 'avg_speed', xformat, 'Average wind speed (knot)', width, height);
-        drawlines('#rain', source, 'daily_rain',xformat,  'Daily rain (mm)', width, height);
-        drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
-        /* Bar graphs */
-        /*
-        bartender('#rain', 'daily_rain', 'Daily Rain', width, height);
-        bartender('#temp', 'temp', 'Daily Max Temp', width, height);
-        bartender('#wind', 'avg_speed', 'Daily Max Wind', width, height);
-        */
-
-
+    source.forEach(function(d) {
+        d.date = parseDate(d.timestamp);
     });
+    var width = $('#main').css('width').split('px')[0];
+    var height = width/4;
+
+    /* Line graphs */
+    temprain('#temp', source, 'temp', xformat, 'Temperature (°C)', width, height);
+    drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
+    drawlines('#wind', source, 'avg_speed', xformat, 'Average wind speed (knot)', width, height);
+    drawlines('#rain', source, 'daily_rain',xformat,  'Daily rain (mm)', width, height);
+    drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
+    /* Bar graphs */
+    /*
+    bartender('#rain', 'daily_rain', 'Daily Rain', width, height);
+    bartender('#temp', 'temp', 'Daily Max Temp', width, height);
+    bartender('#wind', 'avg_speed', 'Daily Max Wind', width, height);
+    */
 }
 
-
+var fetch_and_draw = function() {
+    // Fetch new json data
+    if (!gsource) {    
+        d3.json(apiurl, draw); 
+    }else {
+        draw(gsource);
+    }
+}
 
 var apiurl = "/api/";
-var xformat = d3.time.format("%Y-%m-%d %H:%M")
-
+var xformat = d3.time.format("%d")
+var gsource = false;
 
 /* Initial hash and on resize hash change */
 var on_hashchange = function() {
@@ -121,21 +139,19 @@ var on_hashchange = function() {
     fetch_and_draw();
 
 };
-
+// Initial
+on_hashchange();
 
 /* Initial and on resize we draw draw draw */
 on_resize(function() {
     fetch_and_draw();
-})(); // these parenthesis does the trick
+}); // these parenthesis does the trick
 
 // debulked onresize handler
 function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,100)};return c};
 
 // on hash change handler
 window.onhashchange = function(){ on_hashchange() };
-
-// Initial
-on_hashchange();
 
 // Tooltip
 var tt = document.createElement('div'),
