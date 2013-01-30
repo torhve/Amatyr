@@ -9,6 +9,7 @@ CREATE TABLE "wd" (
     "barometer" real NOT NULL,
     "daily_rain" real NOT NULL,
     "dew_temp" real NOT NULL,
-    "cloud_height" real NOT NULL
+    "cloud_height" real NOT NULL,
+    "rain_rate" real NOT NULL
 );
 
