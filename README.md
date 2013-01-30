@@ -31,6 +31,7 @@ A weather display with a JavaScript frontend and Postgresql + Lua backend.
 1. Set up nginx:
 
 
+
     upstream database {
         postgres_server 127.0.0.1 dbname=yr user=yr password=yr;
     }
@@ -62,3 +63,5 @@ A weather display with a JavaScript frontend and Postgresql + Lua backend.
             rds_json          on;
         }
     }
+
+

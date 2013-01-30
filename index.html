@@ -36,6 +36,8 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
                 <li class="active"><a href="/">Home</a></li>
+                <li class=""><a href="#/year/2012">2012</a></li>
+                <li class=""><a href="#/year/2012">2011</a></li>
             </ul>
             <ul class="nav pull-right">
                 <li class="">Weather @ Husnes</li>
@@ -49,15 +51,15 @@
         <div class="row-fluid">
             <div class="span12" id="main">
                 <h3>Temp <span class="pull-right" data-text='current.temp | temp'></span></h3>
-                <div id="temp"></div>
+                <div class="svgholder" id="temp"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h3>Wind <span class="pull-right" data-text='current.avg_speed | wind'></span></h3>
-                <div id="wind"></div>
+                <div class="svgholder" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h3>Rain <span class="pull-right" data-text='current.daily_rain | rain'></span></h3>
-                <div id="rain"></div>
+                <div class="svgholder" id="rain"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h3>Pressure <span class="pull-right" data-text='current.barometer | pressure'></span></h3>
-                <div id="pressure"></div>
-                <h3>Wind direction <span class="pull-right" data-text='current.winddir'></span></h3>
-                <div id="winddir"></div>
+                <div class="svgholder" id="pressure"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                <h3>Wind direction <span class="pull-right" data-text='current.winddir | degree '></span></h3>
+                <div class="svgholder" id="winddir"><i class="icon-spin icon-spinner"></i>Loading data...</div>
             </div>
         </div>
     </div> <!-- /container -->

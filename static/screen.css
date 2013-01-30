@@ -37,6 +37,9 @@ svg text.score {
     fill: none;
     stroke-width: 2px;
 }
+.line:hover {
+    stroke: #002147;
+}
 
 .line.positive {
 }

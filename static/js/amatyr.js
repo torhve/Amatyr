@@ -1,15 +1,18 @@
 /* Rivets formatters */
 rivets.formatters.temp = function(value) {
-    return value + ' °C';
+    return Number((value).toFixed(1))+ ' °C';
 }
 rivets.formatters.pressure = function(value) {
-    return value + ' hPa';
+    return Number((value).toFixed(1)) + ' hPa';
 }
 rivets.formatters.rain = function(value) {
-    return value + ' mm';
+    return Number((value).toFixed(1)) + ' mm';
 }
 rivets.formatters.wind = function(value) {
-    return value + ' kn';
+    return Number((value).toFixed(1)) + ' kn';
+}
+rivets.formatters.degree = function(value) {
+    return Number((value).toFixed(1)) + ' °';
 }
 
 /* Configure Rivets to work with Watch JS */
@@ -61,21 +64,18 @@ var bartender = function(target, key, legend, width, height) {
 
 }
 
-/* Initial and on resize we draw draw draw */
-on_resize(function() {
-
+var fetch_and_draw = function() {
     // Fetch new json data
-    d3.json("/api/", function(source) { 
+    d3.json(apiurl, function(source) { 
+        console.log(source);
         /* First remove any existing svg */
         $('#main svg').remove();
+        /* Remove any spinners */
+        $('.svgholder').empty();
 
         // Get the last element and populate rivets bindings with it
         rivets.bind(document.getElementById('main'), {current: source.slice(-1)[0]});
 
-        var colorscale = function(d, attr) {
-            return "darkred";
-            return "steelblue";
-        };
         var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
         source.forEach(function(d) {
@@ -85,19 +85,61 @@ on_resize(function() {
         var height = 180;
 
         /* Line graphs */
-        drawlines('#temp', source, 'temp', colorscale, 'Temperature (°C)', width, height);
-        drawlines('#pressure', source, 'barometer',colorscale,  'Air pressure (hPa)', width, height);
-        drawlines('#wind', source, 'avg_speed', colorscale, 'Average wind speed (knot)', width, height);
-        drawlines('#rain', source, 'daily_rain',colorscale,  'Daily rain (mm)', width, height);
-        drawlines('#winddir', source, 'winddir',colorscale,  'Daily wind direction (°)', width, height);
+        drawlines('#temp', source, 'temp', xformat, 'Temperature (°C)', width, height);
+        drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
+        drawlines('#wind', source, 'avg_speed', xformat, 'Average wind speed (knot)', width, height);
+        drawlines('#rain', source, 'daily_rain',xformat,  'Daily rain (mm)', width, height);
+        drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
         /* Bar graphs */
+        /*
         bartender('#rain', 'daily_rain', 'Daily Rain', width, height);
         bartender('#temp', 'temp', 'Daily Max Temp', width, height);
-        bartender('#wind', 'wind', 'Daily Max Wind', width, height);
+        bartender('#wind', 'avg_speed', 'Daily Max Wind', width, height);
+        */
+
 
     });
+}
+
+
+
+var apiurl = "/api/";
+var xformat = d3.time.format("%Y-%m-%d %H:%M")
+
+
+/* Initial hash and on resize hash change */
+var on_hashchange = function() {
+    var loc =  window.location.hash.split('/')
+    console.log(loc);
+
+    if(loc.length > 1) {
+        apiurl += loc[1] + '/' + loc[2]
+        xformat = d3.time.format("%Y-%m-%d")
+    }
+
+    // Trigger fetch and draw
+    fetch_and_draw();
+
+};
+
+
+/* Initial and on resize we draw draw draw */
+on_resize(function() {
+    fetch_and_draw();
 })(); // these parenthesis does the trick
 
 // debulked onresize handler
 function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,100)};return c};
-//
+
+// on hash change handler
+window.onhashchange = function(){ on_hashchange() };
+
+// Initial
+on_hashchange();
+
+// Tooltip
+var tt = document.createElement('div'),
+  leftOffset = -(~~$('html').css('padding-left').replace('px', '') + ~~$('body').css('margin-left').replace('px', '')),
+  topOffset = -32;
+tt.className = 'ex-tooltip';
+document.body.appendChild(tt);

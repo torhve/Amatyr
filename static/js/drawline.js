@@ -1,4 +1,4 @@
-var drawlines = function(el, json, attr, linecolorfunc, yaxisleg, width, height) { 
+var drawlines = function(el, json, attr, xformat, yaxisleg, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom;
@@ -12,7 +12,7 @@ var drawlines = function(el, json, attr, linecolorfunc, yaxisleg, width, height)
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickFormat(d3.time.format("%H:%M"))
+        .tickFormat(xformat)
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
@@ -67,17 +67,24 @@ var drawlines = function(el, json, attr, linecolorfunc, yaxisleg, width, height)
       .style("text-anchor", "end")
       .text(yaxisleg);
 
-
-
     pathos = svg.append("path")
       .datum(json)
       .attr("class", "line")
       .attr("stroke", "darkred")
       .attr("d", line)
+      .on("mouseover", function (d, i) {
+          var pos = $(this).offset();
+          $(tt).text(d.x + ': ' + d.y)
+          .css({top: topOffset + pos.top, left: pos.left + leftOffset})
+          .show();
+      })
+      .on("mouseout", function (x) {
+          $(tt).hide();
+      })
 
-    pathos.each(function(d, i) {
+
+    /*
+     * pathos.each(function(d, i) {
         console.log(d, i);
-    });
-
-
+    });*/
 }
