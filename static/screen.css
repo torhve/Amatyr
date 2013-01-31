@@ -76,5 +76,16 @@ svg:not(:hover) .focus {
   stroke-width: 1.5px;
 }
 
+#tt {
+    z-index: 1;
+    position: absolute;
+    background: #222426;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #eee;
+    padding: 5px;
+}
+#tt .value {
+    color: white;
+}
 
 

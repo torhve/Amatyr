@@ -27,8 +27,6 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .scale(y)
         .orient("left");
 
-    var colorscale2 = d3.scale.category20c();
-
     x.domain(d3.extent(json, function(d) { return d.date; }));
     y.domain([d3.min(json, function(d) { return d.tempmin }), d3.max(json, function(d) { return d.tempmax; })]);
 
@@ -132,6 +130,36 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
       .attr("width", (width/json.length)*0.8)
       .attr("y", function(d) { return height; })
       .attr("height", function(d) { return 0; })
+      .on("mouseover", function(d,i){
+          d3.select(this)
+          .attr("stroke-width", "3px");
+
+      console.log(d, i);
+
+      var x; var y;
+      if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
+          x = d3.event.pageX;
+          y = d3.event.pageY;
+      } else {
+          x = d3.event.clientX + document.body.scrollLeft +
+          document.documentElement.scrollLeft;
+      y = d3.event.clientY + document.body.scrollTop +
+          document.documentElement.scrollTop;
+      }
+
+      var bubble_code = "<div id='tt' style='top:"
+          + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
+          + d.timestamp + "</span><br>  Rain: <span class=value>" + Number(d.daily_rain).toFixed(1) + "</span> mm</b><br />"
+          + "</div>";
+      console.log(bubble_code);
+      $("body").append(bubble_code);
+
+      }).on("mouseout", function(d,i){
+          d3.select(this)
+          .attr("stroke-width", "1px");
+      $("#tt").remove();
+      })
+
       .transition().delay(function (d,i){ return 300;})
       .duration(150)
       .attr("y", function(d) { return y(d.daily_rain); })
@@ -177,7 +205,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
   focus.append("circle")
       .attr("r", 3.5);
 
-
+  /*
   svg.append("rect")
       .attr("class", "overlay")
       .attr("width", width)
@@ -190,7 +218,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     focus.select(".x").attr("transform", "translate(" + x(d[0]) + ",0)");
     focus.select(".y").attr("transform", "translate(0," + y(d[1]) + ")");
     svg.selectAll(".x.axis path").style("fill-opacity", Math.random()); // XXX Chrome redraw bug
-  }
+  }*/
 }
 
 var addGradient = function(target, w, h) {
