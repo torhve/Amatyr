@@ -68,7 +68,7 @@ end
 local function index()
     ngx.print(dbreq([[
     SELECT  
-        date_trunc('day', timestamp) AS timestamp,
+        date_trunc('hour', timestamp) AS timestamp,
         AVG(temp) as temp,
         MIN(temp) as tempmin,
         MAX(temp) as tempmax,
@@ -77,7 +77,9 @@ local function index()
         AVG(winddir) as winddir,
         AVG(barometer) as barometer
     FROM wd 
-    WHERE timestamp >= date '2013-01-01'
+    WHERE timestamp 
+        BETWEEN now() - INTERVAL '3 days'
+        AND now()
     GROUP BY 1
     ORDER BY 1
     ]]))

@@ -9,7 +9,7 @@ rivets.formatters.rain = function(value) {
     return Number((value).toFixed(1)) + ' mm';
 }
 rivets.formatters.wind = function(value) {
-    return Number((value).toFixed(1)) + ' kn';
+    return Number((value).toFixed(1)) + ' kn' + ' ' + Number(value*0.51444).toFixed(1) + ' m/s';
 }
 rivets.formatters.degree = function(value) {
     return Number((value).toFixed(1)) + ' °';
@@ -122,7 +122,11 @@ var fetch_and_draw = function() {
 }
 
 var apiurl = "/api/";
-var xformat = d3.time.format("%d")
+var width = $('#main').css('width').split('px')[0];
+var xformat = d3.time.format("%A %H")
+if(width < 1200) {
+    xformat = d3.time.format("%d %H");
+}
 var gsource = false;
 
 /* Initial hash and on resize hash change */

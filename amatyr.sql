@@ -1,0 +1,51 @@
+CREATE TABLE `stations` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`station_id` varchar(10) NOT NULL,
+`station_name` varchar(255) NOT NULL,
+`elevation` varchar(20) DEFAULT NULL,
+`operator` varchar(255) DEFAULT NULL,
+`river_basin` varchar(255) DEFAULT NULL,
+`hydrologic_area` varchar(255) DEFAULT NULL,
+`latitude` varchar(20) DEFAULT NULL,
+`longitude` varchar(20) DEFAULT NULL,
+`nearby_city` varchar(255) DEFAULT NULL,
+`country` varchar(255) DEFAULT NULL,
+`added_on` datetime NOT NULL,
+`modified_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+`active` int(11) DEFAULT '1',
+PRIMARY KEY (`id`),
+UNIQUE KEY `station_id_idx` (`station_id`)
+) ENGINE=MyISAM
+
+CREATE TABLE sensordata
+ id bigint(20) unsigned NOT NULL,
+ sensor_number` int(11) NOT NULL,
+ time datetime NOT NULL,
+ value decimal(6,2) NOT NULL, /* 6 digits, 2 precision */
+
+ PRIMARY KEY (sensorId, recipientId, time)
+)
+PARTITION BY RANGE ( TO_DAYS(time) ) (
+    PARTITION Jan2013 VALUES LESS THAN (TO_DAYS('2013-02-01')),
+    PARTITION Feb2013 VALUES LESS THAN (TO_DAYS('2013-03-01')),
+    PARTITION Mar2013 VALUES LESS THAN (TO_DAYS('2013-04-01')),
+    PARTITION Apr2013 VALUES LESS THAN (TO_DAYS('2013-05-01')),
+    PARTITION May2013 VALUES LESS THAN (TO_DAYS('2013-06-01')),
+    PARTITION Jun2013 VALUES LESS THAN (TO_DAYS('2013-07-01')),
+    PARTITION Jul2013 VALUES LESS THAN (TO_DAYS('2013-08-01')),
+    PARTITION Aug2013 VALUES LESS THAN (TO_DAYS('2013-09-01')),
+    PARTITION Sep2013 VALUES LESS THAN (TO_DAYS('2013-10-01')),
+    PARTITION Oct2013 VALUES LESS THAN (TO_DAYS('2013-11-01')),
+    PARTITION Nov2013 VALUES LESS THAN (TO_DAYS('2013-12-01')),
+    PARTITION Dec2013 VALUES LESS THAN (TO_DAYS('2014-01-01'))
+);
+
+
+
+#
+# To DISPLAY:
+#  SELECT PARTITION_NAME, TABLE_ROWS, PARTITION_EXPRESSION, PARTITION_DESCRIPTION FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_NAME = 'PartitionTest';
+
+
+# To check query
+# DESCRIBE PARTITIONS SELECT * FROM PartitionTest WHERE createDate > '2012-01-01' AND createDate < '2012-02-01';

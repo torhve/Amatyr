@@ -3,6 +3,12 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom;
 
+    var svg = d3.select(el).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -21,43 +27,33 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
     var colorscale2 = d3.scale.category20c();
 
-    var line = d3.svg.line()
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.temp); })
-        .interpolate("basis")
-
-    var svg = d3.select(el).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     var gradient = svg.append("svg:defs")
-  .append("svg:linearGradient")
-    .attr("id", "gradient")
-    .attr("x1", "0%")
-    .attr("y1", "0%")
-    .attr("x2", "100%")
-    .attr("y2", "100%")
-    .attr("spreadMethod", "pad");
+      .append("svg:linearGradient")
+        .attr("id", "gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "100%")
+        .attr("y2", "100%")
+        .attr("spreadMethod", "pad");
 
-gradient.append("svg:stop")
-    .attr("offset", "0%")
-    .attr("stop-color", "#fff")
-    .attr("stop-opacity", 1);
+    gradient.append("svg:stop")
+        .attr("offset", "0%")
+        .attr("stop-color", "#fff")
+        .attr("stop-opacity", 1);
 
-gradient.append("svg:stop")
-    .attr("offset", "100%")
-    .attr("stop-color", "#f2f2f2")
-    .attr("stop-opacity", 1);
+    gradient.append("svg:stop")
+        .attr("offset", "100%")
+        .attr("stop-color", "#f2f2f2")
+        .attr("stop-opacity", 1);
 
-svg.append("svg:rect")
-    .attr("width", width)
-    .attr("height", height)
-    .style("fill", "url(#gradient)");
+    svg.append("svg:rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "url(#gradient)");
 
     x.domain(d3.extent(json, function(d) { return d.date; }));
-    y.domain(d3.extent(json, function(d) { return d.temp; }));
+    y.domain([d3.min(json, function(d) { return d.tempmin }), d3.max(json, function(d) { return d.tempmax; })]);
+
 
     // Y Axis grid
     var yrule = svg.selectAll("g.y")
@@ -98,6 +94,11 @@ svg.append("svg:rect")
       .text(yaxisleg);
 
     // Temp line
+    var line = d3.svg.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.temp); })
+        .interpolate("basis")
+
     var pathos = svg.append("path")
       .datum(json)
       .attr("class", "line")
@@ -126,28 +127,14 @@ svg.append("svg:rect")
       .attr("stroke", "darkred")
       .attr("d", line)
 
-    /*
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
-    */
     var x = d3.time.scale()
         .range([0, 1]);
 
     var y = d3.scale.linear()
         .range([height, 0]);
 
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom")
-        .tickFormat(xformat)
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-
     x.domain(json.map(function(d) { return d.date; }));
     y.domain([0, d3.max(json, function(d) { return d.daily_rain; })]);
-
 
     var barxpos = function(d) { 
       var nr = x(d.date);

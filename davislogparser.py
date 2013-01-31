@@ -39,7 +39,9 @@ for i, line in enumerate(fh.readlines()):
             print fields
             break
     timestamp = '%04d-%02d-%02d %02d:%02d:%02d' %(r['year'], r['month'], r['day'], r['hour'], r['minute'], 0)
-    weather_insert = "INSERT INTO wd (timestamp, avg_speed, gusts, winddir, temp, hum, barometer, daily_rain, dew_temp, cloud_height) VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, 0)".format(timestamp, r['windspeed'], r['gustspeed'], r['direction'], r['temperature'], r['humidity'], r['barometer'], r['dailyrain'], r['dewpoint'])
+    #weather_insert = "INSERT INTO wd (timestamp, avg_speed, gusts, winddir, temp, hum, barometer, rain_rate, daily_rain, dew_temp, cloud_height) VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, 0)".format(timestamp, r['windspeed'], r['gustspeed'], r['direction'], r['temperature'], r['humidity'], r['barometer'], r['rainlastmin'], r['dailyrain'], r['dewpoint'])
+    weather_insert = "UPDATE wd set rain_rate = %s WHERE timestamp = '%s'" %(r['rainlastmin'], timestamp)
+    print weather_insert
     try:
         pg_weather_cursor.execute(weather_insert)
         pg_weather.commit()
