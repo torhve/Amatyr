@@ -1,3 +1,4 @@
+/* D3 function for drawing temperatures and rain bars in same svg */
 var temprain = function(el, json, attr, xformat, yaxisleg, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
@@ -174,10 +175,13 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .attr("x", barxpos)
         .attr("y", function(d){ return y(d.daily_rain) + 10 } )
         .attr("dx", (width/json.length)*0.4)
-        .attr("dy", ".36em")
-        .attr("text-anchor", "end")
+        .attr("dy", (width/json.length)*0.4)
+        .attr("text-anchor", "middle")
         .attr('class', 'score')
-        .style("text-anchor", "middle")
+        .style('font-size', function(d) { 
+            // Compute proper font size
+            w = (width/json.length)*0.6;
+            return w})
         .text(valfmt)
 
   var focus = svg.append("g")
@@ -210,6 +214,4 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     focus.select(".y").attr("transform", "translate(0," + y(d[1]) + ")");
     svg.selectAll(".x.axis path").style("fill-opacity", Math.random()); // XXX Chrome redraw bug
   }
-
-
 }
