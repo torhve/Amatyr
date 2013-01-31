@@ -154,7 +154,6 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
       .attr("width", (width/json.length)*0.8)
       .attr("y", function(d) { return height; })
       .attr("height", function(d) { return 0; })
-      .on('mouseover', hover)
       .transition().delay(function (d,i){ return 300;})
       .duration(150)
       .attr("y", function(d) { return y(d.daily_rain); })

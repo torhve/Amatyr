@@ -32,21 +32,6 @@ rivets.configure({
     }
   }
 })
-function hover(d, i) {
-    console.log(d,i, this);
-    var num = 0,
-        color = 'black';
-    if (d.daily_rain > 0) {
-      color = 'green';
-      num = "+" + d.daily_rain;
-    } else if (d.change < 0) {
-      color = 'red';
-      num = d.daily_rain;
-    }
-    d3.select("#tooltip")
-      .html(d.item + "<span style='color:" + color + "'>" + num + "</span>");
-  }
-
 
 // Helps out with the bars
 var bartender = function(target, key, legend, width, height) {
@@ -79,16 +64,19 @@ var bartender = function(target, key, legend, width, height) {
 
 }
 
-var draw = function(source) {
+var draw = function(source, xformat) {
     gsource = source;
-    console.log(source);
+    console.log('Current dataset', source);
     /* First remove any existing svg */
     $('#main svg').remove();
     /* Remove any spinners */
     $('.svgholder').empty();
 
     // Get the last element and populate rivets bindings with it
-    rivets.bind(document.getElementById('main'), {current: source.slice(-1)[0]});
+    rivets.bind(document.getElementById('main'), {
+        current: source.slice(-1)[0],
+        first: source.slice(0)[0]
+    });
 
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
@@ -112,54 +100,68 @@ var draw = function(source) {
     */
 }
 
-var fetch_and_draw = function() {
-    // Fetch new json data
-    if (!gsource) {    
-        d3.json(apiurl, draw); 
-    }else {
-        draw(gsource);
-    }
+var redraw = function() {
+    draw(currentsource, xformat);
 }
 
 var apiurl = "/api/";
-var width = $('#main').css('width').split('px')[0];
-var xformat = d3.time.format("%A %H")
-if(width < 1200) {
-    xformat = d3.time.format("%d %H");
-}
-var gsource = false;
-
-/* Initial hash and on resize hash change */
-var on_hashchange = function() {
-    var loc =  window.location.hash.split('/')
-    console.log(loc);
-
-    if(loc.length > 1) {
-        apiurl += loc[1] + '/' + loc[2]
-        xformat = d3.time.format("%Y-%m-%d")
-    }
-
-    // Trigger fetch and draw
-    fetch_and_draw();
-
-};
-// Initial
-on_hashchange();
+var currentsource = false;
+var xformat = false;
 
 /* Initial and on resize we draw draw draw */
 on_resize(function() {
-    fetch_and_draw();
+    redraw();
 }); // these parenthesis does the trick
 
 // debulked onresize handler
 function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,100)};return c};
 
-// on hash change handler
-window.onhashchange = function(){ on_hashchange() };
+// Register HTML5 push state handler for navbar links
+$(".navbar a").live("click", function(event){
+    event.preventDefault();
+    // Fix active link
+    $('.navbar li.active').removeClass('active');
+    $(this).closest('li').addClass('active');
 
-// Tooltip
-var tt = document.createElement('div'),
-  leftOffset = -(~~$('html').css('padding-left').replace('px', '') + ~~$('body').css('margin-left').replace('px', '')),
-  topOffset = -32;
-tt.className = 'ex-tooltip';
-document.body.appendChild(tt);
+    // Call path state to handle the clicked link
+    Path.history.pushState({}, "", $(this).attr("href"));
+});
+
+Path.map("/year/:year").to(function(){
+    var year = this.params['year'];
+    // save to global for redraw purpose
+    xformat = d3.time.format("%Y-%m-%d")
+    var yearurl = apiurl + 'year/' + year;
+    console.log('Fetching data for year ', year);
+    /* Remove any existing graphs */
+    $('.svgholder').empty();
+    // Fetch data for this year
+    d3.json(yearurl, function(json) { 
+        // Save to global for redrawing
+        currentsource = json;
+        draw(json, xformat);
+    }); 
+});
+Path.map("/").to(function(){
+    var width = $('#main').css('width').split('px')[0];
+    // save to global for redraw purpose
+    xformat = d3.time.format("%A %H")
+    if(width < 1200) {
+        xformat = d3.time.format("%d %H");
+    }
+    /* Remove any existing graphs */
+    $('.svgholder').empty();
+    d3.json(apiurl, function(json) { 
+        // Save to global for redrawing
+        currentsource = json;
+        draw(json, xformat);
+    }); 
+});
+
+// Start listening for URL events
+Path.history.listen(true);  // Yes, please fall back to hashtags if HTML5 is not supported.
+
+
+// Initial fetch and draw
+Path.history.pushState({}, "", window.location.pathname);
+
