@@ -35,7 +35,7 @@
           <a class="brand" href="/">AmatYR</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-                <li class="active"><a href="/">Home</a></li>
+                <li class="active"><a href="/">3 day</a></li>
                 <li class=""><a href="/year/2013">2013</a></li>
                 <li class=""><a href="/year/2012">2012</a></li>
                 <li class=""><a href="/year/2011">2011</a></li>
@@ -54,12 +54,19 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12" id="main">
-                <h5>High, avg, min temp and rain in mm <span class="" data-text'first.timestamp'></span> <span class="pull-right" data-text='current.temp | temp'></span></h5>
+                <h5>High, avg, min temp and rain in mm</h5>
+                <!--
+                <h6>From <span class="" data-text='first.timestamp'></span> to <span class="" data-text='current.timestamp'></span>
+                </h6>
+                -->
+                <span class="pull-right" data-text='current.temp | temp'></span>
                 <div class="svgholder" id="temp"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h5>Wind <span class="pull-right" data-text='current.avg_speed | wind'></span></h5>
                 <div class="svgholder" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                <!--
                 <h5>Rain <span class="pull-right" data-text='current.daily_rain | rain'></span></h5>
                 <div class="svgholder" id="rain"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                -->
                 <h5>Pressure <span class="pull-right" data-text='current.barometer | pressure'></span></h5>
                 <div class="svgholder" id="pressure"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h5>Wind direction <span class="pull-right" data-text='current.winddir | degree '></span></h5>
@@ -78,12 +85,12 @@
         <div class="row-fluid">
             <hr>
             <footer class="footer">
-                &copy; Tor Hveem 2013 
+            <a href="https://github.com/torhve/Amatyr">AmatYr</a> &copy; <a href="http://hveem.no/">Tor Hveem</a> 2013 
             </footer>
         </div>
     </div> <!-- /container -->
     <div id="#tooltip"></div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="/static/js/watch.js"></script>
     <script src="/static/js/path.min.js"></script>
     <script src="/static/js/rivets.min.js"></script>

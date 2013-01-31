@@ -18,20 +18,20 @@ rivets.formatters.degree = function(value) {
 /* Configure Rivets to work with Watch JS */
 rivets.configure({
   adapter: {
-          subscribe: function(obj, keypath, callback) {
-                    watch(obj, keypath, callback)
+      subscribe: function(obj, keypath, callback) {
+        watch(obj, keypath, callback)
     },
     unsubscribe: function(obj, keypath, callback) {
-              unwatch(obj, keypath, callback)
+        unwatch(obj, keypath, callback)
     },
     read: function(obj, keypath) {
-              return obj[keypath]
+        return obj[keypath]
     },
     publish: function(obj, keypath, value) {
-              obj[keypath] = value
+        obj[keypath] = value
     }
   }
-})
+});
 
 // Helps out with the bars
 var bartender = function(target, key, legend, width, height) {
@@ -90,7 +90,9 @@ var draw = function(source, xformat) {
     temprain('#temp', source, 'temp', xformat, 'Temperature (°C)', width, height);
     drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
     drawlines('#wind', source, 'avg_speed', xformat, 'Average wind speed (knot)', width, height);
+    /* Disable rain graph as it is part of temp graph now
     drawlines('#rain', source, 'daily_rain',xformat,  'Daily rain (mm)', width, height);
+    */
     drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
     /* Bar graphs */
     /*
@@ -117,14 +119,14 @@ on_resize(function() {
 function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,100)};return c};
 
 // Register HTML5 push state handler for navbar links
-$(".navbar a").live("click", function(event){
-    event.preventDefault();
+$(".navbar a").bind("click", function(event){
+    event.preventDefault();
     // Fix active link
     $('.navbar li.active').removeClass('active');
     $(this).closest('li').addClass('active');
 
     // Call path state to handle the clicked link
-    Path.history.pushState({}, "", $(this).attr("href"));
+    Path.history.pushState({}, "", $(this).attr("href"));
 });
 
 Path.map("/year/:year").to(function(){
@@ -160,7 +162,6 @@ Path.map("/").to(function(){
 
 // Start listening for URL events
 Path.history.listen(true);  // Yes, please fall back to hashtags if HTML5 is not supported.
-
 
 // Initial fetch and draw
 Path.history.pushState({}, "", window.location.pathname);

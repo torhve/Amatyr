@@ -10,6 +10,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    addGradient(svg, width, height);
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -27,30 +28,6 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .orient("left");
 
     var colorscale2 = d3.scale.category20c();
-
-    var gradient = svg.append("svg:defs")
-      .append("svg:linearGradient")
-        .attr("id", "gradient")
-        .attr("x1", "0%")
-        .attr("y1", "0%")
-        .attr("x2", "100%")
-        .attr("y2", "100%")
-        .attr("spreadMethod", "pad");
-
-    gradient.append("svg:stop")
-        .attr("offset", "0%")
-        .attr("stop-color", "#fff")
-        .attr("stop-opacity", 1);
-
-    gradient.append("svg:stop")
-        .attr("offset", "100%")
-        .attr("stop-color", "#f2f2f2")
-        .attr("stop-opacity", 1);
-
-    svg.append("svg:rect")
-        .attr("width", width)
-        .attr("height", height)
-        .style("fill", "url(#gradient)");
 
     x.domain(d3.extent(json, function(d) { return d.date; }));
     y.domain([d3.min(json, function(d) { return d.tempmin }), d3.max(json, function(d) { return d.tempmax; })]);
@@ -181,7 +158,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .style('font-size', function(d) { 
             // Compute proper font size
             w = (width/json.length)*0.6;
-            return w})
+            return w + 'px' })
         .text(valfmt)
 
   var focus = svg.append("g")
@@ -214,4 +191,30 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     focus.select(".y").attr("transform", "translate(0," + y(d[1]) + ")");
     svg.selectAll(".x.axis path").style("fill-opacity", Math.random()); // XXX Chrome redraw bug
   }
+}
+
+var addGradient = function(target, w, h) {
+    var gradient = target.append("svg:defs")
+      .append("svg:linearGradient")
+        .attr("id", "gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "100%")
+        .attr("y2", "100%")
+        .attr("spreadMethod", "pad");
+
+    gradient.append("svg:stop")
+        .attr("offset", "0%")
+        .attr("stop-color", "#fff")
+        .attr("stop-opacity", 1);
+
+    gradient.append("svg:stop")
+        .attr("offset", "100%")
+        .attr("stop-color", "#f2f2f2")
+        .attr("stop-opacity", 1);
+
+    target.append("svg:rect")
+        .attr("width", w)
+        .attr("height", h)
+        .style("fill", "url(#gradient)");
 }

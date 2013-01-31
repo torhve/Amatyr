@@ -3,6 +3,14 @@ var drawlines = function(el, json, attr, xformat, yaxisleg, width, height) {
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom;
 
+    var svg = d3.select(el).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    addGradient(svg, width, height);
+
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -25,12 +33,6 @@ var drawlines = function(el, json, attr, xformat, yaxisleg, width, height) {
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.val); })
         .interpolate("basis")
-
-    var svg = d3.select(el).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     json.forEach(function(d) {
         d.val = d[attr];
