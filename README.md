@@ -5,10 +5,12 @@ A weather display with a JavaScript frontend and Postgresql + Lua backend.
 ### Frontend Components
 
 -    jQuery
--    D3js
--    Rivetsjs
--    WatchJS
--    Bootstrap
+-    D3 js
+-    Rivets js
+-    Watch js
+-    Path js 
+-    Bootstrap css + js
+
 
 ### Backend Components
 
