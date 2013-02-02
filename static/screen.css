@@ -33,20 +33,6 @@ svg text.score {
     stroke: #d4d4d4;
 }
 
-.line {
-    fill: none;
-    stroke-width: 2px;
-}
-.line:hover {
-    stroke: #002147;
-}
-
-.line.positive {
-}
-
-.line.negative {
-    fill: black;
-}
 
 .bar {
     fill: steelblue;
@@ -79,13 +65,92 @@ svg:not(:hover) .focus {
 #tt {
     z-index: 1;
     position: absolute;
-    background: #222426;
-    color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #eee;
-    padding: 5px;
+    background-color: rgba(255,255,255,1);
+    padding: 10px;
+    border: 1px solid #ddd;
+    transition: opacity 500ms linear;
+    -moz-transition: opacity 500ms linear;
+    -webkit-transition: opacity 500ms linear;
+
+    transition-delay: 500ms
+    -moz-transition-delay: 500ms;
+    -webkit-transition-delay: 500ms;
+
+    -moz-box-shadow: 4px 4px 10px rgba(0,0,0,.5);
+    -webkit-box-shadow: 4px 4px 10px rgba(0,0,0,.5);
+    box-shadow: 4px 4px 10px rgba(0,0,0,.5);
+
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+
+
+
 }
 #tt .value {
-    color: white;
+    font-weight: strong;
 }
 
+/**********
+*  Legend
+*/
+
+.legend .series {
+  cursor: pointer;
+}
+
+.legend circle {
+  stroke-width: 2px;
+}
+
+.legend .disabled circle {
+  fill-opacity: 0;
+}
+/**********
+*  Line chart
+*/
+
+.point-paths path {
+  /*
+  fill: #eee;
+  stroke: #aaa;
+  */
+  stroke-opacity: 0;
+  fill-opacity: 0;
+}
+
+
+.line path {
+  fill: none;
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+
+  transition: stroke-width 250ms linear;
+  -moz-transition: stroke-width 250ms linear;
+  -webkit-transition: stroke-width 250ms linear;
+
+  transition-delay: 250ms
+  -moz-transition-delay: 250ms;
+  -webkit-transition-delay: 250ms;
+}
+
+.line.hover path {
+  stroke-width: 6px;
+  stroke: #002147;
+}
+
+.line .point {
+  transition: stroke-width 250ms linear;
+  -moz-transition: stroke-width 250ms linear;
+  -webkit-transition: stroke-width 250ms linear;
+}
+
+.line .point.hover {
+  stroke-width: 20px;
+  stroke-opacity: .5;
+}
+
+.line {
+    fill: none;
+    stroke-width: 2px;
+}
 
