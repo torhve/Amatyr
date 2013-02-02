@@ -108,7 +108,9 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     x.domain(d3.extent(json, function(d) { return d.date; }));
     var y = d3.scale.linear()
         .range([height, 0]);
-    y.domain(d3.extent(json, function(d) { return d.barometer; }));
+    //y.domain(d3.extent(json, function(d) { return d.barometer; }));
+    // hard coded minmax
+    y.domain([950, 1050]);
     // Pressure line
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
