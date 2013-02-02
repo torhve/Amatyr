@@ -103,6 +103,30 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
       .attr("stroke", "darkred")
       .attr("d", line)
 
+    /* Pressure section */
+
+    x.domain(d3.extent(json, function(d) { return d.date; }));
+    var y = d3.scale.linear()
+        .range([height, 0]);
+    y.domain(d3.extent(json, function(d) { return d.barometer; }));
+    // Pressure line
+    var line = d3.svg.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.barometer); })
+        .interpolate("basis")
+
+    // Pressure path
+    var pathospressure = svg.append("path")
+      .datum(json)
+      .attr("class", "line")
+      .attr("stroke", "darkgreen")
+      .attr("stroke-opacity", "0.2")
+      .attr("d", line)
+
+
+
+    /* Rain bar section */
+
     var x = d3.time.scale()
         .range([0, 1]);
 
@@ -134,8 +158,6 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
           d3.select(this)
           .attr("stroke-width", "3px");
 
-      console.log(d, i);
-
       var x; var y;
       if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
           x = d3.event.pageX;
@@ -151,7 +173,6 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
           + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
           + d.timestamp + "</span><br>  Rain: <span class=value>" + Number(d.daily_rain).toFixed(1) + "</span> mm</b><br />"
           + "</div>";
-      console.log(bubble_code);
       $("body").append(bubble_code);
 
       }).on("mouseout", function(d,i){

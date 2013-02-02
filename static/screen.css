@@ -6,6 +6,22 @@ body {
     background-color: #fdfdfd;
     padding-top: 40px;
 }
+.high {
+    color: darkred;
+}
+.avg {
+    color: red;
+}
+.min {
+    color: steelblue;
+}
+.rain {
+    color: steelblue;
+}
+.pressure {
+    color: darkgreen;
+}
+
 @media (max-width: 979px) {
     body {
         padding-top: 0;
@@ -121,7 +137,7 @@ svg:not(:hover) .focus {
 
 .line path {
   fill: none;
-  stroke-width: 1.5px;
+  stroke-width: 2px;
   stroke-linecap: round;
 
   transition: stroke-width 250ms linear;
@@ -151,6 +167,6 @@ svg:not(:hover) .focus {
 
 .line {
     fill: none;
-    stroke-width: 2px;
+    stroke-width: 3px;
 }
 

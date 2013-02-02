@@ -54,15 +54,20 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12" id="main">
-                <h5>High, avg, min temp and rain in mm</h5>
+                <h5>
+                <span class="pull-right avg" data-text='current.temp | temp'></span>
+                <span class="pull-right pressure" data-text=' current.barometer | pressure'> </span> 
+                    <span class="high">High</span>, <span class="avg">avg</span>, <span class="min">min</span> temperature. <span class="rain">Rain</span> in mm. <span class="pressure">Pressure</span>
+                </h5>
                 <!--
                 <h6>From <span class="" data-text='first.timestamp'></span> to <span class="" data-text='current.timestamp'></span>
                 </h6>
                 -->
-                <span class="pull-right" data-text='current.temp | temp'></span>
                 <div class="svgholder" id="temp"><i class="icon-spin icon-spinner"></i>Loading data...</div>
-                <h5>Pressure <span class="pull-right" data-text='current.barometer | pressure'></span></h5>
+                <!--
+                <h5>Pressure </h5>
                 <div class="svgholder" id="pressure"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                -->
                 <h5>Wind <span class="pull-right" data-text='current.avg_speed | wind'></span></h5>
                 <div class="svgholder" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <!--
