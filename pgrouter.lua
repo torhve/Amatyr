@@ -29,6 +29,14 @@ local function max(match)
     return ngx.HTTP_OK
 end
 
+local function now(match)
+
+    local sql = "SELECT * FROM wd ORDER BY timestamp DESC LIMIT 1"
+    
+    ngx.print(dbreq(sql))
+    return ngx.HTTP_OK
+end
+
 local function record(match)
 
     local key = ngx.req.get_uri_args()['key']
@@ -113,6 +121,7 @@ local routes = {
     ['max']               = max,
     ['record/(([0-9]{4})?)']= record,
     ['year/([0-9]{4})']   = year,
+    ['now']               = now,
     ['$']                 = index,
 }
 -- Set the content type
