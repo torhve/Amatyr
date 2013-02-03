@@ -14,6 +14,9 @@ rivets.formatters.wind = function(value) {
 rivets.formatters.degree = function(value) {
     return Number((value).toFixed(1)) + ' °';
 }
+rivets.formatters.percent = function(value) {
+    return Number((value).toFixed(0)) + ' %';
+}
 
 /* Configure Rivets to work with Watch JS */
 rivets.configure({
@@ -109,6 +112,7 @@ var redraw = function() {
 var apiurl = "/api/";
 var currentsource = false;
 var xformat = false;
+var current_weather;
 
 /* Initial and on resize we draw draw draw */
 on_resize(function() {
@@ -158,6 +162,13 @@ Path.map("/").to(function(){
         currentsource = json;
         draw(json, xformat);
     }); 
+    // Fetch current weather
+    d3.json(apiurl + 'now', function(json) { 
+        current_weather = json[0];
+        rivets.bind(document.getElementById('current_weather'), {
+            current: current_weather
+        });
+    });
 });
 
 // Start listening for URL events

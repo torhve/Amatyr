@@ -24,7 +24,7 @@
 
   <body>
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar">
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -44,11 +44,66 @@
                 <li class=""><a href="/year/2008">2008</a></li>
             </ul>
             <ul class="nav pull-right">
-                <li class="">Weather @ Husnes</li>
+                <li class=""></li>
             </ul>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12" id="current_weather">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+
+                            <li>
+                            <h5>Husnes</h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 data-text="current.timestamp"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 title="Temperature" class="avg" data-text="current.temp | temp"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 title="Dew point" class="avg" data-text="current.dew_temp | temp"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 title="Humidity" class="avg" data-text="current.hum | percent"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 class="high" title="Average wind speeds" data-text="current.avg_speed | wind"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 class="high" title="Gusts" data-text="current.gusts | wind"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 class="high" title="Wind direction" data-text="current.winddir | degree"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 class="rain" title="Daily rain" data-text="current.daily_rain | rain"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+                            <li>
+                                <h5 class="pressure" title="Barometer" data-text="current.barometer | pressure"></h5>
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="container-fluid">

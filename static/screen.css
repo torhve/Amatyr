@@ -4,7 +4,14 @@ body {
     color: #222;
     font: 15px/22px 'Open Sans',Arial,Helvetica,sans-serif;
     background-color: #fdfdfd;
-    padding-top: 40px;
+}
+#current_weather .navbar .nav > li > span {
+    float: none;
+    padding: 10px 15px 10px;
+    margin: 10px 0;
+    color: #777777;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #ffffff;
 }
 .high {
     color: darkred;
