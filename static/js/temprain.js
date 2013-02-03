@@ -42,12 +42,11 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .attr("x2", width)
         .attr("y1", y)
         .attr("y2", y)
-        .attr("stroke-dasharray", "5,5")
         .style('stroke', function(d, i) { 
             if(d == 0) {
                 return 'steelblue';
             }
-            return '#eee';
+            return '#ededed';
         })
         .style("shape-rendering", "crispEdges")
         ;
@@ -250,7 +249,7 @@ var addGradient = function(target, w, h) {
         .attr("id", "gradient")
         .attr("x1", "0%")
         .attr("y1", "0%")
-        .attr("x2", "100%")
+        .attr("x2", "0%")
         .attr("y2", "100%")
         .attr("spreadMethod", "pad");
 
