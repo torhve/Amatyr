@@ -5,6 +5,17 @@ body {
     font: 15px/22px 'Open Sans',Arial,Helvetica,sans-serif;
     background-color: #fdfdfd;
 }
+#sparkline {
+    height: 42px;
+    width: 50px;
+    display: block;
+    padding-top: 2px;
+}
+#sparkline path {
+    stroke: steelblue;
+    stroke-width: 1;
+    fill: none;
+}
 #current_weather .navbar .nav > li > span {
     float: none;
     padding: 10px 15px 10px;

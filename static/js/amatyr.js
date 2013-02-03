@@ -188,3 +188,13 @@ setInterval(function() { d3.json(apiurl + 'now', function(json) {
     }
 }) }, 60*1000);
 
+// Draw sparkline
+d3.json(apiurl+'recent', function(json) {
+    var data = []; 
+    json.forEach(function(k, v) {
+        // Ordered wrong way, so unshift
+        data.unshift(k.temp);
+    });
+    console.log(data);
+    sparkline('#sparkline', data, data.length, 38, 'basis', true, 60*1000, 1000);
+});
