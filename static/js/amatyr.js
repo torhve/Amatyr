@@ -72,7 +72,7 @@ var bartender = function(target, key, legend, width, height) {
 
 var draw = function(source, xformat) {
     gsource = source;
-    console.log('Current dataset', source);
+    //console.log('Current dataset', source);
     /* First remove any existing svg */
     $('#main svg').remove();
     /* Remove any spinners */
@@ -190,11 +190,13 @@ setInterval(function() { d3.json(apiurl + 'now', function(json) {
 
 // Draw sparkline
 d3.json(apiurl+'recent', function(json) {
-    var data = []; 
+    var tdata = []; 
+    var wdata = []; 
     json.forEach(function(k, v) {
         // Ordered wrong way, so unshift
-        data.unshift(k.temp);
+        tdata.unshift(k.temp);
+        wdata.unshift(k.avg_speed);
     });
-    console.log(data);
-    sparkline('#sparkline', data, data.length, 38, 'basis', true, 60*1000, 1000);
+    sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
+    sparkline('#windsparkline', wdata, 'avg_speed', wdata.length, 38, 'basis', true, 60*1000, 1000);
 });

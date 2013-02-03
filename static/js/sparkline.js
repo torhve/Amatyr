@@ -1,4 +1,4 @@
-function sparkline(id, data, width, height, interpolation, animate, updateDelay, transitionDelay) {
+function sparkline(id, data, key, width, height, interpolation, animate, updateDelay, transitionDelay) {
     // create an SVG element inside the #graph div that fills 100% of the div
     var graph = d3.select(id).append("svg:svg").attr("width", "100%").attr("height", "100%");
 
@@ -51,11 +51,10 @@ function sparkline(id, data, width, height, interpolation, animate, updateDelay,
 
     setInterval(function() {
         d3.json(apiurl+'now', function(json) {
-            console.log('databefore', data);
 
             data.shift(); // remove the first element of the array
-            data.push(json[0].temp); // add a new element to the array 
-            console.log('dataafter', data);
+            data.push(json[0][key]); // add a new element to the array 
+            console.log('data', data);
             if(animate) {
                 redrawWithAnimation();
             } else {

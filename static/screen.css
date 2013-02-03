@@ -5,16 +5,19 @@ body {
     font: 15px/22px 'Open Sans',Arial,Helvetica,sans-serif;
     background-color: #fdfdfd;
 }
-#sparkline {
+.sparkline {
     height: 42px;
     width: 50px;
     display: block;
     padding-top: 2px;
 }
-#sparkline path {
-    stroke: steelblue;
+.sparkline path {
+    stroke: red;
     stroke-width: 1;
     fill: none;
+}
+#windsparkline path  {
+    stroke: darkred;
 }
 #current_weather .navbar .nav > li > span {
     float: none;
