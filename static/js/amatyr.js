@@ -17,6 +17,9 @@ rivets.formatters.degree = function(value) {
 rivets.formatters.percent = function(value) {
     return Number((value).toFixed(0)) + ' %';
 }
+rivets.formatters.rotate = function(value) {
+    return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-mos-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);'
+}
 
 /* Configure Rivets to work with Watch JS */
 rivets.configure({
