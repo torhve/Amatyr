@@ -164,10 +164,10 @@ Path.map("/").to(function(){
     }); 
     // Fetch current weather
     d3.json(apiurl + 'now', function(json) { 
-        current_weather = json[0];
-        rivets.bind(document.getElementById('current_weather'), {
-            current: current_weather
-        });
+        current_weather = { 
+            current: json[0]
+        };
+        rivets.bind(document.getElementById('current_weather'), current_weather);
     });
 });
 
@@ -176,4 +176,12 @@ Path.history.listen(true);  // Yes, please fall back to hashtags if HTML5 is not
 
 // Initial fetch and draw
 Path.history.pushState({}, "", window.location.pathname);
+
+// Fetch current weather with 1 minute interval
+setInterval(function() { d3.json(apiurl + 'now', function(json) { 
+    // Update each key with new val
+    for(key in current_weather.current) {
+        current_weather.current[key] = json[0][key]
+    }
+}) }, 60*1000);
 
