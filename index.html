@@ -56,8 +56,12 @@
             <div class="span12" id="current_weather">
                 <div class="navbar">
                     <div class="navbar-inner">
+                        <ul class="nav pull-right">
+                            <li class="pull-right">
+                                <h5><i class="green icon-spin icon-spinner"></i></h5>
+                            </li>
+                        </ul>
                         <ul class="nav">
-
                             <li>
                             <h5>Husnes</h5>
                             </li>
@@ -87,11 +91,11 @@
                             </li>
                             <li class="divider-vertical"></li>
                             <li>
-                                <h5 class="high" title="Wind direction" data-text="current.winddir | degree">
-                                </h5>
+                                <h5><i class="high icon-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
                             </li>
                             <li>
-                                <h5><i class="high icon-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
+                                <h5 class="high" title="Wind direction" data-text="current.winddir | degree">
+                                </h5>
                             </li>
                             <li class="divider-vertical"></li>
                             <li>
@@ -102,7 +106,6 @@
                                 <h5 class="pressure" title="Barometer" data-text="current.barometer | pressure"></h5>
                             </li>
                             <li class="divider-vertical"></li>
-
                         </ul>
                     </div>
                 </div>
