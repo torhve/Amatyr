@@ -132,7 +132,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .range([0, 1]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([height, height/2]);
 
     x.domain(json.map(function(d) { return d.date; }));
     y.domain([0, d3.max(json, function(d) { return d.daily_rain; })]);
