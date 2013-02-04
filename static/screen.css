@@ -20,6 +20,9 @@ body {
 #windsparkline path  {
     stroke: darkred;
 }
+#pressuresparkline path  {
+    stroke: darkgreen;
+}
 #current_weather .navbar .nav h5 {
     float: left;
 }
