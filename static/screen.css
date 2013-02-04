@@ -10,6 +10,7 @@ body {
     width: 50px;
     display: block;
     padding-top: 2px;
+    float: left;
 }
 .sparkline path {
     stroke: red;
@@ -19,8 +20,14 @@ body {
 #windsparkline path  {
     stroke: darkred;
 }
-#current_weather .navbar .nav > li {
-    margin-left: 9px;
+#current_weather .navbar .nav h5 {
+    float: left;
+}
+#current_weather .navbar .left > li {
+    padding-left: 9px;
+    padding-right: 9px;
+    border-right: 1px solid white;
+    border-left: 1px solid #f2f2f2;
 }
 #current_weather .navbar .nav > li > span {
     float: none;
@@ -39,7 +46,7 @@ body {
 .avg {
     color: red;
 }
-.min {
+.min, .hum {
     color: steelblue;
 }
 .rain {

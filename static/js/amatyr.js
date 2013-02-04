@@ -1,3 +1,7 @@
+/* Pad helper */
+Number.prototype.pad = function (len) {
+        return (new Array(len+1).join("0") + this).slice(-len);
+}
 /* Rivets formatters */
 rivets.formatters.temp = function(value) {
     return Number((value).toFixed(1))+ ' °C';
@@ -19,6 +23,11 @@ rivets.formatters.percent = function(value) {
 }
 rivets.formatters.rotate = function(value) {
     return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-mos-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);'
+}
+rivets.formatters.date = function(date) {
+    var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+    var date = parseDate(date);
+    return date.getHours().pad(2) + ':' + date.getMinutes().pad(2);
 }
 
 /* Configure Rivets to work with Watch JS */
