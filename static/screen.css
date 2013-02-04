@@ -19,6 +19,9 @@ body {
 #windsparkline path  {
     stroke: darkred;
 }
+#current_weather .navbar .nav > li {
+    margin-left: 9px;
+}
 #current_weather .navbar .nav > li > span {
     float: none;
     padding: 10px 15px 10px;

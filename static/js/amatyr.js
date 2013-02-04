@@ -197,6 +197,9 @@ d3.json(apiurl+'recent', function(json) {
         tdata.unshift(k.temp);
         wdata.unshift(k.avg_speed);
     });
-    sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
-    sparkline('#windsparkline', wdata, 'avg_speed', wdata.length, 38, 'basis', true, 60*1000, 1000);
+    tsl = new sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
+    wsl = new sparkline('#windsparkline', wdata, 'avg_speed', wdata.length, 38, 'basis', true, 60*1000, 1000);
+    // Update each minute
+    setInterval(wsl.update, 60*1000);
+    setInterval(tsl.update, 60*1000);
 });
