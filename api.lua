@@ -53,12 +53,17 @@ function record(match)
     local andwhere = ''
     local year = ngx.req.get_uri_args()['start']
     if year then 
-        local syear = year .. '-01-01'
+        local start
+        if string.upper(year) == 'TODAY' then
+            start ="CURRENT_DATE" 
+        else
+            start = "DATE '" .. year .. "-01-01'"
+        end
         local wherepart = [[
         (
-            timestamp BETWEEN DATE ']]..syear..[['
+            timestamp BETWEEN ]]..start..[[
             AND 
-            DATE ']]..syear..[[' + INTERVAL '365 days'
+            ]]..start..[[ + INTERVAL '365 days'
         )
         ]]
         where = 'WHERE ' .. wherepart

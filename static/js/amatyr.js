@@ -4,16 +4,21 @@ Number.prototype.pad = function (len) {
 }
 /* Rivets formatters */
 rivets.formatters.temp = function(value) {
-    return Number((value).toFixed(1))+ ' °C';
+    if(!value)
+        return '';
+    if (value != undefined) 
+        return Number((value).toFixed(1))+ ' °C';
 }
 rivets.formatters.pressure = function(value) {
     return Number((value).toFixed(1)) + ' hPa';
 }
 rivets.formatters.rain = function(value) {
-    return Number((value).toFixed(1)) + ' mm';
+    if(value)
+        return Number((value).toFixed(1)) + ' mm';
 }
 rivets.formatters.wind = function(value) {
-    return Number((value).toFixed(1)) + ' kn' + ' ' + Number(value*0.51444).toFixed(1) + ' m/s';
+    if (value)
+        return Number((value).toFixed(1)) + ' kn' + ' ' + Number(value*0.51444).toFixed(1) + ' m/s';
 }
 rivets.formatters.degree = function(value) {
     return Number((value).toFixed(1)) + ' °';
@@ -215,4 +220,64 @@ d3.json(apiurl+'recent', function(json) {
     setInterval(wsl.update, 60*1000);
     setInterval(tsl.update, 60*1000);
     setInterval(psl.update, 60*1000);
+});
+
+// Init the data structure to be used by records and rivets
+var record_weather = {current:{}};
+
+// Fetch record weather
+var updateRecordsYear = function(year) {
+    var keys = ['max', 'min'];
+    var vals = ['temp', 'avg_speed', 'daily_rain', 'barometer', 'gusts'];
+    vals.forEach(function(k, v) {
+        keys.forEach(function(func, idx) {
+            // set key for rivets to set up proper setters and getters
+            record_weather.current[func+k+'date'] = '';
+            record_weather.current[func+k+'value'] = '';
+            /// XXX needs a black list for certain types that doesn't make sense
+            // like min daily_rain or min avg_speed
+            d3.json(apiurl + 'record/'+k+'/'+func+'?start='+year, function(json) { 
+                record_weather.current[func+k+'date'] = json[0].timestamp;
+                record_weather.current[func+k+'value'] = json[0][k];
+                console.log(k, func, json, record_weather);
+            });
+        })
+    });
+}
+// initial structure for rivets to work
+updateRecordsYear('today');
+//rivets.bind(document.getElementById('r2013'), record_weather);
+
+// Populate all the tab content with the tab template
+d3.selectAll('#record_weather .tab-pane').forEach(function (tab) {
+   $(tab).html($('#record_table_template').html());
+});
+// Bind rivets after both elemend and var is available and populated
+rivets.bind(document.getElementById('record_weather'), record_weather);
+
+// Bind the tab clicks to fetching new content
+$('#record_weather .nav-tabs a').bind('click', function(e) {
+  e.preventDefault();
+
+  // Find target container
+  var tab = $($(this).attr('href'));
+  /*
+  var firsttab = $('#record_weather .tab-pane:first>*');
+  if (tab != firsttab) {
+      // Empty any existing
+      tab.empty();
+      // Clone content from first tab
+      firsttab.clone().appendTo(tab);
+  }
+  */
+
+  // Get the year clicked
+  var year = $(this).text();
+  console.log(year);
+  // Fetch new data from db
+  updateRecordsYear(year);
+
+  // Show tab
+  $(this).tab('show');
+
 });

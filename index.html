@@ -129,7 +129,35 @@
                 <div class="svgholder" id="winddir"><i class="icon-spin icon-spinner"></i>Loading data...</div>
             </div>
         </div>
-    </div> <!-- /container -->
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12" id="record_weather">
+                <h3>Records</h3>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_today" data-toggle="tab">Today</a></li>
+                    <li class=""><a href="#r2013" data-toggle="tab">2013</a></li>
+                    <li><a href="#r2012" data-toggle="tab">2012</a></li>
+                    <li><a href="#r2011" data-toggle="tab">2011</a></li>
+                    <li><a href="#r2010" data-toggle="tab">2010</a></li>
+                    <li><a href="#r2009" data-toggle="tab">2009</a></li>
+                    <li><a href="#r2008" data-toggle="tab">2008</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_today">
+                    </div>
+                    <div class="tab-pane" id="r2013"></div>
+                    <div class="tab-pane" id="r2012"></div>
+                    <div class="tab-pane" id="r2011"></div>
+                    <div class="tab-pane" id="r2010"></div>
+                    <div class="tab-pane" id="r2009"></div>
+                    <div class="tab-pane" id="r2008"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span6">
@@ -146,12 +174,47 @@
         </div>
     </div> <!-- /container -->
     <div id="#tooltip"></div>
+    <script id="record_table_template" type="text/html">
+        <table class="table">
+            <tr>
+                <th>Data</th>
+                <th>When</th>
+                <th>What</th>
+            </tr>
+            <tr>
+                <td>Highest temperature</td>
+                <td data-text='current.maxtempdate'></td>
+                <td data-text='current.maxtempvalue | temp'></td>
+            </tr>
+            <tr>
+                <td>Lowest temperature</td>
+                <td data-text='current.mintempdate'></td>
+                <td data-text='current.mintempvalue | temp'></td>
+            </tr>
+            <tr>
+                <td>Highest avg wind speed</td>
+                <td data-text='current.maxavg_speeddate'></td>
+                <td data-text='current.maxavg_speedvalue | wind'></td>
+            </tr>
+            <tr>
+                <td>Highest wind gust speed</td>
+                <td data-text='current.maxgustsdate'></td>
+                <td data-text='current.maxgustsvalue | wind'></td>
+            </tr>
+            <tr>
+                <td>Highest daily rain</td>
+                <td data-text='current.maxdaily_raindate'></td>
+                <td data-text='current.maxdaily_rainvalue | rain'></td>
+            </tr>
+        </table>
+    </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="/static/js/watch.js"></script>
     <script src="/static/js/path.min.js"></script>
     <script src="/static/js/rivets.min.js"></script>
     <script src="/static/js/d3.v3.min.js"></script>
     <script src="/static/js/bootstrap-collapse.js"></script>
+    <script src="/static/js/bootstrap-tab.js"></script>
     <script src="/static/js/drawline.js"></script>
     <script src="/static/js/drawbars.js"></script>
     <script src="/static/js/temprain.js"></script>

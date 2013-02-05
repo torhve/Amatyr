@@ -61,12 +61,14 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
+      /*
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text(yaxisleg);
+      */
 
     // Temp line
     var line = d3.svg.line()
