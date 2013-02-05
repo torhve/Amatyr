@@ -6,6 +6,7 @@
 --
 local setmetatable = setmetatable
 local ngx = ngx
+local string = string
 
 module(...)
 
