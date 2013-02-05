@@ -81,6 +81,7 @@ function record(match)
                 ]]..func..[[(]]..key..[[) 
                 FROM wd
                 ]]..where..[[
+                LIMIT 1 
             )
         ]]..andwhere..[[
         LIMIT 1
