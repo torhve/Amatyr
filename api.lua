@@ -54,8 +54,16 @@ function record(match)
     local year = ngx.req.get_uri_args()['start']
     if year then 
         local start
+        local endpart = "365 days"
         if string.upper(year) == 'TODAY' then
-            start ="CURRENT_DATE" 
+            start = "CURRENT_DATE" 
+            -- XXX fixme, use postgresql function
+        elseif string.upper(year) == 'WEEK' then
+            start = "date(date_trunc('week', current_timestamp))"
+            endpart = '1 week'
+        elseif string.upper(year) == 'MONTH' then
+            start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')" 
+            endpart = '1 month'
         else
             start = "DATE '" .. year .. "-01-01'"
         end
@@ -63,7 +71,7 @@ function record(match)
         (
             timestamp BETWEEN ]]..start..[[
             AND 
-            ]]..start..[[ + INTERVAL '365 days'
+            ]]..start..[[ + INTERVAL ']]..endpart..[['
         )
         ]]
         where = 'WHERE ' .. wherepart

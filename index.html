@@ -58,7 +58,7 @@
                     <div class="navbar-inner">
                         <ul class="nav pull-right">
                             <li class="pull-right">
-                                <h5 title="Data updates every 60 seconds"><i class="green icon-spin icon-spinner"></i></h5>
+                                <h5 title="Data updates every 60 seconds"><i class="green icon-circle"></i></h5>
                             </li>
                         </ul>
                         <ul class="nav left">
@@ -137,6 +137,8 @@
                 <h3>Records</h3>
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_today" data-toggle="tab">Today</a></li>
+                    <li class=""><a href="#tab_week" data-toggle="tab">Week</a></li>
+                    <li class=""><a href="#tab_month" data-toggle="tab">Month</a></li>
                     <li class=""><a href="#r2013" data-toggle="tab">2013</a></li>
                     <li><a href="#r2012" data-toggle="tab">2012</a></li>
                     <li><a href="#r2011" data-toggle="tab">2011</a></li>
@@ -145,8 +147,9 @@
                     <li><a href="#r2008" data-toggle="tab">2008</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_today">
-                    </div>
+                    <div class="tab-pane active" id="tab_today"></div>
+                    <div class="tab-pane" id="tab_week"></div>
+                    <div class="tab-pane" id="tab_month"></div>
                     <div class="tab-pane" id="r2013"></div>
                     <div class="tab-pane" id="r2012"></div>
                     <div class="tab-pane" id="r2011"></div>
@@ -183,34 +186,44 @@
             </tr>
             <tr>
                 <td>Highest temperature</td>
-                <td data-text='current.maxtempdate'></td>
-                <td data-text='current.maxtempvalue | temp'></td>
+                <td data-text='current.maxtempdate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxtempvalue | temp'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Lowest temperature</td>
-                <td data-text='current.mintempdate'></td>
-                <td data-text='current.mintempvalue | temp'></td>
+                <td data-text='current.mintempdate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.mintempvalue | temp'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest avg wind speed</td>
-                <td data-text='current.maxavg_speeddate'></td>
-                <td data-text='current.maxavg_speedvalue | wind'></td>
+                <td data-text='current.maxavg_speeddate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxavg_speedvalue | wind'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest wind gust speed</td>
-                <td data-text='current.maxgustsdate'></td>
-                <td data-text='current.maxgustsvalue | wind'></td>
+                <td data-text='current.maxgustsdate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxgustsvalue | wind'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest daily rain</td>
-                <td data-text='current.maxdaily_raindate'></td>
-                <td data-text='current.maxdaily_rainvalue | rain'></td>
+                <td data-text='current.maxdaily_raindate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxdaily_rainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
+            </tr>
+            <tr>
+                <td>Highest pressure</td>
+                <td data-text='current.maxbarometerdate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxbarometervalue | pressure'><i class="icon-spinner icon-spin"></i></td>
+            </tr>
+            <tr>
+                <td>Lowest pressure</td>
+                <td data-text='current.minbarometerdate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.minbarometervalue | pressure'><i class="icon-spinner icon-spin"></i></td>
             </tr>
         </table>
     </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script src="/static/js/watch.js"></script>
     <script src="/static/js/path.min.js"></script>
+    <script src="/static/js/watch.js"></script>
     <script src="/static/js/rivets.min.js"></script>
     <script src="/static/js/d3.v3.min.js"></script>
     <script src="/static/js/bootstrap-collapse.js"></script>

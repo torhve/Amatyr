@@ -10,7 +10,8 @@ rivets.formatters.temp = function(value) {
         return Number((value).toFixed(1))+ ' °C';
 }
 rivets.formatters.pressure = function(value) {
-    return Number((value).toFixed(1)) + ' hPa';
+    if (value)
+        return Number((value).toFixed(1)) + ' hPa';
 }
 rivets.formatters.rain = function(value) {
     if(value)
@@ -239,7 +240,6 @@ var updateRecordsYear = function(year) {
             d3.json(apiurl + 'record/'+k+'/'+func+'?start='+year, function(json) { 
                 record_weather.current[func+k+'date'] = json[0].timestamp;
                 record_weather.current[func+k+'value'] = json[0][k];
-                console.log(k, func, json, record_weather);
             });
         })
     });
@@ -261,19 +261,9 @@ $('#record_weather .nav-tabs a').bind('click', function(e) {
 
   // Find target container
   var tab = $($(this).attr('href'));
-  /*
-  var firsttab = $('#record_weather .tab-pane:first>*');
-  if (tab != firsttab) {
-      // Empty any existing
-      tab.empty();
-      // Clone content from first tab
-      firsttab.clone().appendTo(tab);
-  }
-  */
 
   // Get the year clicked
   var year = $(this).text();
-  console.log(year);
   // Fetch new data from db
   updateRecordsYear(year);
 
