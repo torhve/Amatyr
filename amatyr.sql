@@ -12,4 +12,9 @@ CREATE TABLE "wd" (
     "cloud_height" real NOT NULL,
     "rain_rate" real NOT NULL
 );
+create index daily_rain_idx on wd(daily_rain);
+create index barometer_idx on wd(barometer);
+create index gusts_idx on wd(gusts);
+create index avg_speed_idx on wd(avg_speed);
+create index temp_idx on wd(temp);
 
