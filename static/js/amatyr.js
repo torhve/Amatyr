@@ -16,6 +16,7 @@ rivets.formatters.pressure = function(value) {
 rivets.formatters.rain = function(value) {
     if(value)
         return Number((value).toFixed(1)) + ' mm';
+    return '0 mm';
 }
 rivets.formatters.wind = function(value) {
     if (value)
