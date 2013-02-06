@@ -119,6 +119,23 @@ function index()
     return sql
 end
 
+function day(match)
+    --- XXX support for day as arg
+    --- current day for now
+    local sql = dbreq([[
+    SELECT  
+        *,
+        temp as tempmin,
+        temp as tempmax
+    FROM wd 
+    WHERE timestamp 
+        BETWEEN CURRENT_DATE
+        AND CURRENT_DATE + INTERVAL '1 day'
+    ORDER BY timestamp
+    ]])
+    return sql
+end
+
 function year(match)
     local year = match[1]
     local syear = year .. '-01-01'

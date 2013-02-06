@@ -14,6 +14,7 @@ local routes = {
     ['record/([a-z_]+)/([a-z]+)']= api.record,
     ['year/([0-9]{4})']   = api.year,
     ['now']               = api.now,
+    ['day']               = api.day,
     ['recent']            = api.recent,
     ['$']                 = api.index,
 }

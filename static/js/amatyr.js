@@ -166,6 +166,20 @@ Path.map("/year/:year").to(function(){
         draw(json, xformat);
     }); 
 });
+Path.map("/day/:day").to(function(){
+    var day = this.params['day'];
+    // save to global for redraw purpose
+    xformat = d3.time.format("%H:%M")
+    var url = apiurl + 'day/' + day;
+    /* Remove any existing graphs */
+    $('.svgholder').empty();
+    // Fetch data for this year
+    d3.json(url, function(json) { 
+        // Save to global for redrawing
+        currentsource = json;
+        draw(json, xformat);
+    }); 
+});
 Path.map("/").to(function(){
     var width = $('#main').css('width').split('px')[0];
     // save to global for redraw purpose
