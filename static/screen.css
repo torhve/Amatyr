@@ -5,6 +5,23 @@ body {
     font: 15px/22px 'Open Sans',Arial,Helvetica,sans-serif;
     background-color: #fdfdfd;
 }
+h1, h2, h3, h4, h5, h6 {
+    color: #317eac;
+}
+.navbar.main .navbar-inner {
+    border: 0;
+    border-bottom: 1px solid #d4d4d4;
+    border-radius: 0;
+}
+.navbar .brand i {
+    color: white;
+    text-shadow: 2px 2px 10px #317eac;
+    margin-right: 5px;
+    font-size: 20px;
+}
+.navbar-inner: {
+    background-color: #45aeea;
+}
 .sparkline {
     height: 42px;
     width: 50px;
