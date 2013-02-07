@@ -19,6 +19,7 @@ local routes = {
     ['now']               = api.now,
     ['day']               = api.day,
     ['recent']            = api.recent,
+    ['station']           = api.meta,
     ['$']                 = api.index,
 }
 -- Set the content type

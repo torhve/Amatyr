@@ -63,26 +63,25 @@
                             </li>
                         </ul>
                         <ul class="nav left">
-                            <li>
-                            <li>
+                            <li id="station">
                                 <h5><i class="icon-globe"></i></h5>
-                                <h5>Husnes</h5>
+                                <h5>{{ conf.station.name }}</h5>
                             </li>
                             <li>
                                 <h5><i class="icon-time"></i></h5>
-                                <h5 data-text="current.timestamp | date"></h5>
+                                <h5 data-text="current.datetime | date"></h5>
                             </li>
                             <li>
                                 <div id="sparkline" class="sparkline"></div>
-                                <h5 title="Temperature" class="avg" data-text="current.temp | temp"></h5>
-                                <h5 title="Dew point" class="avg" data-text="current.dew_temp | temp"></h5>
+                                <h5 title="Temperature" class="avg" data-text="current.outtemp | temp"></h5>
+                                <h5 title="Dew point" class="avg" data-text="current.dewpoint | temp"></h5>
                             </li>
                             <li>
                                 <div id="windsparkline" class="sparkline"></div>
-                                <h5 class="high" title="Average wind speeds" data-text="current.avg_speed | wind"></h5>
+                                <h5 class="high" title="Average wind speeds" data-text="current.windspeed | wind"></h5>
                             </li>
                             <li>
-                                <h5 class="high" title="Gusts" data-text="current.gusts | wind"></h5>
+                                <h5 class="high" title="Gusts" data-text="current.windgust | wind"></h5>
                             </li>
                             <li>
                                 <h5><i class="high icon-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
@@ -91,11 +90,11 @@
                             </li>
                             <li>
                                 <h5><i class="icon-dashboard"></i></h5>
-                                <h5 title="Humidity" class="hum" data-text="current.hum | percent"></h5>
+                                <h5 title="Humidity" class="hum" data-text="current.outhumidity | percent"></h5>
                             </li>
                             <li>
                                 <h5><i class="icon-tint"></i> </h5>
-                                <h5 class="rain" title="Daily rain" data-text="current.daily_rain | rain"></h5>
+                                <h5 class="rain" title="Daily rain" data-text="current.rain | rain"></h5>
                             </li>
                             <li>
                                 <div id="pressuresparkline" class="sparkline"></div>
@@ -117,7 +116,7 @@
                     <span class="high">High</span>, <span class="avg">avg</span>, <span class="min">min</span> temperature. <span class="rain">Rain</span> in mm. <span class="pressure">Pressure</span>
                 </h5>
                 <!--
-                <h6>From <span class="" data-text='first.timestamp'></span> to <span class="" data-text='current.timestamp'></span>
+                <h6>From <span class="" data-text='first.datetime'></span> to <span class="" data-text='current.datetime'></span>
                 </h6>
                 -->
                 <div class="svgholder" id="temp"><i class="icon-spin icon-spinner"></i>Loading data...</div>
@@ -125,10 +124,10 @@
                 <h5>Pressure </h5>
                 <div class="svgholder" id="pressure"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 -->
-                <h5>Wind <span class="pull-right" data-text='current.avg_speed | wind'></span></h5>
+                <h5>Wind <span class="pull-right" data-text='current.windspeed | wind'></span></h5>
                 <div class="svgholder" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <!--
-                <h5>Rain <span class="pull-right" data-text='current.daily_rain | rain'></span></h5>
+                <h5>Rain <span class="pull-right" data-text='current.rain | rain'></span></h5>
                 <div class="svgholder" id="rain"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 -->
                 <h5>Wind direction <span class="pull-right" data-text='current.winddir | degree '></span></h5>
@@ -192,8 +191,8 @@
             </tr>
             <tr>
                 <td>Highest temperature</td>
-                <td data-text='current.maxtempdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxtempvalue | temp'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxouttempdate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxouttempvalue | temp'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Lowest temperature</td>
@@ -202,8 +201,8 @@
             </tr>
             <tr>
                 <td>Highest avg wind speed</td>
-                <td data-text='current.maxavg_speeddate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxavg_speedvalue | wind'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxwindspeeddate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxwind_speedvalue | wind'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest wind gust speed</td>
@@ -212,8 +211,8 @@
             </tr>
             <tr>
                 <td>Highest daily rain</td>
-                <td data-text='current.maxdaily_raindate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxdaily_rainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxraindate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxrainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest pressure</td>

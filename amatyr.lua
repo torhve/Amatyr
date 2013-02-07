@@ -1,9 +1,18 @@
 local redis = require "resty.redis"
 local cjson = require "cjson"
 local tirtemplate = require "tirtemplate"
+local conf
 
 -- use nginx $root variable for template dir, needs trailing slash
 TEMPLATEDIR = ngx.var.root .. '/';
+
+if not conf then
+    local f = assert(io.open(ngx.var.document_root .. "/etc/config.json", "r"))
+    local c = f:read("*all")
+    f:close()
+
+    conf = cjson.decode(c)
+end
 
 -- 
 -- Index view
@@ -11,7 +20,7 @@ TEMPLATEDIR = ngx.var.root .. '/';
 local function index()
 
     local page = tirtemplate.tload('index.html')
-    local context = { }
+    local context = {conf=conf }
     -- render template with counter as context
     -- and return it to nginx
     ngx.print( page(context) )

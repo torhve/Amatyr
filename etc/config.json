@@ -1,5 +1,8 @@
 {
     "db": {
-        "name": "wd"
+        "name": "archive"
+    },
+    "station": {
+        "name": "Naustvika"
     }
 }

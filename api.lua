@@ -40,19 +40,19 @@ function max(match)
     keytest = ngx.re.match(key, '[a-z]+', 'oj')
     if not keytest then ngx.exit(403) end
 
-    local sql = "SELECT date_trunc('day', timestamp) AS timestamp, MAX("..key..") AS "..key.." FROM "..conf.db.name.." WHERE date_part('year', timestamp) < 2013 GROUP BY 1"
+    local sql = "SELECT date_trunc('day', datetime) AS datetime, MAX("..key..") AS "..key.." FROM "..conf.db.name.." WHERE date_part('year', datetime) < 2013 GROUP BY 1"
     
     return dbreq(sql)
 end
 
 function now(match)
-    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY timestamp DESC LIMIT 1"
+    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 1"
     
     return dbreq(sql)
 end
 
 function recent(match)
-    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY timestamp DESC LIMIT 50"
+    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 50"
     return dbreq(sql)
 end
 
@@ -81,7 +81,7 @@ function record(match)
         end
         local wherepart = [[
         (
-            timestamp BETWEEN ]]..start..[[
+            datetime BETWEEN ]]..start..[[
             AND 
             ]]..start..[[ + INTERVAL ']]..endpart..[['
         )
@@ -92,7 +92,7 @@ function record(match)
 
     local sql = dbreq([[
         SELECT
-            timestamp, 
+            datetime, 
             ]]..key..[[
         FROM ]]..conf.db.name..[[ 
         WHERE
@@ -113,16 +113,16 @@ end
 function index()
     local sql = dbreq([[
     SELECT  
-        date_trunc('hour', timestamp) AS timestamp,
-        AVG(temp) as temp,
-        MIN(temp) as tempmin,
-        MAX(temp) as tempmax,
-        AVG(daily_rain) as daily_rain,
-        AVG(avg_speed) as avg_speed,
+        date_trunc('hour', datetime) AS datetime,
+        AVG(outtemp) as outtemp,
+        MIN(outtemp) as tempmin,
+        MAX(outtemp) as tempmax,
+        AVG(rain) as rain,
+        AVG(windspeed) as windspeed,
         AVG(winddir) as winddir,
         AVG(barometer) as barometer
     FROM ]]..conf.db.name..[[ 
-    WHERE timestamp 
+    WHERE datetime 
         BETWEEN now() - INTERVAL '3 days'
         AND now()
     GROUP BY 1
@@ -137,13 +137,13 @@ function day(match)
     local sql = dbreq([[
     SELECT  
         *,
-        temp as tempmin,
-        temp as tempmax
+        outtemp as tempmin,
+        outtemp as tempmax
     FROM ]]..conf.db.name..[[ 
-    WHERE timestamp 
+    WHERE datetime 
         BETWEEN CURRENT_DATE
         AND CURRENT_DATE + INTERVAL '1 day'
-    ORDER BY timestamp
+    ORDER BY datetime
     ]])
     return sql
 end
@@ -153,16 +153,16 @@ function year(match)
     local syear = year .. '-01-01'
     local json = dbreq([[
         SELECT 
-            date_trunc('day', timestamp) AS timestamp,
-            AVG(temp) as temp,
-            MIN(temp) as tempmin,
-            MAX(temp) as tempmax,
-            MAX(daily_rain) as daily_rain,
-            AVG(avg_speed) as avg_speed,
+            date_trunc('day', datetime) AS datetime,
+            AVG(outtemp) as outtemp,
+            MIN(outtemp) as tempmin,
+            MAX(outtemp) as tempmax,
+            MAX(rain) as rain,
+            AVG(windspeed) as windspeed,
             AVG(winddir) as winddir,
             AVG(barometer) as barometer
         FROM ]]..conf.db.name..[[ 
-        WHERE timestamp BETWEEN DATE ']]..syear..[['
+        WHERE datetime BETWEEN DATE ']]..syear..[['
         AND DATE ']]..syear..[[' + INTERVAL '365 days'
         GROUP BY 1
         ORDER BY 1

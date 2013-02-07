@@ -27,7 +27,9 @@ rivets.formatters.degree = function(value) {
     return Number((value).toFixed(1)) + ' °';
 }
 rivets.formatters.percent = function(value) {
-    return Number((value).toFixed(0)) + ' %';
+    if (value)
+        return Number((value).toFixed(0)) + ' %';
+    return '0%'
 }
 rivets.formatters.rotate = function(value) {
     return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-mos-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);'
@@ -67,12 +69,12 @@ var bartender = function(target, key, legend, width, height) {
                 return rivets.formatters.temp(d.val)
             }
         }
-        else if (key == 'daily_rain') {
+        else if (key == 'rain') {
             valfmt = function(d) { 
                 return rivets.formatters.rain(d.val)
             }
         }
-        else if (key == 'avg_speed') {
+        else if (key == 'windspeed') {
             valfmt = function(d) { 
                 return rivets.formatters.wind(d.val)
             }
@@ -104,7 +106,7 @@ var draw = function(source, xformat) {
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
     source.forEach(function(d) {
-        d.date = parseDate(d.timestamp);
+        d.date = parseDate(d.datetime);
     });
     var width = $('#main').css('width').split('px')[0];
     var height = width/4;
@@ -112,16 +114,16 @@ var draw = function(source, xformat) {
     /* Line graphs */
     temprain('#temp', source, 'temp', xformat, 'Temperature (°C)', width, height);
     drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
-    drawlines('#wind', source, 'avg_speed', xformat, 'Average wind speed (knot)', width, height);
+    drawlines('#wind', source, 'windspeed', xformat, 'Average wind speed (knot)', width, height);
     /* Disable rain graph as it is part of temp graph now
-    drawlines('#rain', source, 'daily_rain',xformat,  'Daily rain (mm)', width, height);
+    drawlines('#rain', source, 'rain',xformat,  'Daily rain (mm)', width, height);
     */
     drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
     /* Bar graphs */
     /*
-    bartender('#rain', 'daily_rain', 'Daily Rain', width, height);
+    bartender('#rain', 'rain', 'Daily Rain', width, height);
     bartender('#temp', 'temp', 'Daily Max Temp', width, height);
-    bartender('#wind', 'avg_speed', 'Daily Max Wind', width, height);
+    bartender('#wind', 'windspeed', 'Daily Max Wind', width, height);
     */
 }
 
@@ -141,6 +143,14 @@ on_resize(function() {
 
 // debulked onresize handler
 function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,100)};return c};
+
+// Fetch current weather
+d3.json(apiurl + 'now', function(json) { 
+    current_weather = { 
+        current: json[0]
+    };
+    rivets.bind(document.getElementById('current_weather'), current_weather);
+});
 
 // Register HTML5 push state handler for navbar links
 $(".navbar a").bind("click", function(event){
@@ -196,13 +206,6 @@ Path.map("/").to(function(){
         currentsource = json;
         draw(json, xformat);
     }); 
-    // Fetch current weather
-    d3.json(apiurl + 'now', function(json) { 
-        current_weather = { 
-            current: json[0]
-        };
-        rivets.bind(document.getElementById('current_weather'), current_weather);
-    });
 });
 
 // Start listening for URL events
@@ -227,11 +230,11 @@ d3.json(apiurl+'recent', function(json) {
     json.forEach(function(k, v) {
         // Ordered wrong way, so unshift
         tdata.unshift(k.temp);
-        wdata.unshift(k.avg_speed);
+        wdata.unshift(k.windspeed);
         pdata.unshift(k.barometer);
     });
     tsl = new sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
-    wsl = new sparkline('#windsparkline', wdata, 'avg_speed', wdata.length, 38, 'basis', true, 60*1000, 1000);
+    wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 60*1000, 1000);
     psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 60*1000, 1000);
     // Update each minute
     setInterval(wsl.update, 60*1000);
@@ -245,17 +248,19 @@ var record_weather = {current:{}};
 // Fetch record weather
 var updateRecordsYear = function(year) {
     var keys = ['max', 'min'];
-    var vals = ['temp', 'avg_speed', 'daily_rain', 'barometer', 'gusts'];
+    var vals = ['temp', 'windspeed', 'rain', 'barometer', 'windgust'];
     vals.forEach(function(k, v) {
         keys.forEach(function(func, idx) {
             // set key for rivets to set up proper setters and getters
             record_weather.current[func+k+'date'] = '';
             record_weather.current[func+k+'value'] = '';
             /// XXX needs a black list for certain types that doesn't make sense
-            // like min daily_rain or min avg_speed
+            // like min daily_rain or min windspeed
             d3.json(apiurl + 'record/'+k+'/'+func+'?start='+year, function(json) { 
-                record_weather.current[func+k+'date'] = json[0].timestamp;
-                record_weather.current[func+k+'value'] = json[0][k];
+                if(json) {
+                    record_weather.current[func+k+'date'] = json[0].datetime;
+                    record_weather.current[func+k+'value'] = json[0][k];
+                }
             });
         })
     });
