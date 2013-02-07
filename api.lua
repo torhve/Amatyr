@@ -7,10 +7,22 @@
 local setmetatable = setmetatable
 local ngx = ngx
 local string = string
+local cjson = require "cjson"
+local io = require "io"
+local assert = assert
+local conf
 
 module(...)
 
 local mt = { __index = _M }
+
+if not conf then
+    local f = assert(io.open(ngx.var.document_root .. "/etc/config.json", "r"))
+    local c = f:read("*all")
+    f:close()
+
+    conf = cjson.decode(c)
+end
 
 -- The function sending subreq to nginx postgresql location with rds_json on
 -- returns json body to the caller
@@ -28,19 +40,19 @@ function max(match)
     keytest = ngx.re.match(key, '[a-z]+', 'oj')
     if not keytest then ngx.exit(403) end
 
-    local sql = "SELECT date_trunc('day', timestamp) AS timestamp, MAX("..key..") AS "..key.." FROM wd WHERE date_part('year', timestamp) < 2013 GROUP BY 1"
+    local sql = "SELECT date_trunc('day', timestamp) AS timestamp, MAX("..key..") AS "..key.." FROM "..conf.db.name.." WHERE date_part('year', timestamp) < 2013 GROUP BY 1"
     
     return dbreq(sql)
 end
 
 function now(match)
-    local sql = "SELECT * FROM wd ORDER BY timestamp DESC LIMIT 1"
+    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY timestamp DESC LIMIT 1"
     
     return dbreq(sql)
 end
 
 function recent(match)
-    local sql = "SELECT * FROM wd ORDER BY timestamp DESC LIMIT 50"
+    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY timestamp DESC LIMIT 50"
     return dbreq(sql)
 end
 
@@ -82,12 +94,12 @@ function record(match)
         SELECT
             timestamp, 
             ]]..key..[[
-        FROM wd 
+        FROM ]]..conf.db.name..[[ 
         WHERE
         ]]..key..[[ = (
             SELECT 
                 ]]..func..[[(]]..key..[[) 
-                FROM wd
+                FROM ]]..conf.db.name..[[
                 ]]..where..[[
                 LIMIT 1 
             )
@@ -109,7 +121,7 @@ function index()
         AVG(avg_speed) as avg_speed,
         AVG(winddir) as winddir,
         AVG(barometer) as barometer
-    FROM wd 
+    FROM ]]..conf.db.name..[[ 
     WHERE timestamp 
         BETWEEN now() - INTERVAL '3 days'
         AND now()
@@ -127,7 +139,7 @@ function day(match)
         *,
         temp as tempmin,
         temp as tempmax
-    FROM wd 
+    FROM ]]..conf.db.name..[[ 
     WHERE timestamp 
         BETWEEN CURRENT_DATE
         AND CURRENT_DATE + INTERVAL '1 day'
@@ -149,7 +161,7 @@ function year(match)
             AVG(avg_speed) as avg_speed,
             AVG(winddir) as winddir,
             AVG(barometer) as barometer
-        FROM wd 
+        FROM ]]..conf.db.name..[[ 
         WHERE timestamp BETWEEN DATE ']]..syear..[['
         AND DATE ']]..syear..[[' + INTERVAL '365 days'
         GROUP BY 1

@@ -6,7 +6,10 @@
 
 local cjson = require "cjson"
 local string = require "string"
+
+-- Load our API commands
 local api = require "api"
+
 
 -- mapping patterns to query views
 local routes = {
