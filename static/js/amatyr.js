@@ -248,7 +248,7 @@ var record_weather = {current:{}};
 // Fetch record weather
 var updateRecordsYear = function(year) {
     var keys = ['max', 'min'];
-    var vals = ['temp', 'windspeed', 'rain', 'barometer', 'windgust'];
+    var vals = ['outtemp', 'windspeed', 'rain', 'barometer', 'windgust'];
     vals.forEach(function(k, v) {
         keys.forEach(function(func, idx) {
             // set key for rivets to set up proper setters and getters
