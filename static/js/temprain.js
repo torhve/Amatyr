@@ -73,7 +73,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     // Temp line
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.temp); })
+        .y(function(d) { return y(d.outtemp); })
         .interpolate("basis")
 
     var pathos = svg.append("path")
@@ -137,7 +137,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .range([height, height/2]);
 
     x.domain(json.map(function(d) { return d.date; }));
-    y.domain([0, d3.max(json, function(d) { return d.daily_rain; })]);
+    y.domain([0, d3.max(json, function(d) { return d.rain; })]);
 
     var barxpos = function(d) { 
       var nr = x(d.date);

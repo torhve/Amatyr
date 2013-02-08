@@ -96,7 +96,7 @@ d3.json(apiurl+'recent', function(json) {
     var pdata = [];
     json.forEach(function(k, v) {
         // Ordered wrong way, so unshift
-        tdata.unshift(k.temp);
+        tdata.unshift(k.outtemp);
         wdata.unshift(k.windspeed);
         pdata.unshift(k.barometer);
     });

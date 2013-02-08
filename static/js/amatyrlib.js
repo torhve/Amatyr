@@ -114,7 +114,7 @@ var draw = function(source, xformat) {
     var height = width/4;
 
     /* Line graphs */
-    temprain('#temp', source, 'temp', xformat, 'Temperature (°C)', width, height);
+    temprain('#temp', source, 'outtemp', xformat, 'Temperature (°C)', width, height);
     drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
     drawlines('#wind', source, 'windspeed', xformat, 'Average wind speed (knot)', width, height);
     /* Disable rain graph as it is part of temp graph now
