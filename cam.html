@@ -157,11 +157,11 @@ d3.json(apiurl+'recent', function(json) {
     var pdata = [];
     json.forEach(function(k, v) {
         // Ordered wrong way, so unshift
-        tdata.unshift(k.temp);
+        tdata.unshift(k.outtemp);
         wdata.unshift(k.windspeed);
         pdata.unshift(k.barometer);
     });
-    tsl = new sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
+    tsl = new sparkline('#sparkline', tdata, 'outtemp', tdata.length, 38, 'basis', true, 60*1000, 1000);
     wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 60*1000, 1000);
     psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 60*1000, 1000);
     // Update each minute
