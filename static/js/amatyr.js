@@ -20,7 +20,7 @@ rivets.formatters.rain = function(value) {
 }
 rivets.formatters.wind = function(value) {
     if (value)
-        return Number((value).toFixed(1)) + ' kn' + ' ' + Number(value*0.51444).toFixed(1) + ' m/s';
+        return Number(value*0.51444).toFixed(1) + ' m/s';
     return '0 m/s'
 }
 rivets.formatters.degree = function(value) {
