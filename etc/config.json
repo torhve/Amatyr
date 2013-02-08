@@ -4,5 +4,8 @@
     },
     "station": {
         "name": "Naustvika"
+    },
+    "webcam": {
+        "url": "http://hveem.no/cam/snap.jpg"
     }
 }

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <head>
+        <title>Naust Cam</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Tor Hveem">
+
+        <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
+
+        <link href="/static/screen.css" rel="stylesheet">
+
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <style type="text/css">
+            img {
+                max-width: 1280px;
+                border: 1px solid #000;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                margin-left:auto;
+                margin-right:auto;
+
+            }
+            body {
+                background: #111;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+                color: rgba(255, 255, 255, 0.8);
+                font-family: Arial;
+            }
+            .navbar-inner {
+                background: inherit;
+                border: 0;
+            }
+            #current_weather .navbar .left > li {
+                border-left: 0;
+                border-right: 1px solid black;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <img src="{{conf.webcam.url}}?nocache=1">
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12" id="current_weather">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav pull-right">
+                            <li class="pull-right">
+                                <h5 title="Data updates every 60 seconds"><i class="green icon-circle"></i></h5>
+                            </li>
+                        </ul>
+                        <ul class="nav left">
+                            <li id="station">
+                                <h5><i class="icon-globe"></i></h5>
+                                <h5>{{ conf.station.name }}</h5>
+                            </li>
+                            <li>
+                                <h5><i class="icon-time"></i></h5>
+                                <h5 data-text="current.datetime | date"></h5>
+                            </li>
+                            <li>
+                                <div id="sparkline" class="sparkline"></div>
+                                <h5 title="Temperature" class="avg" data-text="current.outtemp | temp"></h5>
+                                <h5 title="Dew point" class="avg" data-text="current.dewpoint | temp"></h5>
+                            </li>
+                            <li>
+                                <div id="windsparkline" class="sparkline"></div>
+                                <h5 class="high" title="Average wind speeds" data-text="current.windspeed | wind"></h5>
+                            </li>
+                            <li>
+                                <h5 class="high" title="Gusts" data-text="current.windgust | wind"></h5>
+                            </li>
+                            <li>
+                                <h5><i class="high icon-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
+                                <h5 class="high" title="Wind direction" data-text="current.winddir | degree">
+                                </h5>
+                            </li>
+                            <li>
+                                <h5><i class="icon-dashboard"></i></h5>
+                                <h5 title="Humidity" class="hum" data-text="current.outhumidity | percent"></h5>
+                            </li>
+                            <li>
+                                <h5><i class="icon-tint"></i> </h5>
+                                <h5 class="rain" title="Daily rain" data-text="current.rain | rain"></h5>
+                            </li>
+                            <li>
+                                <div id="pressuresparkline" class="sparkline"></div>
+                                <h5 class="pressure" title="Barometer" data-text="current.barometer | pressure"></h5>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="/static/js/watch.js"></script>
+<script src="/static/js/rivets.min.js"></script>
+<script src="/static/js/d3.v3.min.js"></script>
+<script src="/static/js/sparkline.js"></script>
+<script src="/static/js/amatyrlib.js"></script>
+<script>
+
+days = ["Sundag","Mondag","Tirsdag","Onsdag","Torsdag","Fredag","Laurdag"],
+months = ["Januar","Februar","Mars","April","Mai","Juni","Juli","August","September","Oktober","Desember"];
+Number.prototype.pad = function (len) {
+    return (new Array(len+1).join("0") + this).slice(-len);
+}
+
+function updateDate() {
+    var d = new Date();
+    document.getElementById("date").innerHTML = days[d.getDay()] + " " +  d.getDate() + ". " + months[d.getMonth()] + " " +d.getFullYear() + " " + d.getHours().pad(2) + ":" + d.getMinutes().pad(2) + ":" + d.getSeconds().pad(2);
+};
+//updateDate();
+
+setInterval(function () {
+  var imgElem = document.querySelectorAll("img")[0];
+  var newImg = new Image();
+  newImg.src = imgElem.src.split("?")[0] + "?" + new Date().getTime();
+  newImg.addEventListener("load", function (evt) {
+    imgElem.src = newImg.src;
+    //console.log(newImg.fileModifiedDate);
+    //updateDate();
+  });
+}, 30000);
+</script>
+<script>
+var apiurl = "/api/";
+var current_weather;
+// Fetch current weather
+d3.json(apiurl + 'now', function(json) { 
+    current_weather = { 
+        current: json[0]
+    };
+    rivets.bind(document.getElementById('current_weather'), current_weather);
+});
+// Draw sparkline
+d3.json(apiurl+'recent', function(json) {
+    var tdata = []; 
+    var wdata = []; 
+    var pdata = [];
+    json.forEach(function(k, v) {
+        // Ordered wrong way, so unshift
+        tdata.unshift(k.temp);
+        wdata.unshift(k.windspeed);
+        pdata.unshift(k.barometer);
+    });
+    tsl = new sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
+    wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 60*1000, 1000);
+    psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 60*1000, 1000);
+    // Update each minute
+    setInterval(wsl.update, 60*1000);
+    setInterval(tsl.update, 60*1000);
+    setInterval(psl.update, 60*1000);
+});
+// Fetch current weather with 1 minute interval
+setInterval(function() { d3.json(apiurl + 'now', function(json) { 
+    // Update each key with new val
+    for(key in current_weather.current) {
+        current_weather.current[key] = json[0][key]
+    }
+}) }, 60*1000);
+</script>
+
+</body>
+</html>

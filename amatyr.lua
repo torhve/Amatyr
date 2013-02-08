@@ -20,14 +20,25 @@ end
 local function index()
 
     local page = tirtemplate.tload('index.html')
-    local context = {conf=conf }
-    -- render template with counter as context
-    -- and return it to nginx
+    local context = { conf=conf }
     ngx.print( page(context) )
 end
 
+
+--
+-- Webcam view
+--
+local function cam()
+
+    local page = tirtemplate.tload('cam.html')
+    local context = { conf=conf }
+    ngx.print( page(context) )
+end
+
+
 -- mapping patterns to views
 local routes = {
+    ['cam']       = cam,
     ['(.*)$']     = index,
 }
 -- Set the content type
