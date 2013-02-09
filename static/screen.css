@@ -142,6 +142,7 @@ svg:not(:hover) .focus {
 
 #tt, #tooltip {
     z-index: 1;
+    display: none;
     position: absolute;
     background-color: #fafafa;
     background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);

@@ -250,8 +250,7 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
       .on('mouseout', function(d, i) {
           // move tooltip off screen
           d3.select('#tooltip')
-          .attr('style', 'left', '-1000px')
-          .attr('style', 'top', '-1000px');
+            .attr('style', 'display:hidden;top:-1000pxleft:-1000px');
           // hide the ruler 
           mRule.style("stroke", "none");
       })
@@ -282,7 +281,7 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
         }
         // move the tooltip element
         d3.select('#tooltip')
-            .attr('style', 'top:'+(ty+10)+'px;left:'+(tx+10)+'px');
+            .attr('style', 'display: block; top:'+(ty+10)+'px;left:'+(tx+10)+'px');
         // update the rivets tt obj
         for(key in d) { 
             ttobj.d[key] = d[key];
