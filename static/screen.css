@@ -136,7 +136,7 @@ svg:not(:hover) .focus {
   stroke-width: 1.5px;
 }
 
-#tt {
+#tt, #tooltip {
     z-index: 1;
     position: absolute;
     background-color: rgba(255,255,255,1);
@@ -156,9 +156,6 @@ svg:not(:hover) .focus {
 
     -moz-border-radius: 10px;
     border-radius: 10px;
-
-
-
 }
 #tt .value {
     font-weight: strong;

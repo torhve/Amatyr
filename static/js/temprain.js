@@ -1,8 +1,10 @@
 /* D3 function for drawing temperatures and rain bars in same svg */
-var temprain = function(el, json, attr, xformat, yaxisleg, width, height) { 
+var temprain = function(el, data, attr, xformat, yaxisleg, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
-        height = height - margin.top - margin.bottom;
+        height = height - margin.top - margin.bottom,
+        interpolation = 'basis',
+        bisectDate = d3.bisector(function(d) { return d.date; }).left; // Bisector used for mouse over
 
     var svg = d3.select(el).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -12,7 +14,8 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
 
     // Add gradient to chart
-    addGradient(svg, width, height);
+    var gradient = addGradient(svg, width, height);
+    // Add mouseover overlay
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -25,8 +28,8 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .orient("bottom");
 
     // Figure out xformat to be used given the domain and chart width
-    var xextent = d3.extent(json, function(d) { return d.date; })
-    console.log("Xaxis extent diff", xextent[1] - xextent[0]);
+    var xextent = d3.extent(data, function(d) { return d.date; })
+    //console.log("Xaxis extent diff", xextent[1] - xextent[0]);
     var xdiff = xextent[1] - xextent[0];
     if (xdiff >= 8640000000) { // a year
         //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
@@ -44,7 +47,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .orient("left");
 
     x.domain(xextent);
-    y.domain([d3.min(json, function(d) { return d.tempmin }), d3.max(json, function(d) { return d.tempmax; })]);
+    y.domain([d3.min(data, function(d) { return d.tempmin }), d3.max(data, function(d) { return d.tempmax; })]);
 
 
     // Y Axis grid
@@ -90,10 +93,10 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.outtemp); })
-        .interpolate("basis")
+        .interpolate(interpolation)
 
     var pathos = svg.append("path")
-      .datum(json)
+      .datum(data)
       .attr("class", "line")
       .attr("stroke", "red")
       .attr("d", line)
@@ -101,9 +104,9 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.tempmin); })
-        .interpolate("basis")
+        .interpolate(interpolation)
     var pathoslow = svg.append("path")
-      .datum(json)
+      .datum(data)
       .attr("class", "line")
       .attr("stroke-dasharray", "5,5")
       .attr("stroke", "steelblue")
@@ -112,9 +115,9 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.tempmax); })
-        .interpolate("basis")
+        .interpolate(interpolation)
     var pathoslow = svg.append("path")
-      .datum(json)
+      .datum(data)
       .attr("class", "line")
       .attr("stroke-dasharray", "5,5")
       .attr("stroke", "darkred")
@@ -122,55 +125,54 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
     /* Pressure section */
 
-    x.domain(d3.extent(json, function(d) { return d.date; }));
+    x.domain(d3.extent(data, function(d) { return d.date; }));
     var y = d3.scale.linear()
         .range([height, 0]);
-    //y.domain(d3.extent(json, function(d) { return d.barometer; }));
+    //y.domain(d3.extent(data, function(d) { return d.barometer; }));
     // hard coded minmax
     y.domain([950, 1050]);
     // Pressure line
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.barometer); })
-        .interpolate("basis")
+        .interpolate(interpolation)
 
     // Pressure path
     var pathospressure = svg.append("path")
-      .datum(json)
+      .datum(data)
       .attr("class", "line")
       .attr("stroke", "darkgreen")
       .attr("stroke-opacity", "0.2")
       .attr("d", line)
 
 
-
     /* Rain bar section */
 
-    var x = d3.time.scale()
+    var timex = d3.time.scale()
         .range([0, 1]);
 
-    var y = d3.scale.linear()
+    var timey = d3.scale.linear()
         .range([height, height/2]);
 
-    x.domain(json.map(function(d) { return d.date; }));
-    y.domain([0, d3.max(json, function(d) { return d.rain; })]);
+    timex.domain(data.map(function(d) { return d.date; }));
+    timey.domain([0, d3.max(data, function(d) { return d.rain; })]);
 
     var barxpos = function(d) { 
-      var nr = x(d.date);
-      var bwidth = (width/json.length)*0.8
-      var barmargin = (width/json.length)*0.2
+      var nr = timex(d.date);
+      var bwidth = (width/data.length)*0.8
+      var barmargin = (width/data.length)*0.2
       var barx = width-bwidth;
       return  nr*bwidth + nr*barmargin;
     }
 
     svg.selectAll(".bar")
-      .data(json)
+      .data(data)
     .enter().append("rect")
       .attr("class", "bar")
       .attr('rx', 3)
       .attr('ry', 3)
       .attr("x", barxpos )
-      .attr("width", (width/json.length)*0.8)
+      .attr("width", (width/data.length)*0.8)
       .attr("y", function(d) { return height; })
       .attr("height", function(d) { return 0; })
       .on("mouseover", function(d,i){
@@ -190,7 +192,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
       var bubble_code = "<div id='tt' style='top:"
           + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
-          + d.timestamp + "</span><br>  Rain: <span class=value>" + Number(d.rain).toFixed(1) + "</span> mm</b><br />"
+          + d.datetime + "</span><br>  Rain: <span class=value>" + Number(d.rain).toFixed(1) + "</span> mm</b><br />"
           + "</div>";
       $("body").append(bubble_code);
 
@@ -202,9 +204,8 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
       .transition().delay(function (d,i){ return 300;})
       .duration(150)
-      .attr("y", function(d) { return y(d.rain); })
-      .attr("height", function(d) { return height - y(d.rain); })
-
+      .attr("y", function(d) { return timey(d.rain); })
+      .attr("height", function(d) { return height - timey(d.rain); })
       ;
 
     var valfmt = function(d) { 
@@ -214,51 +215,55 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
             return Number(nr).toFixed(1);
         return parseInt(nr);
     }
+    /* Bar text */
     svg.selectAll("text.score")
-        .data(json)
+        .data(data)
         .enter().append("text")
         .attr("x", barxpos)
-        .attr("y", function(d){ return y(d.rain) + 10 } )
-        .attr("dx", (width/json.length)*0.4)
-        .attr("dy", (width/json.length)*0.4)
+        .attr("y", function(d){ return timey(d.rain) + 10 } )
+        .attr("dx", (width/data.length)*0.4)
+        .attr("dy", (width/data.length)*0.4)
         .attr("text-anchor", "middle")
         .attr('class', 'score')
         .style('font-size', function(d) { 
             // Compute proper font size
-            w = (width/json.length)*0.6;
+            w = (width/data.length)*0.6;
             return w + 'px' })
         .text(valfmt)
 
-  var focus = svg.append("g")
-      .attr("class", "focus");
-
-  focus.append("line")
-      .attr("class", "x")
-      .attr("y1", y(0) - 6)
-      .attr("y2", y(0) + 6);
-
-  focus.append("line")
-      .attr("class", "y")
-      .attr("x1", width - 6)
-      .attr("x2", width + 6);
-
-  focus.append("circle")
-      .attr("r", 3.5);
-
-  /*
-  svg.append("rect")
+    svg.append("rect")
       .attr("class", "overlay")
       .attr("width", width)
       .attr("height", height)
-      .on("mousemove", mousemove);
+      .on("mousemove", mousemove)
+      .on('mouseout', function(d, i) {d3.selectAll('#tooltip').remove();})
 
-  function mousemove() {
-    var d = json[Math.round((x.invert(d3.mouse(this)[0]) - json[0].date) / 60*60*24)];
-    focus.select("circle").attr("transform", "translate(" + x(d[0]) + "," + y(d[1]) + ")");
-    focus.select(".x").attr("transform", "translate(" + x(d[0]) + ",0)");
-    focus.select(".y").attr("transform", "translate(0," + y(d[1]) + ")");
-    svg.selectAll(".x.axis path").style("fill-opacity", Math.random()); // XXX Chrome redraw bug
-  }*/
+      //.on("mouseover", function() { tt.show() })
+      //.on("mouseout", function() { tt.hide(); })
+    function mousemove() {
+        d3.selectAll('#tooltip').remove();
+        var x0 = x.invert(d3.mouse(this)[0]);
+        var i = bisectDate(data, x0, 1);
+        //console.log(x0, i, data[i]);
+        var d = data[i];
+        var tx; var ty;
+        if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
+            tx = d3.event.pageX;
+            ty = d3.event.pageY;
+        } else {
+            tx = d3.event.clientX + document.body.scrollLeft +
+                document.documentElement.scrollLeft;
+            ty = d3.event.clientY + document.body.scrollTop +
+                document.documentElement.scrollTop;
+        }
+        var tt = '<div id="tooltip" style="top:'+ty+'px;left:'+(tx+10)+'px;">Date:'+d.datetime + "<br>  Temp: <span class=value>" + Number(d.outtemp).toFixed(1) + "</span><br>";
+        tt += "Pressure: <span class=value>" + Number(d.barometer).toFixed(1) + "</span><br>";
+        tt += "Wind speed: <span class=value>" + Number(d.windspeed).toFixed(1) + "</span><br>";
+        tt += "Humidity: <span class=value>" + Number(d.outhumidity).toFixed(1) + "</span><br>";
+        tt += "Rain: <span class=value>" + Number(d.rain).toFixed(1) + "</span><br>";
+        $("body").append(tt+'</div>');
+    }
+
 }
 
 var addGradient = function(target, w, h) {
@@ -285,4 +290,5 @@ var addGradient = function(target, w, h) {
         .attr("width", w)
         .attr("height", h)
         .style("fill", "url(#gradient)");
+    return gradient;
 }
