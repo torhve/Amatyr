@@ -222,6 +222,22 @@
     <script src="/static/js/sparkline.js"></script>
     <script src="/static/js/amatyrlib.js"></script>
     <script src="/static/js/amatyr.js"></script>
+    <script>
+      !function ($) {
+        $(function(){
+          var pkBaseURL = (("https:" == document.location.protocol) ? "https://statistikk.idrift.no/" : "http://statistikk.idrift.no/");
+          $.getScript(pkBaseURL + 'piwik.js', function(){
+              var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 116);
+              piwikTracker.trackPageView();
+              piwikTracker.enableLinkTracking();
+          });
+        })
+      }(window.jQuery)
+    </script>
+    <noscript><p><img src="http://statistikk.idrift.no/piwik.php?idsite=116" style="border:0" alt=""><p></noscript>
+
+
+    </script>
   </body>
 </html>
 
