@@ -85,11 +85,6 @@ h1, h2, h3, h4, h5, h6 {
     color: darkgreen;
 }
 
-@media (max-width: 979px) {
-    body {
-        padding-top: 0;
-    }
-}
 
 svg {
     font-size: 13px;
@@ -230,6 +225,21 @@ svg:not(:hover) .focus {
 
 .line {
     fill: none;
-    stroke-width: 3px;
+    stroke-width: 2px;
 }
 
+@media (max-width: 979px) {
+    body {
+        padding-top: 0;
+    }
+    /* Lesser stroke width for smaller screen */
+    .line {
+        stroke-width: 1.5px;
+    }
+}
+@media (min-width: 1200px) {
+    /* Bigger stroke width for bigger screen */
+    .line {
+        stroke-width: 3px;
+    }
+}
