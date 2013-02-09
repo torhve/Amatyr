@@ -177,6 +177,18 @@ setInterval(function() { d3.json(apiurl + 'now', function(json) {
     }
 }) }, 60*1000);
 </script>
+<script>
+  !function ($) {
+    $(function(){
+      var pkBaseURL = (("https:" == document.location.protocol) ? "https://statistikk.idrift.no/" : "http://statistikk.idrift.no/");
+      $.getScript(pkBaseURL + 'piwik.js', function(){
+          var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 116);
+          piwikTracker.trackPageView();
+          piwikTracker.enableLinkTracking();
+      });
+    })
+  }(window.jQuery)
+</script>
 
 </body>
 </html>
