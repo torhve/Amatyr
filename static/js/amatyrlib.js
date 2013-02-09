@@ -121,6 +121,7 @@ var draw = function(source, xformat) {
     drawlines('#rain', source, 'rain',xformat,  'Daily rain (mm)', width, height);
     */
     drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
+    drawlines('#humidity', source, 'outhumidity',xformat,  'Humidity (%)', width, height);
     /* Bar graphs */
     /*
     bartender('#rain', 'rain', 'Daily Rain', width, height);

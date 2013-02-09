@@ -174,7 +174,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
       var bubble_code = "<div id='tt' style='top:"
           + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
-          + d.timestamp + "</span><br>  Rain: <span class=value>" + Number(d.daily_rain).toFixed(1) + "</span> mm</b><br />"
+          + d.timestamp + "</span><br>  Rain: <span class=value>" + Number(d.rain).toFixed(1) + "</span> mm</b><br />"
           + "</div>";
       $("body").append(bubble_code);
 
@@ -186,13 +186,13 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
       .transition().delay(function (d,i){ return 300;})
       .duration(150)
-      .attr("y", function(d) { return y(d.daily_rain); })
-      .attr("height", function(d) { return height - y(d.daily_rain); })
+      .attr("y", function(d) { return y(d.rain); })
+      .attr("height", function(d) { return height - y(d.rain); })
 
       ;
 
     var valfmt = function(d) { 
-        var nr = d.daily_rain;
+        var nr = d.rain;
         if (nr == 0) return '';
         if (nr < 1 )
             return Number(nr).toFixed(1);
@@ -202,7 +202,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
         .data(json)
         .enter().append("text")
         .attr("x", barxpos)
-        .attr("y", function(d){ return y(d.daily_rain) + 10 } )
+        .attr("y", function(d){ return y(d.rain) + 10 } )
         .attr("dx", (width/json.length)*0.4)
         .attr("dy", (width/json.length)*0.4)
         .attr("text-anchor", "middle")
