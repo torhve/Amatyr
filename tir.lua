@@ -1,4 +1,4 @@
-module('tirtemplate', package.seeall)
+module('tir', package.seeall)
 
 -- Simplistic HTML escaping.
 function escape(s)
@@ -13,7 +13,7 @@ function tirescape(s)
     if s == nil then return '' end
 
     local esc, i = s:gsub('{', '&#123;'):gsub('}', '&#125;')
-    return tirtemplate.escape(esc)
+    return tir.escape(esc)
 end
 
 -- Helper function that loads a file into ram.
@@ -37,9 +37,9 @@ local VIEW_ACTIONS = {
 
     ['{('] = function(code)
         return ([[ 
-            local tirtemplate = require('tirtemplate')
+            local tir= require('tir')
             if not _children[%s] then
-                _children[%s] = tirtemplate.tload(%s)
+                _children[%s] = tir.tload(%s)
             end
 
             _result[#_result+1] = _children[%s](getfenv())
@@ -47,7 +47,7 @@ local VIEW_ACTIONS = {
     end,
 
     ['{<'] = function(code)
-        return ('local tirtemplate = require("tirtemplate") _result[#_result+1] =  tirtemplate.escape(%s)'):format(code)
+        return ('local tir= require("tir") _result[#_result+1] =  tir.escape(%s)'):format(code)
     end,
 }
 

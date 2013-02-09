@@ -33,6 +33,7 @@ var sparkline = function(id, data, key, width, height, interpolation, animate, u
     //graph.selectAll("path").data([data]).enter().append("svg:path").attr("d", line);
     //
    this.redrawWithAnimation = function() {
+       console.log(this.key, this.data);
         // update with animation
         this.graph.selectAll("path")
             .data([this.data]) // set the new data

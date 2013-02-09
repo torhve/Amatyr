@@ -48,7 +48,7 @@ Path.map("/year/:year").to(function(){
 Path.map("/day/:day").to(function(){
     var day = this.params['day'];
     // save to global for redraw purpose
-    xformat = d3.time.format("%H:%M")
+    xformat = d3.time.format("%H")
     var url = apiurl + 'day/' + day;
     /* Remove any existing graphs */
     $('.svgholder').empty();
@@ -100,7 +100,7 @@ d3.json(apiurl+'recent', function(json) {
         wdata.unshift(k.windspeed);
         pdata.unshift(k.barometer);
     });
-    tsl = new sparkline('#sparkline', tdata, 'temp', tdata.length, 38, 'basis', true, 60*1000, 1000);
+    tsl = new sparkline('#sparkline', tdata, 'outtemp', tdata.length, 38, 'basis', true, 60*1000, 1000);
     wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 60*1000, 1000);
     psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 60*1000, 1000);
     // Update each minute

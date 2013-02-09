@@ -10,6 +10,8 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+    // Add gradient to chart
     addGradient(svg, width, height);
 
     var x = d3.time.scale()
@@ -20,14 +22,28 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickFormat(xformat)
         .orient("bottom");
+
+    // Figure out xformat to be used given the domain and chart width
+    var xextent = d3.extent(json, function(d) { return d.date; })
+    console.log("Xaxis extent diff", xextent[1] - xextent[0]);
+    var xdiff = xextent[1] - xextent[0];
+    if (xdiff >= 86400000) { // a year
+        //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
+        xAxis.ticks(d3.time.hours, 24).tickFormat(d3.time.format('%d.%m'));
+    }
+    else if (xdiff >= 100800000) { // 3 days
+        xAxis.ticks(d3.time.hours, 4).tickFormat(d3.time.format('%a %H'));
+    }
+    else {
+        xAxis.ticks(d3.time.hours, 2).tickFormat(d3.time.format('%H'));
+    }
 
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left");
 
-    x.domain(d3.extent(json, function(d) { return d.date; }));
+    x.domain(xextent);
     y.domain([d3.min(json, function(d) { return d.tempmin }), d3.max(json, function(d) { return d.tempmax; })]);
 
 

@@ -120,7 +120,8 @@ function index()
         AVG(rain) as rain,
         AVG(windspeed) as windspeed,
         AVG(winddir) as winddir,
-        AVG(barometer) as barometer
+        AVG(barometer) as barometer,
+        AVG(outhumidity) as outhumidity
     FROM ]]..conf.db.name..[[ 
     WHERE datetime 
         BETWEEN now() - INTERVAL '3 days'
