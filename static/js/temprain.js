@@ -28,7 +28,7 @@ var temprain = function(el, json, attr, xformat, yaxisleg, width, height) {
     var xextent = d3.extent(json, function(d) { return d.date; })
     console.log("Xaxis extent diff", xextent[1] - xextent[0]);
     var xdiff = xextent[1] - xextent[0];
-    if (xdiff >= 86400000) { // a year
+    if (xdiff >= 8640000000) { // a year
         //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
         xAxis.ticks(d3.time.hours, 24).tickFormat(d3.time.format('%d.%m'));
     }
