@@ -50,6 +50,8 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
     y.domain([d3.min(data, function(d) { return d.tempmin }), d3.max(data, function(d) { return d.tempmax; })]);
 
 
+
+
     // Y Axis grid
     var yrule = svg.selectAll("g.y")
         .data(y.ticks(10))
@@ -231,18 +233,40 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
             return w + 'px' })
         .text(valfmt)
 
+    // Append a mouseover rule
+    var mRule = svg.append('svg:line')
+    .attr("class", "ruler")
+    .attr("x1", 0)
+    .attr("x2", 0)
+    .attr("y1", 0)
+    .attr("y2", height)
+
+    // set up a overlay over the graph that we will use to listen to mouse events
     svg.append("rect")
       .attr("class", "overlay")
       .attr("width", width)
       .attr("height", height)
       .on("mousemove", mousemove)
-      .on('mouseout', function(d, i) {d3.selectAll('#tooltip').remove();})
+      .on('mouseout', function(d, i) {
+          // move tooltip off screen
+          d3.select('#tooltip')
+          .attr('style', 'left', '-1000px')
+          .attr('style', 'top', '-1000px');
+          // hide the ruler 
+          mRule.style("stroke", "none");
+      })
 
-      //.on("mouseover", function() { tt.show() })
-      //.on("mouseout", function() { tt.hide(); })
+    // set up the timestamp rivets object
+    ttobj = {d:{}};
+    for(key in data[0]) { 
+        ttobj.d[key] = data[0][key];
+    }
+    // bind timestamp object to tooltip using rivets
+    rivets.bind(document.getElementById('tooltip'), ttobj);
+
     function mousemove() {
-        d3.selectAll('#tooltip').remove();
-        var x0 = x.invert(d3.mouse(this)[0]);
+        var graphx = d3.mouse(this)[0];
+        var x0 = x.invert(graphx);
         var i = bisectDate(data, x0, 1);
         //console.log(x0, i, data[i]);
         var d = data[i];
@@ -256,12 +280,20 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
             ty = d3.event.clientY + document.body.scrollTop +
                 document.documentElement.scrollTop;
         }
-        var tt = '<div id="tooltip" style="top:'+ty+'px;left:'+(tx+10)+'px;">Date:'+d.datetime + "<br>  Temp: <span class=value>" + Number(d.outtemp).toFixed(1) + "</span><br>";
-        tt += "Pressure: <span class=value>" + Number(d.barometer).toFixed(1) + "</span><br>";
-        tt += "Wind speed: <span class=value>" + Number(d.windspeed).toFixed(1) + "</span><br>";
-        tt += "Humidity: <span class=value>" + Number(d.outhumidity).toFixed(1) + "</span><br>";
-        tt += "Rain: <span class=value>" + Number(d.rain).toFixed(1) + "</span><br>";
-        $("body").append(tt+'</div>');
+        // move the tooltip element
+        d3.select('#tooltip')
+            .attr('style', 'top:'+(ty+10)+'px;left:'+(tx+10)+'px');
+        // update the rivets tt obj
+        for(key in d) { 
+            ttobj.d[key] = d[key];
+        }
+
+        // move the ruler
+        mRule.attr('x1', graphx)
+             .attr('x2', graphx)
+             .style("stroke", "#222")
+             .style("stroke-width", "1px")
+            ;
     }
 
 }

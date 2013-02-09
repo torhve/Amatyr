@@ -166,6 +166,22 @@
             </footer>
         </div>
     </div> <!-- /container -->
+    <div id="tooltip">
+        <table>
+            <tr>
+                <td>
+                    <strong>Date</strong>
+                </td>
+                <td data-text="d.datetime"></td>
+            </tr>
+            <tr class="avg"><td>Temperature </td><td data-text="d.outtemp | temp"></td></tr>
+            <tr class="pressure"><td>Pressure</td><td data-text="d.barometer | pressure"></td></tr>
+            <tr class="rain"><td>Rain </td><td data-text="d.rain | rain"></td></tr>
+            <tr class="wind"><td>Wind speed </td><td data-text="d.windspeed | wind"></td></tr>
+            <tr class="wind"><td>Wind direction </td><td data-text="d.winddir | degree"></td></tr>
+            <tr class="hum"><td>Humidity</td><td data-text="d.outhumidity | percent"></td></tr>
+        </table>
+    </div>
     <script id="record_table_template" type="text/html">
         <table class="table">
             <tr>

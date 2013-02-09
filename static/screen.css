@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
 .green {
     color: green;
 }
-.high {
+.high, .wind {
     color: darkred;
 }
 .avg {
@@ -95,7 +95,11 @@ svg text {
 svg text.score {
     fill: white;
 }
-
+.ruler {
+    fill: black;
+    stroke: none;
+    shape-rendering: crispEdges;
+}
 .axis path,
 .axis line {
     fill: none;
@@ -139,7 +143,14 @@ svg:not(:hover) .focus {
 #tt, #tooltip {
     z-index: 1;
     position: absolute;
-    background-color: rgba(255,255,255,1);
+    background-color: #fafafa;
+    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    background-repeat: repeat-x;
+    border: 1px solid #d4d4d4;
     padding: 10px;
     border: 1px solid #ddd;
     transition: opacity 500ms linear;
@@ -156,6 +167,7 @@ svg:not(:hover) .focus {
 
     -moz-border-radius: 10px;
     border-radius: 10px;
+
 }
 #tt .value {
     font-weight: strong;
