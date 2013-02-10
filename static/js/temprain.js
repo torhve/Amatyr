@@ -267,18 +267,18 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
         var graphx = d3.mouse(this)[0];
         var x0 = x.invert(graphx);
         var i = bisectDate(data, x0, 1);
-        //console.log(x0, i, data[i]);
         var d = data[i];
         var tx; var ty;
         if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
             tx = d3.event.pageX;
             ty = d3.event.pageY;
-        } else {
-            tx = d3.event.clientX + document.body.scrollLeft +
-                document.documentElement.scrollLeft;
-            ty = d3.event.clientY + document.body.scrollTop +
-                document.documentElement.scrollTop;
+        } 
+        // if the posititon is too close to the edge, move it left
+        if ((window.innerWidth - tx) < 300) {
+            // roughly the size of the tooltip
+            tx -= 275;
         }
+
         // move the tooltip element
         d3.select('#tooltip')
             .attr('style', 'display: block; top:'+(ty+10)+'px;left:'+(tx+10)+'px');
