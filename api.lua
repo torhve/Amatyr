@@ -45,15 +45,13 @@ function max(match)
     return dbreq(sql)
 end
 
+-- Latest record in db
 function now(match)
-    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 1"
-    
-    return dbreq(sql)
+    return dbreq("SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 1")
 end
-
+-- Last 60 samples from db
 function recent(match)
-    local sql = "SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 50"
-    return dbreq(sql)
+    return dbreq("SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 60")
 end
 
 function record(match)
@@ -169,6 +167,16 @@ function year(match)
         ORDER BY 1
         ]])
     return json
+end
+
+function windhist(match)
+    local month -- XXX match[1]
+    return dbreq([[
+        SELECT count(*), (winddir/10)::int*10+10 as d, avg(windspeed)*1.94384449 as avg
+        FROM archive
+        GROUP BY 2
+        ORDER BY 2
+    ]])
 end
 
 local class_mt = {

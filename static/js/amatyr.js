@@ -20,7 +20,7 @@ d3.json(apiurl + 'now', function(json) {
 });
 
 // Register HTML5 push state handler for navbar links
-$(".navbar a").bind("click", function(event){
+$("#main_nav a").bind("click", function(event){
     event.preventDefault();
     // Fix active link
     $('.navbar li.active').removeClass('active');
@@ -108,6 +108,29 @@ d3.json(apiurl+'recent', function(json) {
     setInterval(tsl.update, 60*1000);
     setInterval(psl.update, 60*1000);
 });
+
+/****
+ *
+ *
+ * WIND ROSE SECTION
+ *
+ *
+ */
+// Get all the wind history and draw two wind roses
+d3.json('/api/windhist', function(data) {
+    var windrose = new WindRose();
+    windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
+    windrose.drawBigWindrose(data, "#windroseavg", "Average Speed by Direction");
+});
+
+
+/**** 
+ *
+ *
+ * RECORD WEATHER SECTION 
+ *
+ *
+ * */
 
 // Init the data structure to be used by records and rivets
 var record_weather = {current:{}};

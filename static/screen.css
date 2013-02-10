@@ -236,6 +236,18 @@ svg:not(:hover) .focus {
     fill: none;
     stroke-width: 2px;
 }
+/* Windrose styles */
+svg text { font: 14px sans-serif; text-anchor: middle }
+svg .caption { font: 18px sans-serif; }
+svg .axes { stroke: #aaa; stroke-width: 0.5px; fill: none; }
+svg .labels text { letter-spacing: 1px; fill: #444; font-size: 12px; }
+svg .arcs {  stroke: #000; stroke-width: 0.5px; }
+svg .arctext text { font-size: 9px; }
+svg #windrose .arctext { fill: #44d; }
+svg #windspeed .arctext { fill: #933; }
+svg .calmwind text {  font-size: 18px; }
+svg text.calmcaption {  font-size: 12px; }
+svg g.tickmarks>text { font-size: 10px; fill: #888;}
 
 @media (max-width: 979px) {
     body {
