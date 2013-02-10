@@ -100,9 +100,9 @@ d3.json(apiurl+'recent', function(json) {
         wdata.unshift(k.windspeed);
         pdata.unshift(k.barometer);
     });
-    tsl = new sparkline('#sparkline', tdata, 'outtemp', tdata.length, 38, 'basis', true, 60*1000, 1000);
-    wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 60*1000, 1000);
-    psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 60*1000, 1000);
+    tsl = new sparkline('#sparkline', tdata, 'outtemp', tdata.length, 38, 'basis', true, 1000);
+    wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 1000);
+    psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 1000);
     // Update each minute
     setInterval(wsl.update, 60*1000);
     setInterval(tsl.update, 60*1000);
@@ -145,17 +145,17 @@ rivets.bind(document.getElementById('record_weather'), record_weather);
 
 // Bind the tab clicks to fetching new content
 $('#record_weather .nav-tabs a').bind('click', function(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  // Find target container
-  var tab = $($(this).attr('href'));
+    // Find target container
+    var tab = $($(this).attr('href'));
 
-  // Get the year clicked
-  var year = $(this).text();
-  // Fetch new data from db
-  updateRecordsYear(year);
+    // Get the year clicked
+    var year = $(this).text();
+    // Fetch new data from db
+    updateRecordsYear(year);
 
-  // Show tab
-  $(this).tab('show');
+    // Show tab
+    $(this).tab('show');
 
 });

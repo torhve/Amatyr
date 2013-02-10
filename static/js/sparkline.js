@@ -1,4 +1,4 @@
-var sparkline = function(id, data, key, width, height, interpolation, animate, updateDelay, transitionDelay) {
+var sparkline = function(id, data, key, width, height, interpolation, animate, transitionDelay) {
     var that = this;
     this.data = data;
     this.key = key;
@@ -14,31 +14,26 @@ var sparkline = function(id, data, key, width, height, interpolation, animate, u
     this.animate = animate;
     this.interpolation = interpolation;
 
-    // create a line object that represents the SVN line we're creating
     this.line = d3.svg.line()
-        // assign the X function to plot our line as we wish
-        .x(function(d,i) { 
-            // return the X coordinate where we want to plot this datapoint
-            return x(i); 
-        })
-    .y(function(d) { 
-        // return the Y coordinate where we want to plot this datapoint
-        return y(d); 
-    })
-    .interpolate(interpolation)
+        .x(function(d,i) { return x(i); })
+        .y(function(d) { return y(d); })
+        .interpolate(interpolation)
 
-        // display the line by appending an svg:path element with the data line we created above
         this.graph.append("svg:path").attr("d", this.line(data));
-    // or it can be done like this
-    //graph.selectAll("path").data([data]).enter().append("svg:path").attr("d", line);
-    //
-   this.redrawWithAnimation = function() {
-       console.log(this.key, this.data);
+    this.redrawWithAnimation = function() {
+        // Update domain
+        var x = d3.scale.linear().domain([0, this.data.length]).range([0, width]); 
+        var y = d3.scale.linear().domain(d3.extent(this.data)).range([height, 0]);
+        // New linefunc
+        line = d3.svg.line()
+            .x(function(d,i) { return x(i); })
+            .y(function(d) { return y(d); })
+            .interpolate(interpolation)
         // update with animation
         this.graph.selectAll("path")
             .data([this.data]) // set the new data
             .attr("transform", "translate(" + this.x(1) + ")") // set the transform to the right by x(1) pixels (6 for the scale we've set) to hide the new value
-            .attr("d", this.line) // apply the new data values ... but the new value is hidden at this point off the right of the canvas
+            .attr("d", line) // apply the new data values ... but the new value is hidden at this point off the right of the canvas
             .transition() // start a transition to bring the new value into view
             .ease("linear")
             .duration(this.transitionDelay) // for this demo we want a continual slide so set this to the same as the setInterval amount below
@@ -64,6 +59,5 @@ var sparkline = function(id, data, key, width, height, interpolation, animate, u
             }
         })
     }
-    //this.timer = setInterval(function() { this.update() }, updateDelay);
     return this;
 }
