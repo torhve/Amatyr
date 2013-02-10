@@ -1,5 +1,5 @@
 /* D3 function for drawing temperatures and rain bars in same svg */
-var temprain = function(el, data, attr, xformat, yaxisleg, width, height) { 
+var temprain = function(el, data, attr, yaxisleg, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
@@ -29,18 +29,7 @@ var temprain = function(el, data, attr, xformat, yaxisleg, width, height) {
 
     // Figure out xformat to be used given the domain and chart width
     var xextent = d3.extent(data, function(d) { return d.date; })
-    //console.log("Xaxis extent diff", xextent[1] - xextent[0]);
-    var xdiff = xextent[1] - xextent[0];
-    if (xdiff >= 8640000000) { // a year
-        //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
-        xAxis.ticks(d3.time.hours, 24).tickFormat(d3.time.format('%d.%m'));
-    }
-    else if (xdiff >= 100800000) { // 3 days
-        xAxis.ticks(d3.time.hours, 4).tickFormat(d3.time.format('%a %H'));
-    }
-    else {
-        xAxis.ticks(d3.time.hours, 2).tickFormat(d3.time.format('%H'));
-    }
+    xFormatter(xAxis, xextent);
 
     var yAxis = d3.svg.axis()
         .scale(y)

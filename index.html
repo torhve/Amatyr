@@ -65,18 +65,16 @@
                                 <h5><i class="icon-time"></i></h5>
                                 <h5 data-text="current.datetime | date"></h5>
                             </li>
-                            <li>
-                            <h5><i class="avg icon-met icon-temp"></i></h5>
+                            <li class="avg">
                                 <div id="sparkline" class="sparkline"></div>
+                                <h5><i class="avg icon-met icon-temp"></i></h5>
                                 <h5 title="Temperature" class="avg" data-text="current.outtemp | temp"></h5>
-                                <h5 title="Dew point" class="avg" data-text="current.dewpoint | temp"></h5>
+                                <h5 title="Dew point" class="min" data-text="current.dewpoint | temp"></h5>
                             </li>
                             <li>
-                                <h5><i class="wind icon-met icon-wind"></i></h5>
                                 <div id="windsparkline" class="sparkline"></div>
-                                <h5 class="high" title="Average wind speeds" data-text="current.windspeed | wind"></h5>
-                            </li>
-                            <li>
+                                <h5><i class="wind icon-met icon-wind"></i></h5>
+                                <h5 class="avg" title="Average wind speeds" data-text="current.windspeed | wind"></h5>
                                 <h5 class="high" title="Gusts" data-text="current.windgust | wind"></h5>
                             </li>
                             <li>
@@ -124,15 +122,15 @@
                 <h5>Pressure </h5>
                 <div class="svgholder" id="pressure"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 -->
-                <h5>Wind <span class="pull-right" data-text='current.windspeed | wind'></span></h5>
+                <h5>Wind speed by time<span class="pull-right" data-text='current.windspeed | wind'></span></h5>
                 <div class="svgholder" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <!--
                 <h5>Rain <span class="pull-right" data-text='current.rain | rain'></span></h5>
                 <div class="svgholder" id="rain"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 -->
-                <h5>Wind direction <span class="pull-right" data-text='current.winddir | degree '></span></h5>
+                <h5>Wind direction by time<span class="pull-right" data-text='current.winddir | degree '></span></h5>
                 <div class="svgholder" id="winddir"><i class="icon-spin icon-spinner"></i>Loading data...</div>
-                <h5>Humidity <span class="pull-right" data-text='current.outhumidity | percent '></span></h5>
+                <h5>Humidity by time<span class="pull-right" data-text='current.outhumidity | percent '></span></h5>
                 <div class="svgholder" id="humidity"><i class="icon-spin icon-spinner"></i>Loading data...</div>
             </div>
         </div>

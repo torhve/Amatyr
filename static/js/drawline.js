@@ -1,4 +1,4 @@
-var drawlines = function(el, json, attr, xformat, yaxisleg, width, height) { 
+var drawlines = function(el, json, attr, yaxisleg, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom;
@@ -20,8 +20,11 @@ var drawlines = function(el, json, attr, xformat, yaxisleg, width, height) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickFormat(xformat)
         .orient("bottom");
+
+    // Figure out xformat to be used given the domain and chart width
+    var xextent = d3.extent(json, function(d) { return d.date; })
+    xFormatter(xAxis, xextent);
 
     var yAxis = d3.svg.axis()
         .scale(y)

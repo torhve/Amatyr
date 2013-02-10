@@ -1,3 +1,19 @@
+/* dynamic xformat helper for timelines */
+var xFormatter = function(xAxis, xextent) {
+    //console.log("Xaxis extent diff", xextent[1] - xextent[0]);
+    var xdiff = xextent[1] - xextent[0];
+    if (xdiff >= 8640000000) { // a year
+        //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
+        xAxis.ticks(d3.time.hours, 24).tickFormat(d3.time.format('%d.%m'));
+    }
+    else if (xdiff >= 100800000) { // 3 days
+        xAxis.ticks(d3.time.hours, 4).tickFormat(d3.time.format('%a %H'));
+    }
+    else {
+        xAxis.ticks(d3.time.hours, 2).tickFormat(d3.time.format('%H'));
+    }
+}
+
 /* Pad helper */
 Number.prototype.pad = function (len) {
         return (new Array(len+1).join("0") + this).slice(-len);
@@ -91,7 +107,7 @@ var bartender = function(target, key, legend, width, height) {
 
 }
 
-var draw = function(source, xformat) {
+var draw = function(source) {
     gsource = source;
     //console.log('Current dataset', source);
     /* First remove any existing svg */
@@ -114,14 +130,14 @@ var draw = function(source, xformat) {
     var height = width/4;
 
     /* Line graphs */
-    temprain('#temp', source, 'outtemp', xformat, 'Temperature (°C)', width, height);
-    drawlines('#pressure', source, 'barometer',xformat,  'Air pressure (hPa)', width, height);
-    drawlines('#wind', source, 'windspeed', xformat, 'Average wind speed (knot)', width, height);
+    temprain('#temp', source, 'outtemp','Temperature (°C)', width, height);
+    drawlines('#pressure', source, 'barometer','Air pressure (hPa)', width, height);
+    drawlines('#wind', source, 'windspeed', 'Average wind speed (knot)', width, height);
     /* Disable rain graph as it is part of temp graph now
-    drawlines('#rain', source, 'rain',xformat,  'Daily rain (mm)', width, height);
+    drawlines('#rain', source, 'rain','Daily rain (mm)', width, height);
     */
-    drawlines('#winddir', source, 'winddir',xformat,  'Daily wind direction (°)', width, height);
-    drawlines('#humidity', source, 'outhumidity',xformat,  'Humidity (%)', width, height);
+    drawlines('#winddir', source, 'winddir','Daily wind direction (°)', width, height);
+    drawlines('#humidity', source, 'outhumidity','Humidity (%)', width, height);
     /* Bar graphs */
     /*
     bartender('#rain', 'rain', 'Daily Rain', width, height);
@@ -131,5 +147,5 @@ var draw = function(source, xformat) {
 }
 
 var redraw = function() {
-    draw(currentsource, xformat);
+    draw(AmatYr.currentsource);
 }
