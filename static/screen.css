@@ -24,10 +24,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 .sparkline {
     height: 42px;
-    width: 50px;
+    width: 100%;
+    margin-top: -12px;
     display: block;
-    padding-top: 2px;
-    float: left;
+}
+.sparkline svg {
+    width: 50%;
+    min-width: 60px;
+    margin: 0 auto;
 }
 .sparkline path {
     stroke: red;
@@ -46,11 +50,22 @@ h1, h2, h3, h4, h5, h6 {
 #wind path, #winddir path  {
     stroke: black;
 }
+#current_weather>div{
+    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    background-repeat: repeat-x;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    text-align: center;
+}
 #current_weather .navbar .nav h5 {
     float: left;
 }
 #current_weather i {
-    margin-right: 5px;
+    font-size: 24px;
 }
 #current_weather .navbar .left > li {
     padding-left: 9px;

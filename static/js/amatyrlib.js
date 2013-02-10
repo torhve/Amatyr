@@ -115,12 +115,6 @@ var draw = function(source) {
     /* Remove any spinners */
     $('.svgholder').empty();
 
-    // Get the last element and populate rivets bindings with it
-    rivets.bind(document.getElementById('main'), {
-        current: source.slice(-1)[0],
-        first: source.slice(0)[0]
-    });
-
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
     source.forEach(function(d) {
@@ -144,8 +138,14 @@ var draw = function(source) {
     bartender('#temp', 'temp', 'Daily Max Temp', width, height);
     bartender('#wind', 'windspeed', 'Daily Max Wind', width, height);
     */
+
+    // Get the last element and populate rivets bindings with it
+    rivets.bind(document.getElementById('main'), {
+        current: source.slice(-1)[0],
+        first: source.slice(0)[0]
+    });
 }
 
 var redraw = function() {
-    draw(AmatYr.currentsource);
+    draw(amatyr.currentsource);
 }

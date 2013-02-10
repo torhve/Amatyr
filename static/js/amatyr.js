@@ -1,8 +1,9 @@
-var AmatYr = function() {
-    var apiurl = "/api/";
+var AmatYr = function(apiurl) {
+    this.apiurl = apiurl;
     this.currentsource = false;
-    var xformat = false;
-    var current_weather;
+    this.current_weather;
+    this.that = this;
+    that = this;
 
     /* Initial and on resize we draw draw draw */
     on_resize(function() {
@@ -34,16 +35,13 @@ var AmatYr = function() {
 
         Path.map("/year/:year").to(function(){
             var year = this.params['year'];
-            // save to global for redraw purpose
-            xformat = d3.time.format("%Y-%m-%d")
             var yearurl = apiurl + 'year/' + year;
-            console.log('Fetching data for year ', year);
             /* Remove any existing graphs */
             $('.svgholder').empty();
             // Fetch data for this year
             d3.json(yearurl, function(json) { 
                 // Save to global for redrawing
-                this.currentsource = json;
+                that.currentsource = json;
                 draw(json);
             }); 
         });
@@ -56,7 +54,7 @@ var AmatYr = function() {
             // Fetch data for this year
             d3.json(url, function(json) { 
                 // Save to global for redrawing
-                this.currentsource = json;
+                that.currentsource = json;
                 draw(json);
             }); 
         });
@@ -67,7 +65,7 @@ var AmatYr = function() {
             $('.svgholder').empty();
             d3.json(apiurl, function(json) { 
                 // Save to global for redrawing
-                this.currentsource = json;
+                that.currentsource = json;
                 draw(json);
             }); 
         });
@@ -183,4 +181,4 @@ var AmatYr = function() {
     });
     return this;
 }
-var amatyr = new AmatYr();
+var amatyr = new AmatYr('/api/');
