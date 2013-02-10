@@ -10,6 +10,7 @@
     <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
 
     <link href="/static/screen.css" rel="stylesheet">
 
@@ -67,11 +68,13 @@
                                 <h5 data-text="current.datetime | date"></h5>
                             </li>
                             <li>
+                            <h5><i class="avg icon-met icon-temp"></i></h5>
                                 <div id="sparkline" class="sparkline"></div>
                                 <h5 title="Temperature" class="avg" data-text="current.outtemp | temp"></h5>
                                 <h5 title="Dew point" class="avg" data-text="current.dewpoint | temp"></h5>
                             </li>
                             <li>
+                                <h5><i class="wind icon-met icon-wind"></i></h5>
                                 <div id="windsparkline" class="sparkline"></div>
                                 <h5 class="high" title="Average wind speeds" data-text="current.windspeed | wind"></h5>
                             </li>
@@ -125,7 +128,7 @@
                 -->
                 <h5>Wind direction <span class="pull-right" data-text='current.winddir | degree '></span></h5>
                 <div class="svgholder" id="winddir"><i class="icon-spin icon-spinner"></i>Loading data...</div>
-                <h5>Humidity <span class="pull-right" data-text='current.humidity | percent '></span></h5>
+                <h5>Humidity <span class="pull-right" data-text='current.outhumidity | percent '></span></h5>
                 <div class="svgholder" id="humidity"><i class="icon-spin icon-spinner"></i>Loading data...</div>
             </div>
         </div>
@@ -167,19 +170,20 @@
         </div>
     </div> <!-- /container -->
     <div id="tooltip">
-        <table>
+        <table class="table table-condesed">
             <tr>
-                <td>
-                    <strong>Date</strong>
-                </td>
-                <td data-text="d.datetime"></td>
+                <th>
+                   Date 
+                </th>
+                <th><i class="icon-time"></i></th>
+                <th data-text="d.datetime"></th>
             </tr>
-            <tr class="avg"><td>Temperature </td><td data-text="d.outtemp | temp"></td></tr>
-            <tr class="pressure"><td>Pressure</td><td data-text="d.barometer | pressure"></td></tr>
-            <tr class="rain"><td>Rain </td><td data-text="d.rain | rain"></td></tr>
-            <tr class="wind"><td>Wind speed </td><td data-text="d.windspeed | wind"></td></tr>
-            <tr class="wind"><td>Wind direction </td><td data-text="d.winddir | degree"></td></tr>
-            <tr class="hum"><td>Humidity</td><td data-text="d.outhumidity | percent"></td></tr>
+            <tr class="avg"><td>Temperature </td><td><i class="icon-met icon-temp"></i></td><td data-text="d.outtemp | temp"></td></tr>
+                <tr class="rain"><td>Rain </td><td><i class="icon-tint"></i></td><td data-text="d.rain | rain"></td></tr>
+                <tr class="wind"><td>Wind speed </td><td><i class="icon-met icon-wind"></i></td><td data-text="d.windspeed | wind"></td></tr>
+                <tr class="wind"><td>Wind direction </td><td><i class="icon-met icon-compass"></i></td><td data-text="d.winddir | degree"></td></tr>
+            <tr class="pressure"><td>Pressure</td><td><i class="icon-signal"></i></td><td data-text="d.barometer | pressure"></td></tr>
+                <tr class="hum"><td>Humidity</td><td><i class="icon-dashboard"></i></td><td data-text="d.outhumidity | percent"></td></tr>
         </table>
     </div>
     <script id="record_table_template" type="text/html">
