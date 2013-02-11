@@ -2,7 +2,10 @@
 var xFormatter = function(xAxis, xextent) {
     console.log("Xaxis extent diff", xextent[1] - xextent[0]);
     var xdiff = xextent[1] - xextent[0];
-    if (xdiff >= 345600000) { // a year
+    if (xdiff >= 3628800000) { // a monthish
+        xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%d.%m'));
+    }
+    else if (xdiff >= 345600000) { // a weekish
                  
         //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
         xAxis.ticks(d3.time.hours, 24).tickFormat(d3.time.format('%d.%m'));
