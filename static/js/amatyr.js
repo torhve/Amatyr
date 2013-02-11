@@ -64,6 +64,7 @@ var AmatYr = function(apiurl) {
                 that.currentsource = json;
                 draw(json);
             }); 
+            drawWindrose(year); 
         });
         Path.map("/day/:day").to(function(){
             var day = this.params['day'];
@@ -77,6 +78,7 @@ var AmatYr = function(apiurl) {
                 that.currentsource = json;
                 draw(json);
             }); 
+            drawWindrose(day); 
         });
         Path.map("/").to(function(){
             var width = $('#main').css('width').split('px')[0];
@@ -88,7 +90,7 @@ var AmatYr = function(apiurl) {
                 that.currentsource = json;
                 draw(json);
             });
-            drawWindrose('today'); 
+            drawWindrose('3DAY'); 
         });
 
         // Start listening for URL events

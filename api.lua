@@ -64,6 +64,9 @@ local function getDateConstrains(startarg)
         if string.upper(startarg) == 'TODAY' then
             start = "CURRENT_DATE" 
             -- XXX fixme, use postgresql function
+        elseif string.upper(startarg) == '3DAY' then
+            start = "CURRENT_DATE - INTERVAL '3 days'"
+            endpart = '3 days'
         elseif string.upper(startarg) == 'WEEK' then
             start = "date(date_trunc('week', current_timestamp))"
             endpart = '1 week'
