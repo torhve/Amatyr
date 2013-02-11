@@ -131,7 +131,7 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
       .datum(data)
       .attr("class", "line")
       .attr("stroke", "darkgreen")
-      .attr("stroke-opacity", "0.2")
+      .attr("stroke-opacity", "0.4")
       .attr("d", line)
 
 

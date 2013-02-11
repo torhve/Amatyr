@@ -33,6 +33,11 @@ local function dbreq(sql)
     return json
 end
 
+-- Translate front end column names to back end column names
+local function column(key)
+    return conf.db.columns[key]
+end
+
 function max(match)
     local key = ngx.req.get_uri_args()['key']
     if not key then ngx.exit(403) end
@@ -181,7 +186,7 @@ function windhist(match)
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     return dbreq([[
         SELECT count(*), (winddir/10)::int*10+10 as d, avg(windspeed)*1.94384449 as avg
-        FROM archive
+        FROM ]]..conf.db.name..[[ 
         ]]..where..[[
         GROUP BY 2
         ORDER BY 2

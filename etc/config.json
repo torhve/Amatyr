@@ -1,6 +1,23 @@
 {
     "db": {
-        "name": "archive"
+        "name": "archive",
+        "columns": {
+            "datetime": "datetime",
+            "windspeed": "windspeed",
+            "winddir": "winddir",
+            "windgust": "windgust",
+            "windgustdir": "windgustdir",
+            "rainrate": "rainrate",
+            "rain": "rain",
+            "dewpoint": "dewpoint",
+            "windchill": "windchill",
+            "heatindex": "heatindex",
+            "outtemp": "outtemp",
+            "intemp": "intemp",
+            "inhumidity": "inhumidity",
+            "outhumidity": "outhumidity",
+            "barometer": "barometer"
+            }
     },
     "station": {
         "name": "Naustvika",

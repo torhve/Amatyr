@@ -44,7 +44,7 @@ timestamp = '%s-%s-%s %s:%s:%s' %(year, month, day, hour, minute, seconds)
 
 pg_weather = psycopg2.connect("dbname='yr' user='yr' host='localhost' password='amatyr'")
 pg_weather_cursor = pg_weather.cursor()
-weather_insert = "INSERT INTO wd (timestamp, avg_speed, gusts, winddir, temp, hum, barometer, rain_rate, daily_rain, dew_temp, cloud_height) VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10})".format(timestamp, avg_speed, gusts, winddir, temp, hum, barometer, rain_rate, daily_rain, dew_temp, cloud_height)
+weather_insert = "INSERT INTO wd (datetime, windspeed, windgust, winddir, outtemp, outhumidity, barometer, rainrate, rain, dew_point, cloud_height) VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, 0)".format(timestamp, avg_speed, gusts, winddir, temp, hum, barometer, rain_rate, daily_rain, dew_temp)
 print weather_insert
 pg_weather_cursor.execute(weather_insert)
 
