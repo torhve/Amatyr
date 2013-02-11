@@ -14,7 +14,7 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
 
 
     // Add gradient to chart
-    var gradient = addGradient(svg, width, height);
+    var gradient = amatyrlib.addGradient(svg, width, height);
     // Add mouseover overlay
 
     var x = d3.time.scale()
@@ -37,8 +37,6 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
 
     x.domain(xextent);
     y.domain([d3.min(data, function(d) { return d.tempmin }), d3.max(data, function(d) { return d.tempmax; })]);
-
-
 
 
     // Y Axis grid
@@ -283,32 +281,24 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
              .style("stroke-width", "1px")
             ;
     }
+    /* Function to update the graph every minute if we are looking at the daily graph. This can be animated */
+    this.updateToday = function(data) {
+        // update with animation
+        // function update(data)
+        this.graph.selectAll("path")
+            .data([this.data]) // set the new data
+            .attr("transform", "translate(" + this.x(1) + ")") // set the transform to the right by x(1) pixels (6 for the scale we've set) to hide the new value
+            .attr("d", line) // apply the new data values ... but the new value is hidden at this point off the right of the canvas
+            .transition() // start a transition to bring the new value into view
+            .ease("linear")
+            .duration(this.transitionDelay) // for this demo we want a continual slide so set this to the same as the setInterval amount below
+            .attr("transform", "translate(" + this.x(0) + ")"); // animate a slide to the left back to x(0) pixels to reveal the new value
 
+        /* thanks to 'barrym' for examples of transform: https://gist.github.com/1137131 */
+    }
+    /* Function to update the graph completeley */
+    this.update = function(data) {
+    }
+    return this;
 }
 
-var addGradient = function(target, w, h) {
-    var gradient = target.append("svg:defs")
-      .append("svg:linearGradient")
-        .attr("id", "gradient")
-        .attr("x1", "0%")
-        .attr("y1", "0%")
-        .attr("x2", "0%")
-        .attr("y2", "100%")
-        .attr("spreadMethod", "pad");
-
-    gradient.append("svg:stop")
-        .attr("offset", "0%")
-        .attr("stop-color", "#fff")
-        .attr("stop-opacity", 1);
-
-    gradient.append("svg:stop")
-        .attr("offset", "100%")
-        .attr("stop-color", "#f2f2f2")
-        .attr("stop-opacity", 1);
-
-    target.append("svg:rect")
-        .attr("width", w)
-        .attr("height", h)
-        .style("fill", "url(#gradient)");
-    return gradient;
-}

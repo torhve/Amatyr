@@ -9,8 +9,8 @@ var drawlines = function(el, json, attr, yaxisleg, width, height) {
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    addGradient(svg, width, height);
-
+    // Add gradient to chart
+    var gradient = amatyrlib.addGradient(svg, width, height);
 
     var x = d3.time.scale()
         .range([0, width]);

@@ -115,8 +115,11 @@ var draw = function(source) {
     /* Remove any spinners */
     $('.svgholder').empty();
 
+
+    // The date format of SQL
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
+    // Add d3 js date for each datum
     source.forEach(function(d) {
         d.date = parseDate(d.datetime);
     });
@@ -124,7 +127,7 @@ var draw = function(source) {
     var height = width/4;
 
     /* Line graphs */
-    temprain('#temp', source, 'outtemp','Temperature (°C)', width, height);
+    var tempgraph = temprain('#temp', source, 'outtemp','Temperature (°C)', width, height);
     drawlines('#pressure', source, 'barometer','Air pressure (hPa)', width, height);
     drawlines('#wind', source, 'windspeed', 'Average wind speed (knot)', width, height);
     /* Disable rain graph as it is part of temp graph now
@@ -148,4 +151,37 @@ var draw = function(source) {
 
 var redraw = function() {
     draw(amatyr.currentsource);
+}
+
+/* Container for assorted helpers */
+var amatyrlib = function() {
+    this.that = this;
+    that = this;
+    this.addGradient = function(target, w, h) {
+        var gradient = target.append("svg:defs")
+          .append("svg:linearGradient")
+            .attr("id", "gradient")
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "0%")
+            .attr("y2", "100%")
+            .attr("spreadMethod", "pad");
+
+        gradient.append("svg:stop")
+            .attr("offset", "0%")
+            .attr("stop-color", "#fff")
+            .attr("stop-opacity", 1);
+
+        gradient.append("svg:stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "#f2f2f2")
+            .attr("stop-opacity", 1);
+
+        target.append("svg:rect")
+            .attr("width", w)
+            .attr("height", h)
+            .style("fill", "url(#gradient)");
+        return gradient;
+    }
+    return this;
 }

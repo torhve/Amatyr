@@ -49,7 +49,7 @@ var sparkline = function(id, data, key, width, height, interpolation, animate, t
             .attr("d", this.line) // apply the new data values
     }
     this.update = function() {
-        d3.json(apiurl+'now', function(json) {
+        d3.json(amatyr.apiurl+'now', function(json) {
             data.shift(); // remove the first element of the array
             data.push(json[0][key]); // add a new element to the array 
             if(animate) {

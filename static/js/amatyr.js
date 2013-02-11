@@ -181,4 +181,5 @@ var AmatYr = function(apiurl) {
     });
     return this;
 }
+var amatyrlib = new amatyrlib();
 var amatyr = new AmatYr('/api/');
