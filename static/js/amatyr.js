@@ -21,6 +21,26 @@ var AmatYr = function(apiurl) {
         rivets.bind(document.getElementById('current_weather'), current_weather);
     });
 
+    /****
+     *
+     *
+     * WIND ROSE SECTION
+     *
+     *
+     */
+    var drawWindrose = function(startarg) {
+        // Empty nodes
+        d3.selectAll('.windroserow div').html('');
+        // Get all the wind history and draw two wind roses
+        d3.json('/api/windhist?start='+startarg, function(data) {
+
+            var windrose = new WindRose();
+            windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
+            windrose.drawBigWindrose(data, "#windroseavg", "Average Speed by Direction");
+        });
+    }
+
+
     var initPath = function() {
         // Register HTML5 push state handler for navbar links
         $("#main_nav a").bind("click", function(event){
@@ -37,7 +57,7 @@ var AmatYr = function(apiurl) {
             var year = this.params['year'];
             var yearurl = apiurl + 'year/' + year;
             /* Remove any existing graphs */
-            $('.svgholder').empty();
+            d3.selectAll('.svgholder').html('');
             // Fetch data for this year
             d3.json(yearurl, function(json) { 
                 // Save to global for redrawing
@@ -50,7 +70,7 @@ var AmatYr = function(apiurl) {
             // save to global for redraw purpose
             var url = apiurl + 'day/' + day;
             /* Remove any existing graphs */
-            $('.svgholder').empty();
+            d3.selectAll('.svgholder').html('');
             // Fetch data for this year
             d3.json(url, function(json) { 
                 // Save to global for redrawing
@@ -62,12 +82,13 @@ var AmatYr = function(apiurl) {
             var width = $('#main').css('width').split('px')[0];
             // save to global for redraw purpose
             /* Remove any existing graphs */
-            $('.svgholder').empty();
+            d3.selectAll('.svgholder').html('');
             d3.json(apiurl, function(json) { 
                 // Save to global for redrawing
                 that.currentsource = json;
                 draw(json);
-            }); 
+            });
+            drawWindrose('today'); 
         });
 
         // Start listening for URL events
@@ -105,21 +126,6 @@ var AmatYr = function(apiurl) {
         setInterval(tsl.update, 60*1000);
         setInterval(psl.update, 60*1000);
     });
-
-    /****
-     *
-     *
-     * WIND ROSE SECTION
-     *
-     *
-     */
-    // Get all the wind history and draw two wind roses
-    d3.json('/api/windhist', function(data) {
-        var windrose = new WindRose();
-        windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
-        windrose.drawBigWindrose(data, "#windroseavg", "Average Speed by Direction");
-    });
-
 
     /**** 
      *
