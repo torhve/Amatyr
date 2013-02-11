@@ -6,6 +6,9 @@
 
     //we don't have a selectedMonthControl so we just turn on all the months
 var WindRose = function() {
+    this.that = this;
+    that = this;
+
     var months = [];
     for(var i = 0; i < 12; i++) {
       months.push(true);
@@ -131,6 +134,58 @@ var WindRose = function() {
     }
 
     /** Code for big visualization **/
+
+    // Degree to wind direction name
+    this.degreeToWindText = function(d) {
+        var ret = 'N';
+        console.log(d);
+        if (d < 10){
+            ret =  'N';
+            return ret}
+        if (20 < d && d  < 57){
+            ret =  'NE' ;
+            return ret}
+        if (30 < d && d  < 80){
+            ret =  'ENE' ;
+            return ret}
+        if (40 < d && d  < 102){
+            ret =  'E' ;
+            return ret}
+        if (50 < d && d  < 127){
+            ret =  'ESE' ;
+            return ret;}
+        if (60 < d && d  < 143){
+            ret =  'SE' ;
+            return ret;}
+        if (70 < d && d  < 166){
+            ret =  'SSE' ;
+            return ret;}
+        if (80 < d && d  < 190){
+            ret =  'S' ;
+            return ret;}
+        if (90 < d && d  < 215){
+            ret =  'SSW' ;
+            return ret;}
+        if (100 < d && d  < 237){
+            ret =  'SW' ;
+            return ret;}
+        if (237 < d && d  < 260){
+            ret =  'WSW' ;
+            return ret;}
+        if (260 < d && d  < 281){
+            ret =  'W' ;
+            return ret;}
+        if (281 < d && d  < 304){
+            ret =  'WNW' ;
+            return ret;}
+        if (304 < d && d  < 324){
+            ret =  'NW' ;
+            return ret;}
+        if (324 < d && d  < 350){
+            ret =  'NNW' ;
+            return ret;}
+        return ret;
+    }
 
     // Transformation to place a mark on top of an arc
     function probArcTextT(d) {
@@ -313,7 +368,7 @@ var WindRose = function() {
             .attr("dy", "-4px")
             .attr("transform", function(d) {     
                 return "translate(" + r + "," + p + ") rotate(" + d + ",0," + (r-p) + ")"})        
-            .text(function(dir) { return dir; });
+            .text(function(dir) { return that.degreeToWindText(dir); });
 
         //var rollup = rollupForMonths(windroseData, selectedMonthControl.selected());
         var rollup = rollupForAmatyr(windroseData, months);
