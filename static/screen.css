@@ -42,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .sparkline path {
     stroke: red;
-    stroke-width: 1;
+    stroke-width: 1.2px;
     fill: none;
 }
 #windsparkline path  {
