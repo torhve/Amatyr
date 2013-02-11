@@ -4,6 +4,13 @@ body {
     color: #222;
     font: 15px/22px 'Open Sans',Arial,Helvetica,sans-serif;
     background-color: #fdfdfd;
+    background: url(/static/pattern.png) repeat;
+    margin-bottom: 30px;
+}
+.row-fluid {
+    background-color: #fafafa;
+    padding: 10px;
+    border-radius: 5px;
 }
 h1, h2, h3, h4, h5, h6 {
     color: #317eac;
@@ -13,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: 1px solid #d4d4d4;
     border-radius: 0;
 }
-.navbar .brand i {
+.brand i {
     color: white;
     text-shadow: 2px 2px 10px #317eac;
     margin-right: 5px;
@@ -49,6 +56,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 #wind path, #winddir path  {
     stroke: black;
+}
+#current_weather.row-fluid {
+    background: inherit;
+    margin-bottom: 15px;
 }
 #current_weather>div{
     background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);

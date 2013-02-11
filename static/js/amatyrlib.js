@@ -169,12 +169,12 @@ var amatyrlib = function() {
 
         gradient.append("svg:stop")
             .attr("offset", "0%")
-            .attr("stop-color", "#fff")
+            .attr("stop-color", "#fafafa")
             .attr("stop-opacity", 1);
 
         gradient.append("svg:stop")
             .attr("offset", "100%")
-            .attr("stop-color", "#f2f2f2")
+            .attr("stop-color", "#f0f0f0")
             .attr("stop-opacity", 1);
 
         target.append("svg:rect")

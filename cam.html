@@ -100,17 +100,19 @@ setInterval(function () {
 }, 30000);
 </script>
 <script>
-var apiurl = "/api/";
+var amatyr = {
+    apiurl : "/api/"
+};
 var current_weather;
 // Fetch current weather
-d3.json(apiurl + 'now', function(json) { 
+d3.json(amatyr.apiurl + 'now', function(json) { 
     current_weather = { 
         current: json[0]
     };
     rivets.bind(document.getElementById('current_weather'), current_weather);
 });
 // Draw sparkline
-d3.json(apiurl+'recent', function(json) {
+d3.json(amatyr.apiurl+'recent', function(json) {
     var tdata = []; 
     var wdata = []; 
     var pdata = [];
@@ -129,7 +131,7 @@ d3.json(apiurl+'recent', function(json) {
     setInterval(psl.update, 60*1000);
 });
 // Fetch current weather with 1 minute interval
-setInterval(function() { d3.json(apiurl + 'now', function(json) { 
+setInterval(function() { d3.json(amatyr.apiurl + 'now', function(json) { 
     // Update each key with new val
     for(key in current_weather.current) {
         current_weather.current[key] = json[0][key]
