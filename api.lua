@@ -54,28 +54,24 @@ function recent(match)
     return dbreq("SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 60")
 end
 
-function record(match)
-
-    local key = match[1]
-    local func = string.upper(match[2])
-
+-- Helper function to get a start argument and return SQL constrains
+local function getDateConstrains(startarg)
     local where = ''
     local andwhere = ''
-    local year = ngx.req.get_uri_args()['start']
-    if year then 
+    if startarg then 
         local start
         local endpart = "365 days"
-        if string.upper(year) == 'TODAY' then
+        if string.upper(startarg) == 'TODAY' then
             start = "CURRENT_DATE" 
             -- XXX fixme, use postgresql function
-        elseif string.upper(year) == 'WEEK' then
+        elseif string.upper(startarg) == 'WEEK' then
             start = "date(date_trunc('week', current_timestamp))"
             endpart = '1 week'
-        elseif string.upper(year) == 'MONTH' then
+        elseif string.upper(startarg) == 'MONTH' then
             start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')" 
             endpart = '1 month'
         else
-            start = "DATE '" .. year .. "-01-01'"
+            start = "DATE '" .. startarg .. "-01-01'"
         end
         local wherepart = [[
         (
@@ -87,6 +83,15 @@ function record(match)
         where = 'WHERE ' .. wherepart
         andwhere = 'AND ' .. wherepart
     end
+    return where, andwhere
+end
+
+-- Function to return extremeties from database, min/maxes for different time intervals
+function record(match)
+
+    local key = match[1]
+    local func = string.upper(match[2])
+    local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
 
     local sql = dbreq([[
         SELECT
@@ -170,10 +175,11 @@ function year(match)
 end
 
 function windhist(match)
-    local month -- XXX match[1]
+    local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     return dbreq([[
         SELECT count(*), (winddir/10)::int*10+10 as d, avg(windspeed)*1.94384449 as avg
         FROM archive
+        ]]..where..[[
         GROUP BY 2
         ORDER BY 2
     ]])
