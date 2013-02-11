@@ -263,6 +263,11 @@ svg:not(:hover) .focus {
     stroke-width: 2px;
 }
 /* Windrose styles */
+.windroserow svg {
+    margin: 0 auto;
+    width: 400px;
+    display: block;
+}
 svg text { font: 14px sans-serif; text-anchor: middle }
 svg .caption { font: 18px sans-serif; }
 svg .axes { stroke: #aaa; stroke-width: 0.5px; fill: none; }
