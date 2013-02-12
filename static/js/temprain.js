@@ -98,18 +98,18 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
       .datum(data)
       .attr("class", "line")
       .attr("stroke-dasharray", "5,5")
-      .attr("stroke", "steelblue")
+      .attr("stroke", "#7b6bb9")
       .attr("d", line)
     // High Temp line
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.tempmax); })
         .interpolate(interpolation)
-    var pathoslow = svg.append("path")
+    var pathoshigh = svg.append("path")
       .datum(data)
       .attr("class", "line")
       .attr("stroke-dasharray", "5,5")
-      .attr("stroke", "darkred")
+      .attr("stroke", "#8C52E2")
       .attr("d", line)
 
     /* Pressure section */
@@ -130,8 +130,8 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
     var pathospressure = svg.append("path")
       .datum(data)
       .attr("class", "line")
-      .attr("stroke", "darkgreen")
-      .attr("stroke-opacity", "0.4")
+      .attr("stroke", "#5c8843")
+      .attr("stroke-opacity", "0.5")
       .attr("d", line)
 
 

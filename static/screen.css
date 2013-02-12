@@ -12,8 +12,8 @@ body {
     padding: 10px;
     border-radius: 5px;
 }
-h1, h2, h3, h4, h5, h6 {
-    color: #317eac;
+h5 {
+    font-size: 13px;
 }
 .navbar.main .navbar-inner {
     border: 0;
@@ -43,18 +43,20 @@ h1, h2, h3, h4, h5, h6 {
     margin: 2%;
 }
 .sparkline path {
-    stroke: red;
     stroke-width: 1.2px;
     fill: none;
 }
+#sparkline path {
+    stroke: #b5152b;
+}
 #windsparkline path  {
-    stroke: darkred;
+    stroke: #b5152b;
 }
 #pressuresparkline path  {
-    stroke: darkgreen;
+    stroke: #5c8843;
 }
 #humidity path  {
-    stroke: darkblue;
+    stroke: #4d8fc8;
 }
 #wind path, #winddir path  {
     stroke: black;
@@ -94,25 +96,15 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
     text-shadow: 0 1px 0 #ffffff;
 }
-.green {
-    color: green;
+.yellow { color: #C98E0A; }
+.purple, .high { color: #8C52E2; }
+.pink    { color: #C25090; }
+.purple2, .low, .min { 
+    color: #7B6BB9;
 }
-.high, .wind {
-    color: darkred;
-}
-.avg {
-    color: red;
-}
-.min, .hum {
-    color: steelblue;
-}
-.rain {
-    color: steelblue;
-}
-.pressure {
-    color: darkgreen;
-}
-
+.red, .avg, .temp, .wind { color: #b5152b; }
+.green, .pressure { color: #5c8843; }
+h1, h2, h3, h4, h5, h6, .blue, .hum, .rain { color: #4d8fc8; }
 
 svg {
     font-size: 13px;
