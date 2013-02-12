@@ -120,16 +120,22 @@ svg text.score {
     stroke: none;
     shape-rendering: crispEdges;
 }
+
+/* Hide y axis line */
 .axis path,
 .axis line {
     fill: none;
-    stroke: #d4d4d4;
+    /*
+     stroke: #d4d4d4;
+     */
     shape-rendering: crispEdges;
 }
 
 .x.axis path {
     stroke: #d4d4d4;
 }
+
+
 
 
 .bar {
