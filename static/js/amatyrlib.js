@@ -114,7 +114,6 @@ var draw = function(source) {
     gsource = source;
     //console.log('Current dataset', source);
     /* First remove any existing svg */
-    $('#main svg').remove();
     /* Remove any spinners */
     $('.svgholder').empty();
 

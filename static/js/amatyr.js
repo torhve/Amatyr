@@ -36,10 +36,10 @@ var AmatYr = function(apiurl) {
      *
      */
     var drawWindrose = function(startarg) {
-        // Empty nodes
-        d3.selectAll('.windroserow div').html('');
         // Get all the wind history and draw two wind roses
         d3.json('/api/windhist?start='+startarg, function(data) {
+            // Empty nodes
+            d3.selectAll('.windroserow div').html('');
 
             var windrose = new WindRose();
             windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
@@ -63,8 +63,6 @@ var AmatYr = function(apiurl) {
         Path.map("/year/:year").to(function(){
             var year = this.params['year'];
             var yearurl = apiurl + 'year/' + year;
-            /* Remove any existing graphs */
-            d3.selectAll('.svgholder').html('');
             // Fetch data for this year
             d3.json(yearurl, function(json) { 
                 // Save to global for redrawing
@@ -77,8 +75,6 @@ var AmatYr = function(apiurl) {
             var day = this.params['day'];
             // save to global for redraw purpose
             var url = apiurl + 'day/' + day;
-            /* Remove any existing graphs */
-            d3.selectAll('.svgholder').html('');
             // Fetch data for this year
             d3.json(url, function(json) { 
                 // Save to global for redrawing
@@ -90,8 +86,6 @@ var AmatYr = function(apiurl) {
         Path.map("/").to(function(){
             var width = $('#main').css('width').split('px')[0];
             // save to global for redraw purpose
-            /* Remove any existing graphs */
-            d3.selectAll('.svgholder').html('');
             d3.json(apiurl, function(json) { 
                 // Save to global for redrawing
                 that.currentsource = json;
