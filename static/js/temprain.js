@@ -4,6 +4,7 @@ var temprain = function(el, data, width, height) {
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
         interpolation = 'basis',
+        yticks = 8, // Todo make yticks reponsive
         bisectDate = d3.bisector(function(d) { return d.date; }).left; // Bisector used for mouse over
 
     var svg = d3.select(el).append("svg")
@@ -33,6 +34,7 @@ var temprain = function(el, data, width, height) {
 
     var yAxis = d3.svg.axis()
         .scale(y)
+        .ticks(yticks)
         .orient("left");
 
     x.domain(xextent);
@@ -48,7 +50,7 @@ var temprain = function(el, data, width, height) {
 
     // Y Axis grid
     var yrule = svg.selectAll("g.y")
-        .data(y.ticks(10))
+        .data(y.ticks(yticks))
         .enter().append("g")
         .attr("class", "y axis")
       .append("svg:line")

@@ -1,7 +1,8 @@
 var drawlines = function(el, json, attr, yaxisleg, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
-        height = height - margin.top - margin.bottom;
+        height = height - margin.top - margin.bottom,
+        yticks = 8; // Todo make yticks reponsive
 
     var svg = d3.select(el).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -28,6 +29,7 @@ var drawlines = function(el, json, attr, yaxisleg, width, height) {
 
     var yAxis = d3.svg.axis()
         .scale(y)
+        .ticks(yticks)
         .orient("left");
 
     var colorscale2 = d3.scale.category20c();
@@ -45,7 +47,7 @@ var drawlines = function(el, json, attr, yaxisleg, width, height) {
     y.domain(d3.extent(json, function(d) { return d.val; }));
 
     var yrule = svg.selectAll("g.y")
-        .data(y.ticks(10))
+        .data(y.ticks(yticks))
         .enter().append("g")
         .attr("class", "y axis")
       .append("svg:line")
