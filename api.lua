@@ -148,9 +148,7 @@ function day(match)
     --- current day for now
     local sql = dbreq([[
     SELECT  
-        *,
-        outtemp as tempmin,
-        outtemp as tempmax
+        *
     FROM ]]..conf.db.name..[[ 
     WHERE datetime 
         BETWEEN CURRENT_DATE

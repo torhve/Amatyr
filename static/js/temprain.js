@@ -36,7 +36,14 @@ var temprain = function(el, data, width, height) {
         .orient("left");
 
     x.domain(xextent);
-    y.domain([d3.min(data, function(d) { return d.tempmin }), d3.max(data, function(d) { return d.tempmax; })]);
+    var ydomain;
+    // If dataset has min and max temp, use that for domain. or else use outtemp
+    if (data[0].tempmin != undefined) {
+        ydomain = [d3.min(data, function(d) { return d.tempmin }), d3.max(data, function(d) { return d.tempmax; })];
+    }else {
+        ydomain = d3.extent(data, function(d) { return d.outtemp});
+    }
+    y.domain(ydomain);
 
 
     // Y Axis grid
@@ -89,28 +96,35 @@ var temprain = function(el, data, width, height) {
       .attr("class", "line")
       .attr("stroke", "#b5152b")
       .attr("d", line)
-    // Low Temp line
-    var line = d3.svg.line()
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.tempmin); })
-        .interpolate(interpolation)
-    var pathoslow = svg.append("path")
-      .datum(data)
-      .attr("class", "line")
-      .attr("stroke-dasharray", "5,5")
-      .attr("stroke", "#7b6bb9")
-      .attr("d", line)
-    // High Temp line
-    var line = d3.svg.line()
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.tempmax); })
-        .interpolate(interpolation)
-    var pathoshigh = svg.append("path")
-      .datum(data)
-      .attr("class", "line")
-      .attr("stroke-dasharray", "5,5")
-      .attr("stroke", "#8C52E2")
-      .attr("d", line)
+
+    // Check if key is available in source 
+    if (data[0].tempmin != undefined) {
+        // Low Temp line
+        var line = d3.svg.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.tempmin); })
+            .interpolate(interpolation)
+        var pathoslow = svg.append("path")
+          .datum(data)
+          .attr("class", "line")
+          .attr("stroke-dasharray", "5,5")
+          .attr("stroke", "#7b6bb9")
+          .attr("d", line)
+    }
+    // Check if key is available in source 
+    if (data[0].tempmax != undefined) {
+        // High Temp line
+        var line = d3.svg.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.tempmax); })
+            .interpolate(interpolation)
+        var pathoshigh = svg.append("path")
+          .datum(data)
+          .attr("class", "line")
+          .attr("stroke-dasharray", "5,5")
+          .attr("stroke", "#8C52E2")
+          .attr("d", line)
+    }
 
     /* Pressure section */
 
