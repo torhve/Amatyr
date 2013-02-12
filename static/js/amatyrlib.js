@@ -130,7 +130,7 @@ var draw = function(source) {
     var height = width/4;
 
     /* Line graphs */
-    var tempgraph = temprain('#temp', source, 'outtemp','Temperature (°C)', width, height);
+    var tempgraph = temprain('#temp', source, width, height);
     // Less height for less important graphs
     var height = width/8;
     drawlines('#pressure', source, 'barometer','Air pressure (hPa)', width, height);

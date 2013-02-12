@@ -1,5 +1,5 @@
 /* D3 function for drawing temperatures and rain bars in same svg */
-var temprain = function(el, data, attr, yaxisleg, width, height) { 
+var temprain = function(el, data, width, height) { 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
@@ -87,7 +87,7 @@ var temprain = function(el, data, attr, yaxisleg, width, height) {
     var pathos = svg.append("path")
       .datum(data)
       .attr("class", "line")
-      .attr("stroke", "red")
+      .attr("stroke", "#b5152b")
       .attr("d", line)
     // Low Temp line
     var line = d3.svg.line()
