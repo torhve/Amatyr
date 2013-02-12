@@ -4,10 +4,17 @@ var AmatYr = function(apiurl) {
     this.current_weather;
     this.that = this;
     that = this;
+    // array of all sparklines, used for updating them dynamically
+    var sparklines = [];
 
     /* Initial and on resize we draw draw draw */
     on_resize(function() {
+        // Redraw graphs
         redraw();
+        // Redraw sparklines
+        for(key in sparklines) {
+            sparklines[key].redrawWithAnimation();
+        }
     }); // these parenthesis does the trick
 
     // debulked onresize handler
@@ -120,13 +127,13 @@ var AmatYr = function(apiurl) {
             wdata.unshift(k.windspeed);
             pdata.unshift(k.barometer);
         });
-        tsl = new sparkline('#sparkline', tdata, 'outtemp', tdata.length, 38, 'basis', true, 1000);
-        wsl = new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 1000);
-        psl = new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 1000);
-        // Update each minute
-        setInterval(wsl.update, 60*1000);
-        setInterval(tsl.update, 60*1000);
-        setInterval(psl.update, 60*1000);
+        sparklines.push(new sparkline('#sparkline', tdata, 'outtemp', tdata.length, 38, 'basis', true, 1000));
+        sparklines.push(new sparkline('#windsparkline', wdata, 'windspeed', wdata.length, 38, 'basis', true, 1000));
+        sparklines.push(new sparkline('#pressuresparkline', pdata, 'barometer', pdata.length, 38, 'basis', true, 1000));
+        for(key in sparklines) {
+            // Update each minute
+            setInterval(sparklines[key].update, 60*1000);
+        }
     });
 
     /**** 

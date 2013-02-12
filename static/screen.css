@@ -36,9 +36,11 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
 }
 .sparkline svg {
+    /*
     width: 50%;
     min-width: 60px;
-    margin: 0 auto;
+    */
+    margin: 2%;
 }
 .sparkline path {
     stroke: red;

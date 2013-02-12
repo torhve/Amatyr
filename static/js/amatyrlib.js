@@ -2,11 +2,10 @@
 var xFormatter = function(xAxis, xextent) {
     console.log("Xaxis extent diff", xextent[1] - xextent[0]);
     var xdiff = xextent[1] - xextent[0];
-    if (xdiff >= 3628800000) { // a monthish
+    if (xdiff >= 36288000000) { // a monthish
         xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%d.%m'));
     }
     else if (xdiff >= 345600000) { // a weekish
-                 
         //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
         xAxis.ticks(d3.time.hours, 24).tickFormat(d3.time.format('%d.%m'));
     }
@@ -14,7 +13,7 @@ var xFormatter = function(xAxis, xextent) {
         xAxis.ticks(d3.time.hours, 4).tickFormat(d3.time.format('%a %H'));
     }
     else {
-        xAxis.ticks(d3.time.hours, 2).tickFormat(d3.time.format('%H'));
+        xAxis.ticks(d3.time.hours, 1).tickFormat(d3.time.format('%H'));
     }
 }
 
