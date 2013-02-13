@@ -1,4 +1,23 @@
-module('tir', package.seeall)
+--
+-- tortir (C) Tor Hveem
+-- Simple template based on Tir (C) Zed Shaw
+--
+-- License: BSD 3-clause : http://tir.mongrel2.org/wiki/license.html
+--
+--
+
+local require = require
+local setmetatable = setmetatable
+local io = require "io"
+local assert = assert
+local string = string
+local table = table
+local loadstring = loadstring
+local load = load
+local setfenv = setfenv
+local getfenv = getfenv
+
+module('tir',  package.seeall)
 
 -- Simplistic HTML escaping.
 function escape(s)
@@ -9,7 +28,7 @@ function escape(s)
 end
 
 -- Simplistic Tir template escaping, for when you need to show lua code on web.
-function tirescape(s)
+local function tirescape(s)
     if s == nil then return '' end
 
     local esc, i = s:gsub('{', '&#123;'):gsub('}', '&#125;')
@@ -37,8 +56,8 @@ local VIEW_ACTIONS = {
 
     ['{('] = function(code)
         return ([[ 
-            local tir= require('tir')
             if not _children[%s] then
+                local tir = require 'template'
                 _children[%s] = tir.tload(%s)
             end
 
@@ -47,7 +66,7 @@ local VIEW_ACTIONS = {
     end,
 
     ['{<'] = function(code)
-        return ('local tir= require("tir") _result[#_result+1] =  tir.escape(%s)'):format(code)
+        return ('local tir = require "tir" _result[#_result+1] =  tir.escape(%s)'):format(code)
     end,
 }
 
@@ -74,7 +93,8 @@ function compile_view(tmpl, name)
     code[#code+1] = 'return table.concat(_result)'
 
     code = table.concat(code, '\n')
-    local func, err = loadstring(code, name)
+    -- use load from lua 5.2 or luajit
+    local func, err = load(code, name, 't',  mt )
 
     if err then
         assert(func, err)
@@ -88,19 +108,20 @@ function compile_view(tmpl, name)
     end
 end
 
+
+-- Return loaded template
 function tload(name)
+    local tempf = load_file(name)
+    assert(tempf, "Template " .. name .. " does not exist.")
+    return compile_view(tempf, name)
+end
 
-    name = TEMPLATEDIR .. name
-
-    if not os.getenv('DEV') then
+-- Recompile dynamically
+function dynload(name)
+    return function (params)
         local tempf = load_file(name)
-        return compile_view(tempf, name)
-    else
-        return function (params)
-            local tempf = load_file(name)
-            assert(tempf, "Template " .. name .. " does not exist.")
+        assert(tempf, "Template " .. name .. " does not exist.")
 
-            return compile_view(tempf, name)(params)
-        end
+        return compile_view(tempf, name)(params)
     end
 end

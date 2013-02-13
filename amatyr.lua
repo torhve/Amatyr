@@ -1,6 +1,6 @@
 local redis = require "resty.redis"
 local cjson = require "cjson"
-local tir= require "tir"
+local template = require "template"
 local conf
 
 -- use nginx $root variable for template dir, needs trailing slash
@@ -19,7 +19,7 @@ end
 --
 local function index()
 
-    local page = tir.tload('index.html')
+    local page = template.tload('index.html')
     local context = { conf=conf }
     ngx.print( page(context) )
 end
@@ -30,7 +30,7 @@ end
 --
 local function cam()
 
-    local page = tir.tload('cam.html')
+    local page = template.tload('cam.html')
     local context = { conf=conf }
     ngx.print( page(context) )
 end
