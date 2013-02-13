@@ -109,7 +109,7 @@ var WindRose = function() {
     // Filter input data, giving back frequencies for the selected stuff
     function rollupForAmatyr(d) {
         var totals = {}, speeds = {};
-        for (var i = 10; i < 361; i += 10) { totals[""+i] = 0; speeds[""+i] = 0 }
+        for (var i = 0; i < 361; i += 10) { totals[""+i] = 0; speeds[""+i] = 0 }
         totals["null"] = 0; speeds["null"] = 0;
          
         for (var key in d) {
@@ -122,14 +122,14 @@ var WindRose = function() {
                 direction = ""+direction;
             }
             
-            console.log(key, datum, direction, totals[direction], speeds[direction]);
+            //console.log(key, datum, direction, totals[direction], speeds[direction]);
             // count up all samples with this key
             totals[direction] += datum.count;
             // add in the average speed * count from this key
             speeds[direction] += datum.count * datum.avg;
-            console.log(direction, totals[direction], speeds[direction]);
+            //console.log(direction, totals[direction], speeds[direction]);
         }
-        console.log('dodo', totals, speeds);
+        //console.log('dodo', totals, speeds);
         return totalsToFrequencies(totals, speeds);
     }
 
@@ -138,7 +138,7 @@ var WindRose = function() {
     // Degree to wind direction name
     this.degreeToWindText = function(d) {
         var ret = 'N';
-        console.log(d);
+        //console.log(d);
         if (d < 10){
             ret =  'N';
             return ret}
