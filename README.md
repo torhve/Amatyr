@@ -28,7 +28,7 @@ The frontend is somewhat loosely coupled with the backend, but it fetches data v
 
 -    Included with the project is a small python utility to read Davis Vantage .txt-logs and insert into SQL (davislogparser.py)
 -    Inlucded with the project is a smal python utility to read the output from Weather Display Live and insert into SQL (wdparser.py)
--    Included is a patch (scripts/weewx-2.1.1.postgresql.patch) for [Weewx](http://weewx.com) to be able to store data in PostgreSQL.
+-    Included is a patch (scripts/weewx-2.1.1.postgresql.patch) for (Weewx)[http://weewx.com] to be able to store data in PostgreSQL.
 
 ### Installation of the frontend
 
