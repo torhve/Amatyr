@@ -1,0 +1,330 @@
+diff -urN ../weewx-2.1.1.orig/bin/user/schemas.py ./bin/user/schemas.py
+--- ../weewx-2.1.1.orig/bin/user/schemas.py	2012-11-03 18:49:52.000000000 +0100
++++ ./bin/user/schemas.py	2013-02-09 10:55:02.156236646 +0100
+@@ -20,7 +20,7 @@
+ # in saving as much space as you may think --- most of the space is taken up by
+ # the primary key indexes (type "dateTime").
+ # ===============================================================================
+-defaultArchiveSchema = [('dateTime',             'INTEGER NOT NULL UNIQUE PRIMARY KEY'),
++defaultArchiveSchema = [('dateTime',             'timestamp UNIQUE PRIMARY KEY'),
+                         ('usUnits',              'INTEGER NOT NULL'),
+                         ('interval',             'INTEGER NOT NULL'),
+                         ('barometer',            'REAL'),
+Binary files ../weewx-2.1.1.orig/bin/user/schemas.pyc and ./bin/user/schemas.pyc differ
+Binary files ../weewx-2.1.1.orig/bin/weedb/__init__.pyc and ./bin/weedb/__init__.pyc differ
+Binary files ../weewx-2.1.1.orig/bin/weedb/mysql.pyc and ./bin/weedb/mysql.pyc differ
+diff -urN ../weewx-2.1.1.orig/bin/weedb/postgresql.py ./bin/weedb/postgresql.py
+--- ../weewx-2.1.1.orig/bin/weedb/postgresql.py	1970-01-01 01:00:00.000000000 +0100
++++ ./bin/weedb/postgresql.py	2013-02-09 10:55:03.112146640 +0100
+@@ -0,0 +1,199 @@
++#
++#    Copyright (c) 2013 Tor Hveem <tor@hveem.no>
++#
++#    See the file LICENSE.txt for your full rights.
++#
++#
++"""Driver for the PostgreSQL database"""
++
++import decimal
++
++import psycopg2
++
++import weedb
++
++def connect(host='localhost', user='', password='', database='', driver='', **kwargs):
++    """Connect to the specified database"""
++    return Connection(host=host, user=user, password=password, database=database, **kwargs)
++
++def create(host='localhost', user='', password='', database='', driver='', **kwargs):
++    """Create the specified database. If it already exists,
++    an exception of type weedb.DatabaseExists will be thrown."""
++    # Open up a connection w/o specifying the database.
++    try:
++        connect = psycopg2.connect(host   = host,
++                                  user   = user,
++                                  password = password, database='postgres', **kwargs)
++        # Creation of database requires autocommit
++        connect.autocommit = True
++
++        cursor = connect.cursor()
++        # An exception will get thrown if the database already exists.
++        try:
++            # Now create the database.
++            cursor.execute("CREATE DATABASE %s" % (database,))
++	except Exception, i:
++            # The database already exists. Change the type of exception.
++            raise weedb.DatabaseExists("Error while creating database: %s: %s" % (database, i))
++        finally:
++            cursor.close()
++    except Exception, e:
++        raise weedb.OperationalError(e)
++    
++def drop(host='localhost', user='', password='', database='', driver='', **kwargs):
++    """Drop (delete) the specified database."""
++    # Open up a connection
++    try:
++        connect = psycopg2.connect(host   = host,
++                                  user   = user,
++                                  password = password, **kwargs)
++        cursor = connect.cursor()
++        try:
++            # Dropping database requires autocommit
++            connect.autocommit = True
++            cursor.execute("DROP DATABASE %s" % database)
++        except Exception:
++            raise weedb.NoDatabase("""Error: %s while attempt to drop non-existent database %s""" % (e, database,))
++        finally:
++            cursor.close()
++    except _mysql_exceptions.OperationalError, e:
++        raise weedb.OperationalError(e)
++    
++class Connection(weedb.Connection):
++    """A database independent connection object."""
++    
++    def __init__(self, host='localhost', user='', password='', database='', **kwargs):
++        """Initialize an instance of Connection.
++
++        Parameters:
++        
++            host: IP or hostname with the mysql database (required)
++            user: User name (required)
++            password: The password for the username (required)
++            database: The database to be used. (required)
++            kwargs:   Any extra arguments you may wish to pass on to postgresql (optional)
++            
++        If the operation fails, an exception of type weedb.OperationalError will be raised.
++        """
++        try:
++            connection = psycopg2.connect(host=host, user=user, password=password, database=database, **kwargs)
++	except Exception, e:
++            raise weedb.OperationalError(str(e) + " while opening database '%s'" % (database,))
++
++        weedb.Connection.__init__(self, connection, database, 'mysql')
++        
++        # Allowing threads other than the main thread to see any transactions
++        # seems to require an isolation level of READ UNCOMMITTED. 
++        cursor = self.connection.cursor()
++        cursor.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED")
++        cursor.close()
++
++    def cursor(self):
++        """Return a cursor object."""
++        return Cursor(self)
++        
++    def tables(self):
++        """Returns a list of tables in the database."""
++        
++        table_list = list()
++        try:
++            # Get a cursor directly from postgresql
++            cursor = self.connection.cursor()
++            cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';""")
++            while True:
++                row = cursor.fetchone()
++                if row is None: break
++                # Extract the table name. In case it's in unicode, convert to a regular string.
++                table_list.append(str(row[0]))
++        finally:
++            cursor.close()
++        return table_list
++                
++    def columnsOf(self, table):
++        """Return a list of columns in the specified table. 
++        
++        If the table does not exist, an exception of type weedb.OperationalError is raised."""
++        column_list = list()
++        try:
++            # Get a cursor directly from PostgreSQL:
++            cursor = self.connection.cursor()
++            try:
++                cursor.execute("""SELECT column_name FROM information_schema.columns WHERE table_name ='%s';""" % table)
++	    except Exception, e:
++                # Table does not exist. Change the exception type:
++                raise weedb.OperationalError(e)
++            while True:
++                row = cursor.fetchone()
++                if row is None: break
++                # Append this column to the list of columns.
++                column_list.append(str(row[0]))
++        finally:
++            cursor.close()
++
++        return column_list
++    
++    def begin(self):
++        """Begin a transaction."""
++        #self.connection.autocommit = False
++        pass
++    
++class Cursor(object):
++    """A wrapper around the postgresql cursor object"""
++    
++    def __init__(self, connection):
++        """Initialize a Cursor from a connection.
++        
++        connection: An instance of db.mysql.Connection"""
++        
++        # Get the postgresql cursor and store it internally:
++        self.cursor = connection.connection.cursor()
++    
++    def execute(self, sql_string, sql_tuple=() ):
++        """Execute a SQL statement on the postgresql server.
++        
++        sql_string: A SQL statement to be executed. It should use ? as
++        a placeholder.
++        
++        sql_tuple: A tuple with the values to be used in the placeholders."""
++        
++        # PostgreSQL uses '%s' as placeholders, so replace the ?'s with %s
++        psql_string = sql_string.replace('?','%s')
++            
++        try:
++            self.cursor.execute(psql_string, sql_tuple)
++        except Exception, e:
++            raise weedb.OperationalError(e)
++        return self
++        
++    def fetchone(self):
++        # Get a result from the cursor, then run it through the massage
++        # filter below
++        return massage(self.cursor.fetchone())
++
++    def close(self):
++        try:
++            self.cursor.close()
++            del self.cursor
++        except:
++            pass
++    
++    #
++    # Supplying functions __iter__ and next allows the cursor to be used as an iterator.
++    #
++    def __iter__(self):
++        return self
++    
++    def next(self):
++        result = self.fetchone()
++        if result is None:
++            raise StopIteration
++        return result
++
++#
++# This is a utility function for converting a result set that might contain
++# longs or decimal.Decimals (which MySQLdb uses) to something containing just ints.
++#
++def massage(seq):
++    # Return the massaged sequence if it exists, otherwise, return None
++    if seq is not None:
++        return [int(i) if isinstance(i, long) or isinstance(i,decimal.Decimal) else i for i in seq]
+diff -urN ../weewx-2.1.1.orig/bin/weewx/archive.py ./bin/weewx/archive.py
+--- ../weewx-2.1.1.orig/bin/weewx/archive.py	2013-01-01 03:04:28.000000000 +0100
++++ ./bin/weewx/archive.py	2013-02-12 12:32:43.755779991 +0100
+@@ -17,6 +17,8 @@
+ import weeutil.weeutil
+ import weedb
+ import user.schemas
++from string import lower
++import time
+ 
+ #===============================================================================
+ #                         class Archive
+@@ -46,7 +48,8 @@
+         self.connection = connection
+         self.table = table
+         try:
+-            self.sqlkeys = self._getTypes()
++            # Lower case for case insenitive comparison
++            self.sqlkeys = set(map(lower, self._getTypes()))
+         except weedb.OperationalError, e:
+             self.close()
+             raise weewx.UninitializedDatabase(e)
+@@ -115,7 +118,7 @@
+         
+         returns: Time of the last good archive record as an epoch time, or
+         None if there are no records."""
+-        _row = self.getSql("SELECT MAX(dateTime) FROM %s" % self.table)
++        _row = self.getSql("SELECT date_part('epoch', MAX(datetime))::int FROM %s" % self.table)
+         return _row[0] if _row else None
+     
+     def firstGoodStamp(self):
+@@ -123,7 +126,7 @@
+         
+         returns: Time of the first good archive record as an epoch time, or
+         None if there are no records."""
+-        _row = self.getSql("SELECT MIN(dateTime) FROM %s" % self.table)
++        _row = self.getSql("SELECT date_part('epoch', MIN(datetime))::int FROM %s" % self.table)
+         return _row[0] if _row else None
+ 
+     def addRecord(self, record_obj, log_level=syslog.LOG_NOTICE):
+@@ -158,24 +161,32 @@
+                     # against subsequent records:
+                     self.std_unit_system = record['usUnits']
+ 
++                new_record = {}
++                for k, v in record.iteritems():
++                    new_record[k.lower()] = v
++
++                # Format date
++                new_record['datetime'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(new_record['datetime']))
+                 # Only data types that appear in the database schema can be inserted.
+                 # To find them, form the intersection between the set of all record
+                 # keys and the set of all sql keys
+-                record_key_set = set(record.keys())
++                # Only compare lower key for case insensitive databases (PostgreSQL)
++                record_key_set = set(new_record.keys())
+                 insert_key_set = record_key_set.intersection(self.sqlkeys)
+                 # Convert to an ordered list:
+                 key_list = list(insert_key_set)
+                 # Get the values in the same order:
+-                value_list = [record[k] for k in key_list]
+-                
++                value_list = [new_record[k] for k in key_list]
++
+                 # This will a string of sql types, separated by commas. Because
+                 # some of the weewx sql keys (notably 'interval') are reserved
+                 # words in MySQL, put them in backquotes.
+-                k_str = ','.join(["`%s`" % k for k in key_list])
++                k_str = ','.join(["%s" % k for k in key_list])
+                 # This will be a string with the correct number of placeholder question marks:
+                 q_str = ','.join('?' * len(key_list))
+                 # Form the SQL insert statement:
+-                sql_insert_stmt = "INSERT INTO %s (%s) VALUES (%s)" % (self.table, k_str, q_str) 
++                sql_insert_stmt = "INSERT INTO %s (%s) VALUES (%s)" % (self.table, k_str, q_str)
++
+                 try:
+                     cursor.execute(sql_insert_stmt, value_list)
+                     syslog.syslog(log_level, "Archive: added %s record %s" % (self.table, weeutil.weeutil.timestamp_to_string(record['dateTime'])))
+@@ -200,12 +211,12 @@
+                 if stopstamp is None:
+                     _gen = _cursor.execute("SELECT * FROM %s" % (self.table,))
+                 else:
+-                    _gen = _cursor.execute("SELECT * FROM %s WHERE dateTime <= ?" % (self.table,), (stopstamp,))
++                    _gen = _cursor.execute("SELECT * FROM %s WHERE EXTRACT(epoch FROM dateTime)::int <= ?" % (self.table,), (stopstamp,))
+             else:
+                 if stopstamp is None:
+-                    _gen = _cursor.execute("SELECT * FROM %s WHERE dateTime > ?" % (self.table,), (startstamp,))
++                    _gen = _cursor.execute("SELECT * FROM %s WHERE EXTRACT(epoch FROM dateTime)::int > ?" % (self.table,), (startstamp,))
+                 else:
+-                    _gen = _cursor.execute("SELECT * FROM %s WHERE dateTime > ? AND dateTime <= ?" % (self.table,), (startstamp, stopstamp))
++                    _gen = _cursor.execute("SELECT * FROM %s WHERE EXTRACT(epoch FROM dateTime)::int > ? AND EXTRACT(epoch FROM dateTime)::int <= ?" % (self.table,), (startstamp, stopstamp))
+             
+             for _row in _gen :
+                 yield dict(zip(self.sqlkeys, _row)) if _row else None
+@@ -221,7 +232,7 @@
+ 
+         _cursor = self.connection.cursor()
+         try:
+-            _cursor.execute("SELECT * FROM %s WHERE dateTime=?" % (self.table,), (timestamp,))
++            _cursor.execute("SELECT * FROM %s WHERE EXTRACT(epoch FROM dateTime)::int=?" % (self.table,), (timestamp,))
+             _row = _cursor.fetchone()
+             return dict(zip(self.sqlkeys, _row)) if _row else None
+         finally:
+@@ -539,7 +550,7 @@
+         # List comprehension of the types, joined together with commas. Put
+         # the SQL type in backquotes, because at least one of them ('interval')
+         # is a MySQL reserved word
+-        _sqltypestr = ', '.join(["`%s` %s" % _type for _type in archiveSchema])
++        _sqltypestr = ', '.join(["%s %s" % _type for _type in archiveSchema])
+ 
+         _connect = weedb.connect(archive_db_dict)
+         try:
