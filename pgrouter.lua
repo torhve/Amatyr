@@ -21,7 +21,7 @@ local routes = {
     ['recent']            = api.recent,
     ['station']           = api.meta,
     ['windhist']          = api.windhist,
-    ['$']                 = api.index,
+    ['hour']              = api.by_hour,
 }
 -- Set the content type
 ngx.header.content_type = 'application/json';

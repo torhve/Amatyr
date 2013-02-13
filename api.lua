@@ -69,6 +69,9 @@ local function getDateConstrains(startarg)
         if string.upper(startarg) == 'TODAY' then
             start = "CURRENT_DATE" 
             -- XXX fixme, use postgresql function
+        elseif string.lower(startarg) == 'yesterday' then
+            start = "DATE 'yesterday'" 
+            endpart = '1 days'
         elseif string.upper(startarg) == '3DAY' then
             start = "CURRENT_DATE - INTERVAL '3 days'"
             endpart = '3 days'
@@ -121,7 +124,9 @@ function record(match)
     return sql
 end
 
-function index()
+--- Return weather data by hour
+function by_hour()
+    local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     local sql = dbreq([[
     SELECT  
         date_trunc('hour', datetime) AS datetime,
@@ -134,9 +139,7 @@ function index()
         AVG(barometer) as barometer,
         AVG(outhumidity) as outhumidity
     FROM ]]..conf.db.name..[[ 
-    WHERE datetime 
-        BETWEEN now() - INTERVAL '3 days'
-        AND now()
+    ]]..where..[[
     GROUP BY 1
     ORDER BY 1
     ]])
@@ -144,15 +147,12 @@ function index()
 end
 
 function day(match)
-    --- XXX support for day as arg
-    --- current day for now
+    local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     local sql = dbreq([[
     SELECT  
         *
     FROM ]]..conf.db.name..[[ 
-    WHERE datetime 
-        BETWEEN CURRENT_DATE
-        AND CURRENT_DATE + INTERVAL '1 day'
+    ]]..where..[[
     ORDER BY datetime
     ]])
     return sql

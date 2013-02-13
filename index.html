@@ -39,6 +39,9 @@
             <ul id="main_nav" class="nav">
                 <li class=""><a href="/">3 day</a></li>
                 <li class=""><a href="/day/today">Today</a></li>
+                <li class=""><a href="/day/yesterday">Yesterday</a></li>
+                <li class=""><a href="/hour/week">Week</a></li>
+                <li class=""><a href="/hour/month">Month</a></li>
                 <li class=""><a href="/year/2013">2013</a></li>
             </ul>
             <ul class="nav pull-right">
@@ -94,12 +97,14 @@
                 <h3>Records <small>Maximum and minimum values</small></h3>
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_today" data-toggle="tab">Today</a></li>
+                    <li class=""><a href="#tab_yesterday" data-toggle="tab">Yesterday</a></li>
                     <li class=""><a href="#tab_week" data-toggle="tab">Week</a></li>
                     <li class=""><a href="#tab_month" data-toggle="tab">Month</a></li>
                     <li class=""><a href="#r2013" data-toggle="tab">2013</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_today"></div>
+                    <div class="tab-pane" id="tab_yesterday"></div>
                     <div class="tab-pane" id="tab_week"></div>
                     <div class="tab-pane" id="tab_month"></div>
                     <div class="tab-pane" id="r2013"></div>
@@ -110,13 +115,6 @@
 
             <hr>
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span6">
-
-            </div>
-            <div class="span6">
-            </div>
-        </div>
         <div class="row-fluid">
             <footer class="footer">
             <a class="brand" href="https://github.com/torhve/Amatyr"><i class="icon-cloud"></i> AmatYR</a>

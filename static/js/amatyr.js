@@ -73,20 +73,29 @@ var AmatYr = function(apiurl) {
         });
         Path.map("/day/:day").to(function(){
             var day = this.params['day'];
-            // save to global for redraw purpose
             var url = apiurl + 'day/' + day;
             // Fetch data for this year
-            d3.json(url, function(json) { 
+            d3.json(url+'?start='+day, function(json) { 
                 // Save to global for redrawing
                 that.currentsource = json;
                 draw(json);
             }); 
             drawWindrose(day); 
         });
+        Path.map("/hour/:arg").to(function(){
+            var arg = this.params['arg'];
+            var url = apiurl + 'hour/' + arg;
+            // Fetch data for this year
+            d3.json(url+'?start='+arg, function(json) { 
+                // Save to global for redrawing
+                that.currentsource = json;
+                draw(json);
+            }); 
+            drawWindrose(arg); 
+        });
         Path.map("/").to(function(){
             var width = $('#main').css('width').split('px')[0];
-            // save to global for redraw purpose
-            d3.json(apiurl, function(json) { 
+            d3.json(apiurl+'hour?start=3day', function(json) { 
                 // Save to global for redrawing
                 that.currentsource = json;
                 draw(json);
@@ -99,6 +108,8 @@ var AmatYr = function(apiurl) {
 
         // Initial fetch and draw
         Path.history.pushState({}, "", window.location.pathname);
+        // Fix initial active link in case user got direct link and not started at /
+        $('#main_nav a[href="'+window.location.pathname+'"]').closest('li').addClass('active');
     }
     initPath();
 
