@@ -2,6 +2,7 @@ var AmatYr = function(apiurl) {
     this.apiurl = apiurl;
     this.currentsource = false;
     this.current_weather;
+    this.windroseData;
     this.that = this;
     that = this;
     // array of all sparklines, used for updating them dynamically
@@ -36,16 +37,25 @@ var AmatYr = function(apiurl) {
      *
      */
     var drawWindrose = function(startarg) {
-        // Get all the wind history and draw two wind roses
-        d3.json('/api/windhist?start='+startarg, function(data) {
-            // Empty nodes
-            d3.selectAll('.windroserow div').html('');
+        if (this.windroseData == undefined) {
+            // Get all the wind history and draw two wind roses
+            d3.json('/api/windhist?start='+startarg, function(data) {
+                this.windroseData = data;
+                // Empty nodes
+                // d3.selectAll('.windroserow div').html('');
 
-            var windrose = new WindRose();
-            windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
-            windrose.drawBigWindrose(data, "#windroseavg", "Average Speed by Direction");
-        });
+                windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
+                windrose.drawBigWindrose(data, "#windroseavg", "Average Speed by Direction");
+            });
+        }else{ // update existing with new data
+            d3.json('/api/windhist?start='+startarg, function(data) {
+                this.windroseData = data;
+                windrose.updateWindVisDiagrams(data);
+            })
+        }
     }
+    // Create windroses
+    windrose = new WindRose();
 
 
     var initPath = function() {

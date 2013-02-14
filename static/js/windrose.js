@@ -4,7 +4,6 @@
 //Live example from: https://gist.github.com/3589712
 //https://groups.google.com/forum/?fromgroups=#!searchin/d3-js/windhistory.com/d3-js/0fYBKF8mYvE/0VXPUCBBtXsJ
 
-    //we don't have a selectedMonthControl so we just turn on all the months
 var WindRose = function() {
     this.that = this;
     that = this;
@@ -121,15 +120,11 @@ var WindRose = function() {
             }else {
                 direction = ""+direction;
             }
-            
-            //console.log(key, datum, direction, totals[direction], speeds[direction]);
             // count up all samples with this key
             totals[direction] += datum.count;
             // add in the average speed * count from this key
             speeds[direction] += datum.count * datum.avg;
-            //console.log(direction, totals[direction], speeds[direction]);
         }
-        //console.log('dodo', totals, speeds);
         return totalsToFrequencies(totals, speeds);
     }
 
@@ -138,7 +133,6 @@ var WindRose = function() {
     // Degree to wind direction name
     this.degreeToWindText = function(d) {
         var ret = 'N';
-        //console.log(d);
         if (d < 10){
             ret =  'N';
             return ret}
@@ -277,15 +271,15 @@ var WindRose = function() {
     }
 
     // Update all diagrams to the newly selected months
-    function updateWindVisDiagrams(d) {
+    this.updateWindVisDiagrams = function (d) {
         updateBigWindrose(d, "#windrose");
-        updateBigWindrose(d, "#windspeed");
+        updateBigWindrose(d, "#windroseavg");
     }
 
     // Update a specific digram to the newly selected months
     function updateBigWindrose(windroseData, container) {
         var vis = d3.select(container).select("svg");
-        var rollup = rollupForMonths(windroseData, selectedMonthControl.selected());
+        var rollup = rollupForAmatyr(windroseData);
 
         if (container == "#windrose") {
             updateComplexArcs(vis, rollup, speedToColor, speedText, windroseArcOptions, probArcTextT);
