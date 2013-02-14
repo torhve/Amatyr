@@ -64,7 +64,7 @@ h5 {
 }
 #current_weather.row-fluid {
     background: inherit;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 #current_weather>div{
     /*
@@ -77,6 +77,7 @@ h5 {
     border: 1px solid #eee;
     border-radius: 5px;
     */
+    border-radius: 5px;
     text-align: center;
 }
 #current_weather .navbar .nav h5 {

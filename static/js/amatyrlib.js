@@ -74,21 +74,68 @@ rivets.formatters.date = function(date) {
 
 /* Configure Rivets to work with Watch JS */
 rivets.configure({
-  adapter: {
-      subscribe: function(obj, keypath, callback) {
-        watch(obj, keypath, callback)
-    },
-    unsubscribe: function(obj, keypath, callback) {
-        unwatch(obj, keypath, callback)
-    },
-    read: function(obj, keypath) {
-        return obj[keypath]
-    },
-    publish: function(obj, keypath, value) {
-        obj[keypath] = value
+    adapter: {
+        subscribe: function(obj, keypath, callback) {
+            watch(obj, keypath, callback)
+        },
+        unsubscribe: function(obj, keypath, callback) {
+            unwatch(obj, keypath, callback)
+        },
+        read: function(obj, keypath) {
+            return obj[keypath]
+        },
+        publish: function(obj, keypath, value) {
+            obj[keypath] = value
+        }
     }
-  }
 });
+
+/* Create a custom rivets binder that looks into data changed and transitions the update in data with colorful updating depending on if the value decreased or increase.
+
+ It expects data in the following form
+   float unit
+   eg. -2.9 hPa
+ and will only look at the value 
+*/
+rivets.binders.texttransition = function(el, value) {
+    var newVal = 0, oldVal = 0, color;
+    if (value != null) {
+        newVal = parseFloat(value.split(' ')[0]);
+        if (el.innerText != null) {
+            var val = parseFloat(el.innerText.split(' ')[0]);
+            if (oldVal != NaN) {
+                oldVal = val;
+            }
+        }
+    }
+    if(oldVal > newVal) {
+        // Value decrease, we show this as red
+        color = '#b5152b';
+    }else if (oldVal < newVal) {
+        // Value increase, we show this as green
+        color = '#5c8843';
+    }
+    // Animate if color
+    if (color) {
+        // There
+        d3.select(el.parentNode).transition()
+            .style('background-color', color)
+            .style('color', 'white')
+            .duration(250);
+        // And back again
+        d3.select(el.parentNode).transition()
+            .style('background-color', 'inherit')
+            .style('color', 'inherit')
+            .duration(250)
+            .delay(250);
+    }
+    if (el.innerText != null) {
+        return el.innerText = value != null ? value : '';
+    } else {
+        return el.textContent = value != null ? value : '';
+    }
+}
+
 
 // Helps out with the bars
 var bartender = function(target, key, legend, width, height) {
