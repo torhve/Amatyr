@@ -1,16 +1,12 @@
     <div class="container-fluid">
         <div class="row-fluid" id="current_weather">
-            <div class="span1">
-                <h5><i class="icon-time"></i></h5>
-                <h5 data-text="current.datetime | date"></h5>
+            <div title="Temperature" class="span1">
+                <h5><i class="avg icon-met icon-temp"></i></h5>
+                <h5 title="Temperature" class="avg" data-text="current.outtemp | temp"></h5>
             </div>
             <div title="Temperature trend last hour" class="span1">
                 <h5><i class="high icon-met avg icon-temp"></i></h5>
                 <div id="sparkline" class="sparkline"></div>
-            </div>
-            <div title="Temperature" class="span1">
-                <h5><i class="avg icon-met icon-temp"></i></h5>
-                <h5 title="Temperature" class="avg" data-text="current.outtemp | temp"></h5>
             </div>
             <div title="Dew point" class="span1">
                 <h5><i class="min icon-met icon-temp"></i></h5>
@@ -48,6 +44,10 @@
             <div title="Barometer" class="span1 pressure">
                 <h5><i class="pressure icon-signal"></i></h5>
                 <h5 class="pressure" title="Barometer" data-text="current.barometer | pressure"></h5>
+            </div>
+            <div class="span1">
+                <h5><i class="icon-time"></i></h5>
+                <h5 data-text="current.datetime | date"></h5>
             </div>
             <!--
             <div class="span1">
