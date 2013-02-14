@@ -42,7 +42,7 @@ function max(match)
     local key = ngx.req.get_uri_args()['key']
     if not key then ngx.exit(403) end
     -- Make sure valid request, only accept plain lowercase ascii string for key name
-    keytest = ngx.re.match(key, '[a-z]+', 'oj')
+    local keytest = ngx.re.match(key, '[a-z]+', 'oj')
     if not keytest then ngx.exit(403) end
 
     local sql = "SELECT date_trunc('day', datetime) AS datetime, MAX("..key..") AS "..key.." FROM "..conf.db.name.." WHERE date_part('year', datetime) < 2013 GROUP BY 1"
@@ -194,7 +194,7 @@ end
 local class_mt = {
     -- to prevent use of casual module global variables
     __newindex = function (table, key, val)
-        error('attempt to write to undeclared variable "' .. key .. '"')
+        ngx.log(ngx.ERR, 'attempt to write to undeclared variable "' .. key .. '"')
     end
 }
 

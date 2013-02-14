@@ -216,10 +216,6 @@ var draw = function(source) {
     });
 }
 
-var redraw = function() {
-    draw(amatyr.currentsource);
-}
-
 /* Container for assorted helpers */
 var amatyrlib = function() {
     this.that = this;

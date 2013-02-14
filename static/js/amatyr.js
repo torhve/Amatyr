@@ -1,17 +1,17 @@
 var AmatYr = function(apiurl) {
     this.apiurl = apiurl;
-    this.currentsource = false;
     this.current_weather;
     this.windroseData;
     this.that = this;
     that = this;
+    currentsource = false;
     // array of all sparklines, used for updating them dynamically
     var sparklines = [];
 
     /* Initial and on resize we draw draw draw */
     on_resize(function() {
         // Redraw graphs
-        redraw();
+        draw(currentsource);
         // Redraw sparklines
         for(key in sparklines) {
             sparklines[key].redrawWithAnimation();
@@ -41,9 +41,6 @@ var AmatYr = function(apiurl) {
             // Get all the wind history and draw two wind roses
             d3.json('/api/windhist?start='+startarg, function(data) {
                 this.windroseData = data;
-                // Empty nodes
-                // d3.selectAll('.windroserow div').html('');
-
                 windrose.drawBigWindrose(data, "#windrose", "Frequency by Direction");
                 windrose.drawBigWindrose(data, "#windroseavg", "Average Speed by Direction");
             });
@@ -76,7 +73,7 @@ var AmatYr = function(apiurl) {
             // Fetch data for this year
             d3.json(yearurl, function(json) { 
                 // Save to global for redrawing
-                that.currentsource = json;
+                currentsource = json;
                 draw(json);
             }); 
             drawWindrose(year); 
@@ -87,7 +84,7 @@ var AmatYr = function(apiurl) {
             // Fetch data for this year
             d3.json(url+'?start='+day, function(json) { 
                 // Save to global for redrawing
-                that.currentsource = json;
+                currentsource = json;
                 draw(json);
             }); 
             drawWindrose(day); 
@@ -98,7 +95,7 @@ var AmatYr = function(apiurl) {
             // Fetch data for this year
             d3.json(url+'?start='+arg, function(json) { 
                 // Save to global for redrawing
-                that.currentsource = json;
+                currentsource = json;
                 draw(json);
             }); 
             drawWindrose(arg); 
@@ -107,7 +104,7 @@ var AmatYr = function(apiurl) {
             var width = $('#main').css('width').split('px')[0];
             d3.json(apiurl+'hour?start=3day', function(json) { 
                 // Save to global for redrawing
-                that.currentsource = json;
+                currentsource = json;
                 draw(json);
             });
             drawWindrose('3DAY'); 
