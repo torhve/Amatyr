@@ -19,8 +19,8 @@ import sys
 clientraw = urllib2.urlopen('http://%s/clientraw.txt?nocache=%s'%(sys.argv[1], int(time.time()))).read()
 f = clientraw.split(' ')
 
-avg_speed = f[1]
-gusts = f[2]
+avg_speed = f[1] * 1.85200 # knot to km/h
+gusts = f[2] * 1.85200     # knot to km/h
 winddir = f[3]
 temp = f[4]
 hum = f[5]
@@ -42,10 +42,10 @@ year = int(f[141])
 timestamp = '%s-%s-%s %s:%s:%s' %(year, month, day, hour, minute, seconds)
 
 
+
 pg_weather = psycopg2.connect("dbname='yr' user='yr' host='localhost' password='amatyr'")
 pg_weather_cursor = pg_weather.cursor()
 weather_insert = "INSERT INTO wd (datetime, windspeed, windgust, winddir, outtemp, outhumidity, barometer, rainrate, rain, dewpoint, cloud_height) VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, 0)".format(timestamp, avg_speed, gusts, winddir, temp, hum, barometer, rain_rate, daily_rain, dew_temp)
-print weather_insert
 pg_weather_cursor.execute(weather_insert)
 
 pg_weather.commit()
