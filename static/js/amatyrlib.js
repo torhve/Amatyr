@@ -98,7 +98,7 @@ rivets.configure({
  and will only look at the value 
 */
 rivets.binders.texttransition = function(el, value) {
-    var newVal = 0, oldVal = 0, color;
+    var newVal = 0, oldVal = 0, transitonTime = 5*1000, color;
     if (value != null) {
         newVal = parseFloat(value.split(' ')[0]);
         if (el.innerText != null) {
@@ -120,14 +120,19 @@ rivets.binders.texttransition = function(el, value) {
         // There
         d3.select(el.parentNode).transition()
             .style('background-color', color)
-            .style('color', 'white')
-            .duration(250);
+            .duration(transitonTime);
+        d3.select(el)
+            .classed('trans', true)
         // And back again
         d3.select(el.parentNode).transition()
             .style('background-color', 'inherit')
-            .style('color', 'inherit')
-            .duration(250)
-            .delay(250);
+            .duration(transitonTime)
+            .delay(transitonTime);
+        // remove trans class for font styling
+        setTimeout(function() {
+            d3.select(el)
+            .classed('trans', false)
+        }, transitonTime);
     }
     if (el.innerText != null) {
         return el.innerText = value != null ? value : '';

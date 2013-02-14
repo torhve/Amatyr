@@ -66,6 +66,9 @@ h5 {
     background: inherit;
     margin-bottom: 10px;
 }
+.trans {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
 #current_weather>div{
     /*
     background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
