@@ -183,7 +183,7 @@ end
 function windhist(match)
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     return dbreq([[
-        SELECT count(*), ((winddir/10)::int*10)+0 as d, avg(windspeed)*1.94384449 as avg
+        SELECT count(*), ((winddir/10)::int*10)+0 as d, avg(windspeed)*0.539956803  as avg
         FROM ]]..conf.db.name..[[ 
         ]]..where..[[
         GROUP BY 2

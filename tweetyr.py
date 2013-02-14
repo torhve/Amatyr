@@ -18,4 +18,7 @@ api = tweepy.API(auth)
 
 w = json.loads(urlopen(conf['apiurl']).read())[0]
 
+# Fix wind speed
+w.windspeed = w.windspeed/3.6
+
 api.update_status('%(outtemp).1f °C, %(windspeed).1f m/s vind, %(rain).1f mm nedbør' %w,lat=conf['lat'],long=conf['long'])

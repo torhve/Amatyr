@@ -50,7 +50,7 @@ rivets.formatters.rain = function(value) {
 }
 rivets.formatters.wind = function(value) {
     if (value)
-        return Number(value*0.51444).toFixed(1) + ' m/s';
+        return Number(value/3.6).toFixed(1) + ' m/s';
     return '0 m/s'
 }
 rivets.formatters.degree = function(value) {
@@ -187,6 +187,9 @@ var draw = function(source) {
     // Add d3 js date for each datum
     source.forEach(function(d) {
         d.date = parseDate(d.datetime);
+        // also fix wind speed to be in m/s
+        d.windspeed = d.windspeed/3.6;
+        d.windgust = d.windgust/3.6;
     });
     var width = $('#main').css('width').split('px')[0];
     var height = width/4;
@@ -196,11 +199,11 @@ var draw = function(source) {
     // Less height for less important graphs
     var height = width/8;
     drawlines('#pressure', source, 'barometer','Air pressure (hPa)', width, height);
-    drawlines('#wind', source, 'windspeed', 'Average wind speed (knot)', width, height);
+    drawlines('#wind', source, 'windspeed', 'Wind speed m/s', width, height);
     /* Disable rain graph as it is part of temp graph now
     drawlines('#rain', source, 'rain','Daily rain (mm)', width, height);
     */
-    drawlines('#winddir', source, 'winddir','Daily wind direction (°)', width, height);
+    drawlines('#winddir', source, 'winddir','Wind direction (°)', width, height);
     drawlines('#humidity', source, 'outhumidity','Humidity (%)', width, height);
     /* Bar graphs */
     /*
