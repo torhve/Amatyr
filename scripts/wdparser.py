@@ -19,8 +19,8 @@ import sys
 clientraw = urllib2.urlopen('http://%s/clientraw.txt?nocache=%s'%(sys.argv[1], int(time.time()))).read()
 f = clientraw.split(' ')
 
-avg_speed = f[1] * 1.85200 # knot to km/h
-gusts = f[2] * 1.85200     # knot to km/h
+avg_speed = float(f[1]) * 1.85200 # knot to km/h
+gusts = float(f[2]) * 1.85200     # knot to km/h
 winddir = f[3]
 temp = f[4]
 hum = f[5]
