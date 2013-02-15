@@ -24,7 +24,6 @@
 
         <style type="text/css">
             img {
-                max-width: 1280px;
                 border: 1px solid #000;
                 margin: 0;
                 padding: 0;
@@ -66,7 +65,7 @@
         </style>
     </head>
     <body>
-        <img src="{{conf.webcam.url}}?nocache=1">
+        <img style="max-width: {{conf.webcam.width}}px" src="{{conf.webcam.url}}?nocache=1">
         {( "dashbar.html"  )}
     </body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
