@@ -90,7 +90,20 @@
         </div>
     </div>
 
-    <hr>
+    <br>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12"> 
+                <h5><a href="/cam">Live camera</a></h5>
+                <div style="text-align: center">
+                <a href="/cam">
+                    <img id="webcam" style="border: 1px solid #111; margin: 0 auto; width: 100%; max-width: {{conf.webcam.width}}px" src="{{conf.webcam.url}}?nocache=1">
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12" id="record_weather">

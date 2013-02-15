@@ -206,6 +206,16 @@ var AmatYr = function(apiurl) {
         $(this).tab('show');
 
     });
+    // Auto update webcam
+    setInterval(function () {
+      var imgElem = document.getElementById("webcam");
+      var newImg = new Image();
+      newImg.src = imgElem.src.split("?")[0] + "?" + new Date().getTime();
+      newImg.addEventListener("load", function (evt) {
+        imgElem.src = newImg.src;
+      });
+    }, 30000);
+
     return this;
 }
 var amatyrlib = new amatyrlib();

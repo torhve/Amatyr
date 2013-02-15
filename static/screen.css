@@ -176,12 +176,7 @@ svg:not(:hover) .focus {
     display: none;
     overflow: none;
     position: absolute;
-    background-color: #fafafa;
-    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    background-color: rgba(255, 255, 255, 0.9);
     background-repeat: repeat-x;
     border: 1px solid #d4d4d4;
     transition: opacity 500ms linear;
