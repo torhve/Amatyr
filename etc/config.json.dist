@@ -1,0 +1,32 @@
+{
+    "db": {
+        "name": "archive",
+        "columns": {
+            "datetime": "datetime",
+            "windspeed": "windspeed",
+            "winddir": "winddir",
+            "windgust": "windgust",
+            "windgustdir": "windgustdir",
+            "rainrate": "rainrate",
+            "rain": "rain",
+            "dewpoint": "dewpoint",
+            "windchill": "windchill",
+            "heatindex": "heatindex",
+            "outtemp": "outtemp",
+            "intemp": "intemp",
+            "inhumidity": "inhumidity",
+            "outhumidity": "outhumidity",
+            "barometer": "barometer"
+            }
+    },
+    "station": {
+        "name": "",
+        "url": "https://maps.google.com/maps?q=0%2C0&z=15"
+    },
+    "webcam": {
+        "width": "800",
+        "height": "720",
+        "url": "http://yr.no/snap.jpg"
+
+    }
+}
