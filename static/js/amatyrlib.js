@@ -13,7 +13,7 @@ var xFormatter = function(xAxis, xextent) {
 
 
     var xdiff = xextent[1] - xextent[0];
-    if (xdiff >= 36288000000) { // a monthish
+    if (xdiff >= 3628800000) { // a monthish
         xAxis.ticks(d3.time.months, 1*widthFactor).tickFormat(d3.time.format('%d.%m'));
     }
     else if (xdiff >= 345600000) { // a weekish
@@ -28,118 +28,6 @@ var xFormatter = function(xAxis, xextent) {
     }
 }
 
-/* Pad helper */
-Number.prototype.pad = function (len) {
-        return (new Array(len+1).join("0") + this).slice(-len);
-}
-/* Rivets formatters */
-rivets.formatters.temp = function(value) {
-    if(!value)
-        return '';
-    if (value != undefined) 
-        return Number((value).toFixed(1))+ ' °C';
-}
-rivets.formatters.pressure = function(value) {
-    if (value)
-        return Number((value).toFixed(1)) + ' hPa';
-}
-rivets.formatters.rain = function(value) {
-    if(value)
-        return Number((value).toFixed(1)) + ' mm';
-    return '0 mm';
-}
-rivets.formatters.wind = function(value) {
-    if (value)
-        return Number(value/3.6).toFixed(1) + ' m/s';
-    return '0 m/s'
-}
-rivets.formatters.degree = function(value) {
-    if (value)
-        return Number((value).toFixed(1)) + ' °';
-    return '0 °';
-}
-rivets.formatters.percent = function(value) {
-    if (value)
-        return Number((value).toFixed(0)) + ' %';
-    return '0%'
-}
-rivets.formatters.rotate = function(value) {
-    return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-mos-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);'
-}
-rivets.formatters.date = function(date) {
-    var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
-    var date = parseDate(date);
-    return date.getHours().pad(2) + ':' + date.getMinutes().pad(2);
-}
-
-/* Configure Rivets to work with Watch JS */
-rivets.configure({
-    adapter: {
-        subscribe: function(obj, keypath, callback) {
-            watch(obj, keypath, callback)
-        },
-        unsubscribe: function(obj, keypath, callback) {
-            unwatch(obj, keypath, callback)
-        },
-        read: function(obj, keypath) {
-            return obj[keypath]
-        },
-        publish: function(obj, keypath, value) {
-            obj[keypath] = value
-        }
-    }
-});
-
-/* Create a custom rivets binder that looks into data changed and transitions the update in data with colorful updating depending on if the value decreased or increase.
-
- It expects data in the following form
-   float unit
-   eg. -2.9 hPa
- and will only look at the value 
-*/
-rivets.binders.texttransition = function(el, value) {
-    var newVal = 0, oldVal = 0, transitonTime = 5*1000, color;
-    if (value != null) {
-        newVal = parseFloat(value.split(' ')[0]);
-        if (el.innerText != null) {
-            var val = parseFloat(el.innerText.split(' ')[0]);
-            if (oldVal != NaN) {
-                oldVal = val;
-            }
-        }
-    }
-    if(oldVal > newVal) {
-        // Value decrease, we show this as red
-        color = '#b5152b';
-    }else if (oldVal < newVal) {
-        // Value increase, we show this as green
-        color = '#5c8843';
-    }
-    // Animate if color
-    if (color) {
-        // There
-        d3.select(el.parentNode).transition()
-            .style('background-color', color)
-            .duration(transitonTime);
-        d3.select(el)
-            .classed('trans', true)
-        // And back again
-        d3.select(el.parentNode).transition()
-            .style('background-color', 'inherit')
-            .duration(transitonTime)
-            .delay(transitonTime);
-        // remove trans class for font styling
-        setTimeout(function() {
-            d3.select(el)
-            .classed('trans', false)
-        }, transitonTime);
-    }
-    if (el.innerText != null) {
-        return el.innerText = value != null ? value : '';
-    } else {
-        return el.textContent = value != null ? value : '';
-    }
-}
 
 
 // Helps out with the bars
@@ -248,6 +136,118 @@ var amatyrlib = function() {
             .attr("height", h)
             .style("fill", "url(#gradient)");
         return gradient;
+    }
+    /* Pad helper */
+    Number.prototype.pad = function (len) {
+            return (new Array(len+1).join("0") + this).slice(-len);
+    }
+    /* Rivets formatters */
+    rivets.formatters.temp = function(value) {
+        if(!value)
+            return '';
+        if (value != undefined) 
+            return Number((value).toFixed(1))+ ' °C';
+    }
+    rivets.formatters.pressure = function(value) {
+        if (value)
+            return Number((value).toFixed(1)) + ' hPa';
+    }
+    rivets.formatters.rain = function(value) {
+        if(value)
+            return Number((value).toFixed(1)) + ' mm';
+        return '0 mm';
+    }
+    rivets.formatters.wind = function(value) {
+        if (value)
+            return Number(value/3.6).toFixed(1) + ' m/s';
+        return '0 m/s'
+    }
+    rivets.formatters.degree = function(value) {
+        if (value)
+            return Number((value).toFixed(1)) + ' °';
+        return '0 °';
+    }
+    rivets.formatters.percent = function(value) {
+        if (value)
+            return Number((value).toFixed(0)) + ' %';
+        return '0%'
+    }
+    rivets.formatters.rotate = function(value) {
+        return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-mos-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);'
+    }
+    rivets.formatters.date = function(date) {
+        var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+        var date = parseDate(date);
+        return date.getHours().pad(2) + ':' + date.getMinutes().pad(2);
+    }
+
+    /* Configure Rivets to work with Watch JS */
+    rivets.configure({
+        adapter: {
+            subscribe: function(obj, keypath, callback) {
+                watch(obj, keypath, callback)
+            },
+            unsubscribe: function(obj, keypath, callback) {
+                unwatch(obj, keypath, callback)
+            },
+            read: function(obj, keypath) {
+                return obj[keypath]
+            },
+            publish: function(obj, keypath, value) {
+                obj[keypath] = value
+            }
+        }
+    });
+
+    /* Create a custom rivets binder that looks into data changed and transitions the update in data with colorful updating depending on if the value decreased or increase.
+
+     It expects data in the following form
+       float unit
+       eg. -2.9 hPa
+     and will only look at the value 
+    */
+    rivets.binders.texttransition = function(el, value) {
+        var newVal = 0, oldVal = 0, transitonTime = 5*1000, color;
+        if (value != null) {
+            newVal = parseFloat(value.split(' ')[0]);
+            if (el.innerText != null) {
+                var val = parseFloat(el.innerText.split(' ')[0]);
+                if (oldVal != NaN) {
+                    oldVal = val;
+                }
+            }
+        }
+        if(oldVal > newVal) {
+            // Value decrease, we show this as red
+            color = '#b5152b';
+        }else if (oldVal < newVal) {
+            // Value increase, we show this as green
+            color = '#5c8843';
+        }
+        // Animate if color
+        if (color) {
+            // There
+            d3.select(el.parentNode).transition()
+                .style('background-color', color)
+                .duration(transitonTime);
+            d3.select(el)
+                .classed('trans', true)
+            // And back again
+            d3.select(el.parentNode).transition()
+                .style('background-color', 'inherit')
+                .duration(transitonTime)
+                .delay(transitonTime);
+            // remove trans class for font styling
+            setTimeout(function() {
+                d3.select(el)
+                .classed('trans', false)
+            }, transitonTime);
+        }
+        if (el.innerText != null) {
+            return el.innerText = value != null ? value : '';
+        } else {
+            return el.textContent = value != null ? value : '';
+        }
     }
     return this;
 }
