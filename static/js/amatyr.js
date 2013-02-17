@@ -19,7 +19,7 @@ var AmatYr = function(apiurl) {
     }); // these parenthesis does the trick
 
     // debulked onresize handler
-    function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,100)};return c};
+    function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,300)};return c};
 
     // Fetch current weather
     d3.json(apiurl + 'now', function(json) { 
@@ -162,7 +162,7 @@ var AmatYr = function(apiurl) {
     // Fetch record weather
     var updateRecordsYear = function(year) {
         var keys = ['max', 'min'];
-        var vals = ['outtemp', 'windspeed', 'rain', 'barometer', 'windgust'];
+        var vals = ['outtemp', 'windspeed', 'rain', 'dayrain', 'barometer', 'windgust', 'heatindex', 'windchill'];
         vals.forEach(function(k, v) {
             keys.forEach(function(func, idx) {
                 // set key for rivets to set up proper setters and getters

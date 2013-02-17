@@ -145,7 +145,10 @@ svg text.score {
 
 .bar {
     fill: steelblue;
+    /*
+     Stroke makes it ugly on low widths
     stroke: white;
+    */
 }
 .bar:hover {
     fill: #002147;

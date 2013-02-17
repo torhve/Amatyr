@@ -213,6 +213,8 @@ var temprain = function(el, data, width, height) {
       .attr("height", function(d) { return height - timey(d.dayrain); })
       ;
 
+
+    /* Bar text formatter */
     var valfmt = function(d) { 
         var nr = d.dayrain;
         if (nr == 0) return '';
@@ -220,21 +222,23 @@ var temprain = function(el, data, width, height) {
             return Number(nr).toFixed(1);
         return parseInt(nr);
     }
-    /* Bar text */
-    svg.selectAll("text.score")
-        .data(data)
-        .enter().append("text")
-        .attr("x", barxpos)
-        .attr("y", function(d){ return timey(d.dayrain) + 10 } )
-        .attr("dx", (width/data.length)*0.4)
-        .attr("dy", (width/data.length)*0.4)
-        .attr("text-anchor", "middle")
-        .attr('class', 'score')
-        .style('font-size', function(d) { 
-            // Compute proper font size
-            w = (width/data.length)*0.6;
-            return w + 'px' })
-        .text(valfmt)
+    // Compute proper font size
+    var fontSize = (width/data.length)*0.6;
+    // if fontsize is too small to be displayed, just do not draw it
+    if(fontSize > 1) {
+        /* Bar text */
+        svg.selectAll("text.score")
+            .data(data)
+            .enter().append("text")
+            .attr("x", barxpos)
+            .attr("y", function(d){ return timey(d.dayrain) + 10 } )
+            .attr("dx", (width/data.length)*0.4)
+            .attr("dy", (width/data.length)*0.4)
+            .attr("text-anchor", "middle")
+            .attr('class', 'score')
+            .style('font-size', fontSize+'px')
+            .text(valfmt)
+    }
 
     // Append a mouseover rule
     var mRule = svg.append('svg:line')

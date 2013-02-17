@@ -118,25 +118,45 @@ function record(match)
     local key = match[1]
     local func = string.upper(match[2])
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
+    local sql
 
-    local sql = dbreq([[
+    -- Special handling for rain since it needs a sum
+    if key == 'dayrain' then
+        -- Not valid with any other value than max
+        if func == 'MAX' then 
+            sql = [[
+            SELECT 
+            distinct date_trunc('day', datetime) AS datetime, 
+            SUM(rain) OVER (PARTITION BY date_trunc('day', datetime)) AS dayrain 
+            FROM ]]..conf.db.name..[[
+            ]]..where..[[
+            ORDER BY dayrain DESC
+            LIMIT 1
+            ]]
+        else 
+            return '{}' 
+        end
+    else
+        sql = [[
         SELECT
             datetime, 
             ]]..key..[[
         FROM ]]..conf.db.name..[[ 
         WHERE
-        ]]..key..[[ = (
+        ]]..key..[[ = 
+        (
             SELECT 
                 ]]..func..[[(]]..key..[[) 
-                FROM ]]..conf.db.name..[[
-                ]]..where..[[
-                LIMIT 1 
-            )
+            FROM ]]..conf.db.name..[[
+            ]]..where..[[
+            LIMIT 1 
+        )
         ]]..andwhere..[[
         LIMIT 1
-        ]])
+        ]]
+    end
     
-    return sql
+    return dbreq(sql)
 end
 
 --- Return weather data by hour
@@ -182,22 +202,32 @@ end
 function year(match)
     local year = match[1]
     local syear = year .. '-01-01'
+    local where = [[
+        WHERE datetime BETWEEN DATE ']]..syear..[['
+        AND DATE ']]..syear..[[' + INTERVAL '365 days'
+    ]]
     local json = dbreq([[
         SELECT 
             date_trunc('day', datetime) AS datetime,
             AVG(outtemp) as outtemp,
             MIN(outtemp) as tempmin,
             MAX(outtemp) as tempmax,
-            MAX(rain) as rain,
+            MAX(b.dayrain) as dayrain,
             AVG(windspeed) as windspeed,
             AVG(winddir) as winddir,
-            AVG(barometer) as barometer,
-            SUM(rain) OVER (ORDER by datetime) AS dayrain
-        FROM ]]..conf.db.name..[[ 
-        WHERE datetime BETWEEN DATE ']]..syear..[['
-        AND DATE ']]..syear..[[' + INTERVAL '365 days'
+            AVG(barometer) as barometer
+        FROM ]]..conf.db.name..[[ AS a
+        LEFT OUTER JOIN 
+        (
+            SELECT 
+                DISTINCT date_trunc('day', datetime) AS hour, 
+                SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
+                FROM ]]..conf.db.name..' '..where..[[ ORDER BY 1
+        ) AS b
+        ON a.datetime = b.hour
+        ]]..where..[[
         GROUP BY 1
-        ORDER BY 1
+        ORDER BY datetime
         ]])
     return json
 end
