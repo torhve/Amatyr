@@ -173,7 +173,7 @@ var amatyrlib = function() {
         return '0%'
     }
     rivets.formatters.rotate = function(value) {
-        return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-mos-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);'
+        return 'display:inline-block;-o-transform: rotate('+value+'deg);-ms-transform: rotate('+value+'deg);-moz-transform: rotate('+value+'deg);-webkit-transform: rotate('+value+'deg);transform: rotate('+value+'deg);'
     }
     rivets.formatters.date = function(date) {
         var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
@@ -207,12 +207,12 @@ var amatyrlib = function() {
      and will only look at the value 
     */
     rivets.binders.texttransition = function(el, value) {
-        var newVal = 0, oldVal = 0, transitonTime = 5*1000, color;
+        var newVal, oldVal, transitonTime = 5*1000, color;
         if (value != null) {
             newVal = parseFloat(value.split(' ')[0]);
-            if (el.innerText != null) {
-                var val = parseFloat(el.innerText.split(' ')[0]);
-                if (oldVal != NaN) {
+            if (el.textContent != null) {
+                var val = parseFloat(el.textContent.split(' ')[0]);
+                if (val != NaN) {
                     oldVal = val;
                 }
             }
