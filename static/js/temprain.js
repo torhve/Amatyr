@@ -160,7 +160,7 @@ var temprain = function(el, data, width, height) {
         .range([height, height/2]);
 
     timex.domain(data.map(function(d) { return d.date; }));
-    timey.domain([0, d3.max(data, function(d) { return d.rain; })]);
+    timey.domain([0, d3.max(data, function(d) { return d.dayrain; })]);
 
     var barxpos = function(d) { 
       var nr = timex(d.date);
@@ -197,7 +197,7 @@ var temprain = function(el, data, width, height) {
 
       var bubble_code = "<div id='tt' style='top:"
           + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
-          + d.datetime + "</span><br>  Rain: <span class=value>" + Number(d.rain).toFixed(1) + "</span> mm</b><br />"
+          + d.datetime + "</span><br>  Rain: <span class=value>" + Number(d.dayrain).toFixed(1) + "</span> mm</b><br />"
           + "</div>";
       $("body").append(bubble_code);
 
@@ -209,12 +209,12 @@ var temprain = function(el, data, width, height) {
 
       .transition().delay(function (d,i){ return 300;})
       .duration(150)
-      .attr("y", function(d) { return timey(d.rain); })
-      .attr("height", function(d) { return height - timey(d.rain); })
+      .attr("y", function(d) { return timey(d.dayrain); })
+      .attr("height", function(d) { return height - timey(d.dayrain); })
       ;
 
     var valfmt = function(d) { 
-        var nr = d.rain;
+        var nr = d.dayrain;
         if (nr == 0) return '';
         if (nr < 1 )
             return Number(nr).toFixed(1);
@@ -225,7 +225,7 @@ var temprain = function(el, data, width, height) {
         .data(data)
         .enter().append("text")
         .attr("x", barxpos)
-        .attr("y", function(d){ return timey(d.rain) + 10 } )
+        .attr("y", function(d){ return timey(d.dayrain) + 10 } )
         .attr("dx", (width/data.length)*0.4)
         .attr("dy", (width/data.length)*0.4)
         .attr("text-anchor", "middle")

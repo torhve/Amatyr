@@ -52,11 +52,26 @@ end
 
 -- Latest record in db
 function now(match)
-    return dbreq("SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 1")
+    return dbreq([[SELECT 
+    *,
+    (
+        SELECT SUM(rain) 
+        FROM ]]..conf.db.name..[[ 
+        WHERE datetime >= CURRENT_DATE
+    )
+    AS dayrain
+    FROM ]]..conf.db.name..[[
+    ORDER BY datetime DESC LIMIT 1]])
 end
+
 -- Last 60 samples from db
 function recent(match)
-    return dbreq("SELECT * FROM "..conf.db.name.." ORDER BY datetime DESC LIMIT 60")
+    return dbreq([[SELECT 
+    *,
+    SUM(rain) OVER (ORDER by datetime) AS dayrain
+    FROM ]]..conf.db.name..[[
+    ORDER BY datetime DESC 
+    LIMIT 60]])
 end
 
 -- Helper function to get a start argument and return SQL constrains
@@ -73,7 +88,7 @@ local function getDateConstrains(startarg)
             start = "DATE 'yesterday'" 
             endpart = '1 days'
         elseif string.upper(startarg) == '3DAY' then
-            start = "CURRENT_DATE - INTERVAL '3 days'"
+            start = "NOW() - INTERVAL '3 days'"
             endpart = '3 days'
         elseif string.upper(startarg) == 'WEEK' then
             start = "date(date_trunc('week', current_timestamp))"
@@ -134,14 +149,19 @@ function by_hour()
         MIN(outtemp) as tempmin,
         MAX(outtemp) as tempmax,
         AVG(rain) as rain,
+        MAX(b.dayrain) as dayrain,
         AVG(windspeed) as windspeed,
         AVG(winddir) as winddir,
         AVG(barometer) as barometer,
         AVG(outhumidity) as outhumidity
-    FROM ]]..conf.db.name..[[ 
+    FROM ]]..conf.db.name..[[ as a
+    LEFT OUTER JOIN (
+        SELECT DISTINCT date_trunc('hour', datetime) AS hour, SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain FROM ]]..conf.db.name..[[ ]]..where..[[ ORDER BY 1
+    ) AS b
+    ON a.datetime = b.hour
     ]]..where..[[
     GROUP BY 1
-    ORDER BY 1
+    ORDER BY datetime
     ]])
     return sql
 end
@@ -150,7 +170,8 @@ function day(match)
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     local sql = dbreq([[
     SELECT  
-        *
+        *,
+        SUM(rain) OVER (ORDER by datetime) AS dayrain
     FROM ]]..conf.db.name..[[ 
     ]]..where..[[
     ORDER BY datetime
@@ -170,7 +191,8 @@ function year(match)
             MAX(rain) as rain,
             AVG(windspeed) as windspeed,
             AVG(winddir) as winddir,
-            AVG(barometer) as barometer
+            AVG(barometer) as barometer,
+            SUM(rain) OVER (ORDER by datetime) AS dayrain
         FROM ]]..conf.db.name..[[ 
         WHERE datetime BETWEEN DATE ']]..syear..[['
         AND DATE ']]..syear..[[' + INTERVAL '365 days'

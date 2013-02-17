@@ -154,7 +154,7 @@ var amatyrlib = function() {
     }
     rivets.formatters.rain = function(value) {
         if(value)
-            return Number((value).toFixed(1)) + ' mm';
+            return Number((value*10).toFixed(1)) + ' mm';
         return '0 mm';
     }
     rivets.formatters.wind = function(value) {
