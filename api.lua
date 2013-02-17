@@ -215,7 +215,8 @@ function year(match)
             MAX(b.dayrain) as dayrain,
             AVG(windspeed) as windspeed,
             AVG(winddir) as winddir,
-            AVG(barometer) as barometer
+            AVG(barometer) as barometer,
+            AVG(outhumidity) as outhumidity
         FROM ]]..conf.db.name..[[ AS a
         LEFT OUTER JOIN 
         (
