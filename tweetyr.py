@@ -22,7 +22,7 @@ w = json.loads(urlopen(conf['apiurl']).read())[0]
 # Fix wind speed
 w['windspeed'] = w['windspeed']/3.6
 # Fix rain
-w['dayrain'] = w['dayrain']*10
+#w['dayrain'] = w['dayrain']*10
 
 
 if len(sys.argv) > 1:
