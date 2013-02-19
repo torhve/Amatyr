@@ -168,12 +168,18 @@ function by_hour()
         AVG(outtemp) as outtemp,
         MIN(outtemp) as tempmin,
         MAX(outtemp) as tempmax,
+        AVG(dewpoint) as dewpoint,
         AVG(rain) as rain,
         MAX(b.dayrain) as dayrain,
         AVG(windspeed) as windspeed,
+        MAX(windgust) as windgust,
         AVG(winddir) as winddir,
         AVG(barometer) as barometer,
-        AVG(outhumidity) as outhumidity
+        AVG(outhumidity) as outhumidity,
+        AVG(intemp) as intemp,
+        AVG(inhumidity) as inhumidity,
+        AVG(heatindex) as heatindex,
+        AVG(windchill) as windchill
     FROM ]]..conf.db.name..[[ as a
     LEFT OUTER JOIN (
         SELECT DISTINCT date_trunc('hour', datetime) AS hour, SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain FROM ]]..conf.db.name..[[ ]]..where..[[ ORDER BY 1
@@ -212,11 +218,19 @@ function year(match)
             AVG(outtemp) as outtemp,
             MIN(outtemp) as tempmin,
             MAX(outtemp) as tempmax,
+            AVG(dewpoint) as dewpoint,
+            AVG(rain) as rain,
             MAX(b.dayrain) as dayrain,
             AVG(windspeed) as windspeed,
+            MAX(windgust) as windgust,
             AVG(winddir) as winddir,
             AVG(barometer) as barometer,
-            AVG(outhumidity) as outhumidity
+            AVG(outhumidity) as outhumidity,
+            AVG(outhumidity) as outhumidity,
+            AVG(intemp) as intemp,
+            AVG(inhumidity) as inhumidity,
+            AVG(heatindex) as heatindex,
+            AVG(windchill) as windchill
         FROM ]]..conf.db.name..[[ AS a
         LEFT OUTER JOIN 
         (

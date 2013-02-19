@@ -43,6 +43,10 @@ h5 {
     */
     margin: 2%;
 }
+path {
+    stroke: #333;
+}
+#temp {}
 .sparkline path {
     stroke-width: 1.2px;
     fill: none;
@@ -53,15 +57,16 @@ h5 {
 #windsparkline path  {
     stroke: #b5152b;
 }
-#pressuresparkline path  {
+.pressure, #pressuresparkline path  {
     stroke: #5c8843;
 }
-#humidity path  {
+#graphtabs .outhumidity path.line, .humidity path.line  {
     stroke: #4d8fc8;
 }
-#wind path, #winddir path  {
-    stroke: black;
+#graphtabs .wind path.line, .wind path.line, #winddir path.line  {
+    stroke: #b5152b;
 }
+
 #current_weather.row-fluid {
     background: inherit;
     margin-bottom: 10px;
@@ -104,13 +109,20 @@ h5 {
     text-shadow: 0 1px 0 #ffffff;
 }
 .yellow { color: #C98E0A; }
-.purple, .high { color: #8C52E2; }
+.purple, .high { 
+    color: #8C52E2; 
+    stroke: #8c52e2;
+}
 .pink    { color: #C25090; }
 .purple2, .low, .min { 
     color: #7B6BB9;
+    stroke: #7b6bb9;
 }
-.red, .avg, .temp, .wind { color: #b5152b; }
-.green, .pressure { color: #5c8843; }
+.red, .avg, .temp, .wind { color: #b5152b; stroke: #b5152b; }
+.green, .pressure { 
+    color: #5c8843;
+    stroke: #5c8843;
+}
 h1, h2, h3, h4, h5, h6, .blue, .hum, .rain { color: #4d8fc8; }
 
 svg {
@@ -139,9 +151,6 @@ svg text.score {
 .x.axis path {
     stroke: #d4d4d4;
 }
-
-
-
 
 .bar {
     fill: steelblue;
@@ -264,6 +273,10 @@ svg:not(:hover) .focus {
 .line {
     fill: none;
     stroke-width: 2px;
+}
+line.yLine {
+    stroke: #dfdfdf;
+    shape-rendering: crispEdges;
 }
 /* Windrose styles */
 .windroserow svg {

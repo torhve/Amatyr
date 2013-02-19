@@ -95,8 +95,7 @@ var temprain = function(el, data, width, height) {
 
     var pathos = svg.append("path")
       .datum(data)
-      .attr("class", "line")
-      .attr("stroke", "#b5152b")
+      .attr("class", "line avg")
       .attr("d", line)
 
     // Check if key is available in source 
@@ -108,9 +107,8 @@ var temprain = function(el, data, width, height) {
             .interpolate(interpolation)
         var pathoslow = svg.append("path")
           .datum(data)
-          .attr("class", "line")
+          .attr("class", "line min")
           .attr("stroke-dasharray", "5,5")
-          .attr("stroke", "#7b6bb9")
           .attr("d", line)
     }
     // Check if key is available in source 
@@ -122,9 +120,8 @@ var temprain = function(el, data, width, height) {
             .interpolate(interpolation)
         var pathoshigh = svg.append("path")
           .datum(data)
-          .attr("class", "line")
+          .attr("class", "line high")
           .attr("stroke-dasharray", "5,5")
-          .attr("stroke", "#8C52E2")
           .attr("d", line)
     }
 
@@ -145,8 +142,7 @@ var temprain = function(el, data, width, height) {
     // Pressure path
     var pathospressure = svg.append("path")
       .datum(data)
-      .attr("class", "line")
-      .attr("stroke", "#5c8843")
+      .attr("class", "line pressure")
       .attr("stroke-opacity", "0.5")
       .attr("d", line)
 

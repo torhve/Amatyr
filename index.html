@@ -22,6 +22,7 @@
 
 
     <link rel="shortcut icon" href="/static/favicon.png">
+
   </head>
 
   <body>
@@ -75,17 +76,21 @@
                 <!--
                 <h5>Pressure </h5>
                 <div class="svgholder" id="pressure"><i class="icon-spin icon-spinner"></i>Loading data...</div>
-                -->
                 <h5>Wind speed by time<span class="pull-right" data-text='current.windspeed | wind'></span></h5>
-                <div class="svgholder" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
-                <!--
+                <div class="svgholder wind" id="wind"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h5>Rain <span class="pull-right" data-text='current.rain | rain'></span></h5>
                 <div class="svgholder" id="rain"><i class="icon-spin icon-spinner"></i>Loading data...</div>
-                -->
                 <h5>Wind direction by time<span class="pull-right" data-text='current.winddir | degree '></span></h5>
-                <div class="svgholder" id="winddir"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                <div class="svgholder winddir" id="winddir"><i class="icon-spin icon-spinner"></i>Loading data...</div>
                 <h5>Humidity by time<span class="pull-right" data-text='current.outhumidity | percent '></span></h5>
-                <div class="svgholder" id="humidity"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                <div class="svgholder humidity" id="humidity"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                -->
+            </div>
+            <div id="graphtabs" class="row-fluid">
+                <ul class="nav nav-tabs">
+                </ul>
+                <div class="tab-content">
+                </div>
             </div>
         </div>
     </div>
@@ -154,6 +159,8 @@
                 <tr class="hum"><td>Humidity</td><td><i class="icon-dashboard"></i></td><td data-text="d.outhumidity | percent"></td></tr>
         </table>
     </div>
+
+
     <script id="record_table_template" type="text/html">
         <table class="table">
             <tr>
@@ -213,6 +220,22 @@
             </tr>
         </table>
     </script>
+    <div style="width:0;height:0">
+        <svg xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <defs>
+        <linearGradient id="myLinearGradient1"
+        x1="0%" y1="0%"
+        x2="0%" y2="100%"
+        spreadMethod="pad">
+        <stop offset="0%"   stop-color="#fafafa" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#f0f0f0" stop-opacity="1"/>
+        </linearGradient>
+        </defs>
+
+        </svg>
+    </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="/static/js/path.min.js"></script>
     <script src="/static/js/watch.js"></script>
@@ -221,6 +244,7 @@
     <script src="/static/js/bootstrap-collapse.js"></script>
     <script src="/static/js/bootstrap-tab.js"></script>
     <script src="/static/js/drawline.js"></script>
+    <script src="/static/js/timelinegraph.js"></script>
     <script src="/static/js/drawbars.js"></script>
     <script src="/static/js/temprain.js"></script>
     <script src="/static/js/sparkline.js"></script>

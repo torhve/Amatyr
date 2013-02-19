@@ -86,13 +86,59 @@ var draw = function(source) {
     var tempgraph = temprain('#temp', source, width, height);
     // Less height for less important graphs
     var height = width/4;
+    /*
     drawlines('#pressure', source, 'barometer','Air pressure (hPa)', width, height);
     drawlines('#wind', source, 'windspeed', 'Wind speed m/s', width, height);
     /* Disable rain graph as it is part of temp graph now
     drawlines('#rain', source, 'rain','Daily rain (mm)', width, height);
-    */
     drawlines('#winddir', source, 'winddir','Wind direction (°)', width, height);
-    drawlines('#humidity', source, 'outhumidity','Humidity (%)', width, height);
+    //drawlines('#humidity', source, 'outhumidity','Humidity (%)', width, height);
+
+    */
+    var vals = ['outhumidity', 'windspeed', 'winddir', 'windgust', 'rain', 'barometer', 'inhumidity', 'intemp', 'outtemp', 'dewpoint', 'heatindex', 'windchill'];
+    d3.select('#graphtabs ul.nav-tabs').selectAll('li')
+        .data(vals)
+      .enter().append('li')
+        .classed('active', function(d,i) {
+            if (i == 0) {
+                return true;
+            }
+            return false;
+        }
+        )
+        .html(function(d, i) { 
+            return '<a data-toggle="tab" href="#tab_graph_'+d+'">'+d.charAt(0).toUpperCase() + d.substr(1).toLowerCase()+'</a>'
+        });
+    d3.select('#graphtabs .tab-content').selectAll('div')
+        .data(vals)
+      .enter().append('div')
+        .classed('tab-pane', true)
+        .classed('active', function(d,i) {
+            if (i == 0) {
+                return true;
+            }
+            return false;
+        }
+        )
+        .attr('id', function(d,i) { return 'tab_graph_'+d; })
+        .html(function(d, i) { 
+            return '<div class="svgholder '+d+'"></div>';
+        });
+    vals.forEach(function(k,v) {
+        console.log(k, source[0][k]);
+        if(source[0][k] != undefined && source[0][k] != NaN && source[0][k] != null) {
+            console.log(k);
+            d3.select("#graphtabs .svgholder."+k)
+            .datum(source)
+            .call(timeSeriesChart()
+                .width(width)
+                .height(height)
+                .x(function(d) { return d.date; })
+                .y(function(d) { return +d[k]; }));
+        }
+    });
+
+
     /* Bar graphs */
     /*
     bartender('#rain', 'rain', 'Daily Rain', width, height);
@@ -112,6 +158,7 @@ var amatyrlib = function() {
     this.that = this;
     that = this;
     this.addGradient = function(target, w, h) {
+        /*
         var gradient = target.append("svg:defs")
           .append("svg:linearGradient")
             .attr("id", "gradient")
@@ -130,12 +177,12 @@ var amatyrlib = function() {
             .attr("offset", "100%")
             .attr("stop-color", "#f0f0f0")
             .attr("stop-opacity", 1);
+*/
 
         target.append("svg:rect")
             .attr("width", w)
             .attr("height", h)
-            .style("fill", "url(#gradient)");
-        return gradient;
+            .style("fill", "url(#myLinearGradient1)");
     }
     /* Pad helper */
     Number.prototype.pad = function (len) {
