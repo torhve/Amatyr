@@ -125,9 +125,7 @@ var draw = function(source) {
             return '<div class="svgholder '+d+'"></div>';
         });
     vals.forEach(function(k,v) {
-        console.log(k, source[0][k]);
         if(source[0][k] != undefined && source[0][k] != NaN && source[0][k] != null) {
-            console.log(k);
             d3.select("#graphtabs .svgholder."+k)
             .datum(source)
             .call(timeSeriesChart()
