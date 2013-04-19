@@ -94,8 +94,10 @@ local function getDateConstrains(startarg)
             start = "date(date_trunc('week', current_timestamp))"
             endpart = '1 week'
         elseif string.upper(startarg) == 'MONTH' then
-            start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')" 
-            endpart = '1 month'
+            -- old used this month, new version uses last 30 days
+            --start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')" 
+            start = "CURRENT_DATE - INTERVAL '1 MONTH'"
+            endpart = "1 MONTH"
         else
             start = "DATE '" .. startarg .. "-01-01'"
         end
