@@ -161,12 +161,21 @@ function record(match)
     return dbreq(sql)
 end
 
---- Return weather data by hour
-function by_hour()
+--- Return weather data by hour, week, month, year, whatever..
+function by_dateunit(match)
+    local unit = 'hour'
+    if match[1] then
+        if match[1] == 'month' then
+            unit = 'day'
+        end
+    elseif ngx.req.get_uri_args()['start'] == 'month' then
+        unit = 'day'
+    end
+    -- get the date constraints
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     local sql = dbreq([[
     SELECT  
-        date_trunc('hour', datetime) AS datetime,
+        date_trunc(']]..unit..[[', datetime) AS datetime,
         AVG(outtemp) as outtemp,
         MIN(outtemp) as tempmin,
         MAX(outtemp) as tempmax,
@@ -184,9 +193,13 @@ function by_hour()
         AVG(windchill) as windchill
     FROM ]]..conf.db.name..[[ as a
     LEFT OUTER JOIN (
-        SELECT DISTINCT date_trunc('hour', datetime) AS hour, SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain FROM ]]..conf.db.name..[[ ]]..where..[[ ORDER BY 1
+        SELECT DISTINCT 
+            date_trunc(']]..unit..[[', datetime) AS unit, 
+            SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
+        FROM ]]..conf.db.name..[[ ]]..where..[[ 
+        ORDER BY 1
     ) AS b
-    ON a.datetime = b.hour
+    ON a.datetime = b.unit
     ]]..where..[[
     GROUP BY 1
     ORDER BY datetime

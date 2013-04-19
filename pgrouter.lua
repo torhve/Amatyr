@@ -4,12 +4,8 @@
 -- Copyright Tor Hveem <thveem> 2013
 --
 
-local cjson = require "cjson"
-local string = require "string"
-
 -- Load our API commands
 local api = require "api"
-
 
 -- mapping patterns to query views
 local routes = {
@@ -21,7 +17,8 @@ local routes = {
     ['recent']            = api.recent,
     ['station']           = api.meta,
     ['windhist']          = api.windhist,
-    ['hour']              = api.by_hour,
+    ['hour']              = api.by_dateunit,
+    ['(month)']           = api.by_dateunit,
 }
 -- Set the content type
 ngx.header.content_type = 'application/json';
