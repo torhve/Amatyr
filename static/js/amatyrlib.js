@@ -16,6 +16,10 @@ var xFormatter = function(xAxis, xextent) {
     if (xdiff >= 3628800000) { // a monthish
         xAxis.ticks(d3.time.months, 1*widthFactor).tickFormat(d3.time.format('%d.%m'));
     }
+    else if (xdiff >= 2674800000) { // a monthish
+        //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
+        xAxis.ticks(d3.time.days, 9*widthFactor).tickFormat(d3.time.format('%d.%m'));
+    }
     else if (xdiff >= 345600000) { // a weekish
         //xAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%b %Y'));
         xAxis.ticks(d3.time.hours, 24*widthFactor).tickFormat(d3.time.format('%d.%m'));
