@@ -99,7 +99,7 @@ var draw = function(source) {
     //drawlines('#humidity', source, 'outhumidity','Humidity (%)', width, height);
 
     */
-    var vals = ['outhumidity', 'windspeed', 'winddir', 'windgust', 'rain', 'barometer', 'inhumidity', 'intemp', 'outtemp', 'dewpoint', 'heatindex', 'windchill'];
+    var vals = ['windspeed', 'windgust', 'outhumidity', 'winddir', 'rain', 'barometer', 'inhumidity', 'intemp', 'outtemp', 'dewpoint', 'heatindex', 'windchill'];
     d3.select('#graphtabs ul.nav-tabs').selectAll('li')
         .data(vals)
       .enter().append('li')

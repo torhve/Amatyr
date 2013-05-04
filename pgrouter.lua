@@ -4,6 +4,8 @@
 -- Copyright Tor Hveem <thveem> 2013
 --
 
+local cjson = require "cjson"
+
 -- Load our API commands
 local api = require "api"
 
@@ -19,6 +21,8 @@ local routes = {
     ['windhist']          = api.windhist,
     ['hour']              = api.by_dateunit,
     ['(month)']           = api.by_dateunit,
+    ['old']           = api.oldbench,
+    ['new']           = api.newbench,
 }
 -- Set the content type
 ngx.header.content_type = 'application/json';
@@ -30,7 +34,7 @@ for pattern, view in pairs(routes) do
     local match = ngx.re.match(ngx.var.uri, uri, "oj") -- regex mather in compile mode
     if match then
         local ret, exit = view(match) 
-        -- Print the returned json
+        -- Print th returned res
         ngx.print(ret)
         -- If not given exit, then assume OK
         if not exit then exit = ngx.HTTP_OK end
