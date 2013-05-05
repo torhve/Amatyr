@@ -206,6 +206,44 @@ var AmatYr = function(apiurl) {
         $(this).tab('show');
 
     });
+
+    /* Calendar generation */
+    var updateCalender = function() {
+        // TODO dynamic
+        var width = $('#main').css('width').split('px')[0];
+        d3.json(apiurl + 'year/2013', function(json) { 
+            //drawcalender('#heat_calender', json, width);
+            var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+
+            // Add d3 js date for each datum
+            json.forEach(function(d) {
+                d.date = ""+(+parseDate(d.datetime))/1000;
+            });
+
+
+            // Format data to how calheatmap likes it
+            var data = d3.nest()
+              .key(function(d) { return d.date; })
+              .rollup(function(d) { return d[0].dayrain; })
+              .map(json);
+            var cal = new CalHeatMap();
+            cal.init({
+                data: data,
+                start: new Date(2013,1),
+                id : "cal-heatmap",
+                domain : "month",       // Group data by month
+                subDomain : "day",      // Split each month by days
+                range : 11,          // Just display 3 months
+                cellradius : 2,
+                itemName: ['mm', 'mm'],
+                scale: [1, 4, 6, 8]    // Custom threshold for the scale
+            });
+
+        });
+
+    };
+    updateCalender();
+
     // Auto update webcam
     setInterval(function () {
       var imgElem = document.getElementById("webcam");

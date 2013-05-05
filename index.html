@@ -12,6 +12,7 @@
     <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
     <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
 
+    <link href="/static/cal-heatmap/cal-heatmap.css" rel="stylesheet">
     <link href="/static/screen.css" rel="stylesheet">
 
 
@@ -131,7 +132,16 @@
         </div>
     </div>
 
-            <hr>
+    <hr>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12" id="cal-heatmap">
+                <h3>Rain map <small>Intensity by rain amount</small></h3>
+            </div>
+        </div>
+    </div>
+
+    <hr>
     <div class="container-fluid">
         <div class="row-fluid">
             <footer class="footer">
@@ -141,7 +151,7 @@
              <p class="pull-right">Find the source over at <a  href="https://github.com/torhve/Amatyr">GitHub</a>.</p>
             </footer>
         </div>
-    </div> <!-- /container -->
+    </div> 
     <div id="tooltip">
         <table class="table table-condensed">
             <tr>
@@ -249,6 +259,7 @@
     <script src="/static/js/temprain.js"></script>
     <script src="/static/js/sparkline.js"></script>
     <script src="/static/js/windrose.js"></script>
+    <script src="/static/cal-heatmap/cal-heatmap.js"></script>
     <script src="/static/js/amatyrlib.js"></script>
     <script src="/static/js/amatyr.js"></script>
     <script>

@@ -15,6 +15,8 @@ Primary goal of the project is bringing modern and responsive design, suitable f
 -    Path js 
 -    Wind rose chart from [Windhistory.com](http://windhistory.com/about.html)
 -    Bootstrap css + js
+-    Cal-Heatpmap from Wan Qi Chen <http://kamisama.github.io/cal-heatmap/>
+
 
 ### Backend Components
 
