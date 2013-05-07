@@ -51,14 +51,6 @@ local function column(key)
     return conf.db.columns[key]
 end
 
-
-function oldbench(match)
-    return odbreq('SELECT 1 AS message')
-end
-function newbench(match)
-    return dbreq('SELECT 1 AS message')
-end
-
 function max(match)
     local key = ngx.req.get_uri_args()['key']
     if not key then ngx.exit(403) end
