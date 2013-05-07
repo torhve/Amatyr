@@ -227,13 +227,18 @@ var AmatYr = function(apiurl) {
               .rollup(function(d) { return d[0].dayrain; })
               .map(json);
             var cal = new CalHeatMap();
+
+            // Remove spinner
+            $('#cal-heatmap .spinner').remove();
+            // Draw calendar
             cal.init({
                 data: data,
                 start: new Date(2013,1),
+                end: new Date(),
                 id : "cal-heatmap",
                 domain : "month",       // Group data by month
                 subDomain : "day",      // Split each month by days
-                range : 11,          // Just display 3 months
+                range : new Date().getMonth(),  // Only display up to current month
                 cellradius : 2,
                 itemName: ['mm', 'mm'],
                 scale: [1, 4, 6, 8]    // Custom threshold for the scale
