@@ -162,7 +162,7 @@ var AmatYr = function(apiurl) {
     // Fetch record weather
     var updateRecordsYear = function(year) {
         var keys = ['max', 'min'];
-        var vals = ['outtemp', 'windspeed', 'rain', 'dayrain', 'barometer', 'windgust', 'heatindex', 'windchill'];
+        var vals = ['outtemp', 'windspeed', 'sumrain', 'dayrain', 'barometer', 'windgust', 'heatindex', 'windchill'];
         vals.forEach(function(k, v) {
             keys.forEach(function(func, idx) {
                 // set key for rivets to set up proper setters and getters

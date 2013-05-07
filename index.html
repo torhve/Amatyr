@@ -99,19 +99,6 @@
     <br>
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span12"> 
-                <h5><a href="/cam">Live camera</a></h5>
-                <div style="text-align: center">
-                <a href="/cam">
-                    <img id="webcam" style="border: 1px solid #111; margin: 0 auto; width: 100%; max-width: {{conf.webcam.width}}px" src="{{conf.webcam.url}}?nocache=1">
-                </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="container-fluid">
-        <div class="row-fluid">
             <div class="span12" id="record_weather">
                 <h3>Records <small>Maximum and minimum values</small></h3>
                 <ul class="nav nav-tabs">
@@ -141,6 +128,22 @@
             </div>
         </div>
     </div>
+
+    <br>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12"> 
+                <h3><a href="/cam">Live camera</a> <small>Image updated every 30 seconds</small> </h3>
+                <div style="text-align: center">
+                <a href="/cam">
+                    <img id="webcam" style="border: 1px solid #111; margin: 0 auto; width: 100%; max-width: {{conf.webcam.width}}px" src="{{conf.webcam.url}}?nocache=1">
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
 
     <hr>
     <div class="container-fluid">
@@ -210,9 +213,9 @@
                 <td data-text='current.maxwindgustvalue | wind'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
-                <td>Highest rain for a minute</td>
-                <td data-text='current.maxraindate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxrainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
+                <td>Amount of rain in period</td>
+                <td data-text='current.sumraindate'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.sumrainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest daily rain</td>
