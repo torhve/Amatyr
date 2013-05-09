@@ -97,7 +97,7 @@ function recent(match)
 end
 
 -- Helper function to get a start argument and return SQL constrains
-local function getDateConstrains(startarg)
+local function getDateConstrains(startarg, interval)
     local where = ''
     local andwhere = ''
     if startarg then 
@@ -105,7 +105,7 @@ local function getDateConstrains(startarg)
         local endpart = "365 days"
         if string.upper(startarg) == 'TODAY' then
             start = "CURRENT_DATE" 
-            -- XXX fixme, use postgresql function
+            endpart = "1 DAY"
         elseif string.lower(startarg) == 'yesterday' then
             start = "DATE 'yesterday'" 
             endpart = '1 days'
@@ -115,14 +115,25 @@ local function getDateConstrains(startarg)
         elseif string.upper(startarg) == 'WEEK' then
             start = "date(date_trunc('week', current_timestamp))"
             endpart = '1 week'
+        elseif string.upper(startarg) == '7DAYS' then
+            start = "CURRENT_DATE - INTERVAL '1 WEEK'"
+            endpart = '1 WEEK'
         elseif string.upper(startarg) == 'MONTH' then
             -- old used this month, new version uses last 30 days
             --start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')" 
             start = "CURRENT_DATE - INTERVAL '1 MONTH'"
             endpart = "1 MONTH"
-        else
+        elseif string.upper(startarg) == 'YEAR' then
             start = "DATE '" .. startarg .. "-01-01'"
+            endpart = "365 days"
+        else
+            start = "DATE '" .. startarg .. "'"
         end
+        -- use interval if provided, if not use the default endpart
+        if not interval then
+            interval = endpart
+        end
+
         local wherepart = [[
         (
             datetime BETWEEN ]]..start..[[
