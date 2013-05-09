@@ -28,10 +28,19 @@ end
 local function dbreq(sql)
     local db = pg:new()
     db:set_timeout(3000)
-    local ok, err = db:connect({host=conf.db.host,port=5432, database=conf.db.database, user=conf.db.user,password=conf.db.password,compact=false})
+    local ok, err = db:connect(
+        {
+            host=conf.db.host,
+            port=5432, 
+            database=conf.db.database, 
+            user=conf.db.user,
+            password=conf.db.password,
+            compact=false
+        })
     if not ok then
         ngx.say(err)
     end
+    ---ngx.log(ngx.ERR, '___ SQL ___'..sql)
     local res, err = db:query(sql)
     db:set_keepalive(0,10)
     return cjson.encode(res)
@@ -136,21 +145,25 @@ function record(match)
     local sql
 
     -- Special handling for rain since it needs a sum
-    if key == 'dayrain' then
+    if key == 'dayrain' and func == 'MAX' then
         -- Not valid with any other value than max
-        if func == 'MAX' then 
-            sql = [[
+        sql = [[
+        SELECT 
+        distinct date_trunc('day', datetime) AS datetime, 
+        SUM(rain) OVER (PARTITION BY date_trunc('day', datetime)) AS dayrain 
+        FROM ]]..conf.db.table..[[
+        ]]..where..[[
+        ORDER BY dayrain DESC
+        LIMIT 1
+        ]]
+    elseif func == 'SUM' then
+        -- The SUM part doesn't need the datetime of the record since the datetime is effectively over the whole scope
+        sql = [[
             SELECT 
-            distinct date_trunc('day', datetime) AS datetime, 
-            SUM(rain) OVER (PARTITION BY date_trunc('day', datetime)) AS dayrain 
+            SUM(]]..key..[[) AS ]]..key..[[ 
             FROM ]]..conf.db.table..[[
             ]]..where..[[
-            ORDER BY dayrain DESC
-            LIMIT 1
-            ]]
-        else 
-            return '{}' 
-        end
+        ]]
     else
         sql = [[
         SELECT
