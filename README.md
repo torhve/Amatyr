@@ -49,6 +49,7 @@ And follow Openresty's own installation docs.
 1. Configure postgresql
 1. Configure nginx:
 
+
     upstream database {
         postgres_server 127.0.0.1 dbname=yr user=yr password=yr;
     }
