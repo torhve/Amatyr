@@ -72,7 +72,8 @@ And follow Openresty's own installation docs.
 
 1. Install the resty postgresql driver from <https://github.com/azurewang/lua-resty-postgres>
     One simple way to do this is put the postgres.lua in the default openresty folder:
-    wget -O /usr/local/openresty/lualib/resty/postgresql.lua  https://github.com/azurewang/lua-resty-postgres/raw/master/lib/resty/postgres.lua
+
+    wget -O /usr/local/openresty/lualib/resty/postgres.lua  https://github.com/azurewang/lua-resty-postgres/raw/master/lib/resty/postgres.lua
 
 ### Live demo
 
