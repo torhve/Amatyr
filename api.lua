@@ -167,7 +167,7 @@ function record(match)
         -- Not valid with any other value than max
         sql = [[
         SELECT 
-        distinct date_trunc('day', datetime) AS datetime, 
+        DISTINCT date_trunc('day', datetime) AS datetime, 
         SUM(rain) OVER (PARTITION BY date_trunc('day', datetime)) AS dayrain 
         FROM ]]..conf.db.table..[[
         ]]..where..[[
@@ -186,6 +186,7 @@ function record(match)
         sql = [[
         SELECT
             datetime, 
+			date_trunc('second', age(NOW(), date_trunc('second', datetime))) AS age,
             ]]..key..[[
         FROM ]]..conf.db.table..[[ 
         WHERE

@@ -168,12 +168,14 @@ var AmatYr = function(apiurl) {
                 // set key for rivets to set up proper setters and getters
                 record_weather.current[func+k+'date'] = '';
                 record_weather.current[func+k+'value'] = '';
+                record_weather.current[func+k+'age'] = '';
                 /// XXX needs a black list for certain types that doesn't make sense
                 // like min daily_rain or min windspeed
                 d3.json(apiurl + 'record/'+k+'/'+func+'?start='+year, function(json) { 
                     if (json) {
                         record_weather.current[func+k+'date'] = json[0].datetime;
                         record_weather.current[func+k+'value'] = json[0][k];
+                        record_weather.current[func+k+'age'] = json[0].age;
                     }
                 });
             })
