@@ -67,7 +67,14 @@ function max(match)
     local keytest = ngx.re.match(key, '[a-z]+', 'oj')
     if not keytest then ngx.exit(403) end
 
-    local sql = "SELECT date_trunc('day', datetime) AS datetime, MAX("..key..") AS "..key.." FROM "..conf.db.table.." WHERE date_part('year', datetime) < 2013 GROUP BY 1"
+    local sql = [[
+		SELECT 
+			date_trunc('day', datetime) AS datetime,
+			MAX(]]..key..[[) AS ]]..key..[[
+		FROM ]]..conf.db.table..[[
+		WHERE date_part('year', datetime) < 2013 
+		GROUP BY 1
+	]]
     
     return dbreq(sql)
 end
