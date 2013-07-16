@@ -131,8 +131,11 @@ local function getDateConstrains(startarg, interval)
             start = "CURRENT_DATE - INTERVAL '1 MONTH'"
             endpart = "1 MONTH"
         elseif string.upper(startarg) == 'YEAR' then
-            start = "DATE '" .. startarg .. "-01-01'"
+            start = "date_trunc('year', current_timestamp)"
             endpart = "365 days"
+        elseif string.upper(startarg) == 'ALL' then
+            start = "DATE '1900-01-01'" -- Should be old enough :-)
+            endpart = "200 years"
         else
             start = "DATE '" .. startarg .. "'"
         end
