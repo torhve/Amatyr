@@ -11,9 +11,8 @@
         <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
         <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
-    <link rel="shortcut icon" href="/static/favicon.png">
-    <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
-
+        <link rel="shortcut icon" href="/static/favicon.png">
+        <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
         <link href="/static/screen.css" rel="stylesheet">
 
 
@@ -23,14 +22,21 @@
         <![endif]-->
 
         <style type="text/css">
-            img {
-                border: 1px solid #000;
+            .cam {
                 margin: 0;
                 padding: 0;
                 width: 100%;
-                margin-left:auto;
-                margin-right:auto;
+                position: relative;
+                left: 0;
+                top: 0;
+            
 
+            }
+            .cam img {
+                border: 1px solid #000;
+                position: relative;
+                top: 0;
+                left: 0;
             }
             body {
                 /*background: #111;*/
@@ -41,7 +47,7 @@
                 margin: 0;
                 padding: 0;
                 text-align: center;
-                text-shadow: 1px 2px black;
+                text-shadow: 1px 1px black;
             }
             .navbar-inner {
                 background: inherit;
@@ -57,18 +63,69 @@
                 fill: none;
             }
             body, .sparkline path, h5, .high, .avg, .min, .wind, .temp, .pressure, .hum, .rain, #pressuresparkline path, #windsparkline path, #sparkline path {
-                color: rgba(255, 255, 255, 0.8);
-                stroke: rgba(255, 255, 255, 0.8);
+                color: rgba(255, 255, 255, 1);
+                stroke: rgba(255, 255, 255, 1);
+                font-size: 1.5vw;
             }
-
+            #current_weather i {
+                font-size: 3vw;
+            }
+            .widget {
+                position: absolute;
+                text-align: center;
+                left: 15px;
+                width: 80px;
+            }
+            .widget.row1 {
+                top: 5px;
+            }
+            .widget.row2 {
+                top: 70px;
+            }
+            .widget.row3 {
+                top: 140px;
+            }
+            .widget.row4 {
+                top: 210px;
+            }
+            .widget.row5 {
+                top: 280px;
+            }
+            .widget.row6 {
+                top: 350px;
+            }
+            .widget.row7 {
+                top: 420px;
+            }
 
         </style>
     </head>
     <body>
-        <img style="max-width: {{conf.webcam.width}}px" src="{{conf.webcam.url}}?nocache=1">
-        {( "dashbar.html"  )}
+        <div class="cam" id="current_weather">
+            <img src="{{conf.webcam.url}}?nocache=1">
+            <div title="Time of latest weather data from weather station" class="widget row1">
+                <h5><i class="icon-time"></i></h5>
+                <h5 data-texttransition="current.datetime | date"></h5>
+            </div>
+            <div title="Temperature" class="widget row2">
+                <h5><i class="avg icon-met icon-temp"></i></h5>
+                <h5 title="Temperature" class="avg" data-texttransition="current.outtemp | temp"></h5>
+            </div>
+            <div title="Rain" class="widget row3">
+                <h5><i class="icon-tint"></i> </h5>
+                <h5 class="rain" title="Daily rain" data-texttransition="current.dayrain | rain"></h5>
+            </div>
+            <div title="Wind speed" class="widget row4">
+                <h5><i class="avg icon-met icon-wind"></i></h5>
+                <h5 class="avg" title="Average wind speeds" data-texttransition="current.windspeed | wind"></h5>
+            </div>
+            <div title="Wind direction" class="widget row5">
+                <h5><i class="high icon-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
+                <h5 class="high" title="Wind direction" data-texttransition="current.winddir | degree">
+                </h5>
+            </div>
+        </div>
     </body>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="/static/js/watch.js"></script>
 <script src="/static/js/rivets.min.js"></script>
 <script src="/static/js/d3.v3.min.js"></script>
@@ -139,6 +196,7 @@ setInterval(function() { d3.json(amatyr.apiurl + 'now', function(json) {
     }
 }) }, 60*1000);
 </script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script>
   !function ($) {
     $(function(){
