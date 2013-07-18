@@ -1,6 +1,10 @@
 {
     "db": {
-        "name": "archive",
+        "host": "127.0.0.1",
+        "database": "weewx",
+        "user": "w",
+        "password": "w",
+        "table": "archive",
         "columns": {
             "datetime": "datetime",
             "windspeed": "windspeed",
@@ -20,11 +24,11 @@
             }
     },
     "station": {
-        "name": "",
+        "name": "Name",
         "url": "https://maps.google.com/maps?q=0%2C0&z=15"
     },
     "webcam": {
-        "width": "800",
+        "width": "1080",
         "height": "720",
         "url": "http://yr.no/snap.jpg"
 
