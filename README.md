@@ -64,6 +64,9 @@ And follow Openresty's own installation docs.
            lua_code_cache off;
            content_by_lua_file $root/pgrouter.lua;
         }
+        location /static {
+            root $root;
+        }
 
         location / { try_files $uri @lua; }
         location @lua {
