@@ -27,7 +27,7 @@ end
 
 local function dbreq(sql)
     local db = pg:new()
-    db:set_timeout(3000)
+    db:set_timeout(30000)
     local ok, err = db:connect(
         {
             host=conf.db.host,
@@ -40,7 +40,7 @@ local function dbreq(sql)
     if not ok then
         ngx.say(err)
     end
-    ---ngx.log(ngx.ERR, '___ SQL ___'..sql)
+    --ngx.log(ngx.ERR, '___ SQL ___'..sql)
     local res, err = db:query(sql)
     db:set_keepalive(0,10)
     return cjson.encode(res)
@@ -109,7 +109,7 @@ local function getDateConstrains(startarg, interval)
     local andwhere = ''
     if startarg then 
         local start
-        local endpart = "365 days"
+        local endpart = "1 year"
         if string.upper(startarg) == 'TODAY' then
             start = "CURRENT_DATE" 
             endpart = "1 DAY"
@@ -132,7 +132,7 @@ local function getDateConstrains(startarg, interval)
             endpart = "1 MONTH"
         elseif string.upper(startarg) == 'YEAR' then
             start = "date_trunc('year', current_timestamp)"
-            endpart = "365 days"
+            endpart = "1 year"
         elseif string.upper(startarg) == 'ALL' then
             start = "DATE '1900-01-01'" -- Should be old enough :-)
             endpart = "200 years"
@@ -273,7 +273,7 @@ function year(match)
     local syear = year .. '-01-01'
     local where = [[
         WHERE datetime BETWEEN DATE ']]..syear..[['
-        AND DATE ']]..syear..[[' + INTERVAL '365 days'
+        AND DATE ']]..syear..[[' + INTERVAL '1 year'
     ]]
     local json = dbreq([[
         SELECT 
