@@ -326,3 +326,46 @@ svg g.tickmarks>text { font-size: 10px; fill: #888;}
     content: "F";
 }
 
+
+.qi {
+	background-color: #999;
+	fill: #999;
+}
+
+.q0
+{
+	background-color: #fff;
+	fill: #fff;
+	stroke: #ededed;
+}
+
+.q1
+{
+	background-color: #c6dbef;
+	fill: #c6dbef;
+}
+
+.q2
+{
+	background-color: #9ecae1;
+	fill: #9ecae1;
+}
+
+.q3
+{
+	background-color: #6baed6;
+	fill: #6baed6;
+}
+
+.q4
+{
+	background-color: #3182bd;
+	fill: #3182bd;
+}
+
+.q5
+{
+	background-color: #6b6ecf;
+	fill: #6b6ecf;
+}
+
