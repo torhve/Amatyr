@@ -190,6 +190,8 @@ var amatyrlib = function() {
     Number.prototype.pad = function (len) {
             return (new Array(len+1).join("0") + this).slice(-len);
     }
+
+
     /* Rivets formatters */
     rivets.formatters.temp = function(value) {
         if(!value)
@@ -247,6 +249,38 @@ var amatyrlib = function() {
             }
         }
     });
+
+    /* Formatter helper */
+    this.autoformat = function(name, value) {
+        var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+        if (name == 'datetime') {
+            var date = parseDate(value);
+            return date.getMonth().pad(2) + '.' + date.getDate().pad(2);
+        }
+        if (name == 'dayrain') {
+            var val = Number((Number(value)).toFixed(0)).pad(1) + ' mm';
+            if (val == "0 mm") {
+                return '<span class="muted">0 mm</span>';
+            }
+            return val;
+        }
+        if (name == 'outtemp') {
+            var val = Number((value).toFixed(1));
+            var color;
+            if (val < 0) {
+                color = 'steelblue';
+            }else {
+                color = 'red';
+            }
+            return '<span style="color:'+color+'">'+val+ ' </span>°C';
+        }
+        if (name == 'windspeed')
+            return rivets.formatters.wind(value);
+        if (name == 'winddir')
+            return Number((value).toFixed(0)).pad(3) + ' °';
+
+        return value;
+    }
 
     /* Create a custom rivets binder that looks into data changed and transitions the update in data with colorful updating depending on if the value decreased or increase.
 
