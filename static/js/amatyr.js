@@ -261,7 +261,10 @@ var AmatYr = function(apiurl) {
     updateCalender();
 
     var updateTabularData = function(data) {
-        var table = d3.select('#tabular'),
+        // Remove spinner
+        $('#tabular .spinner').remove();
+
+        var table = d3.select('#tabular table'),
             thead = table.append("thead"),
             tbody = table.append("tbody");
 
@@ -290,8 +293,10 @@ var AmatYr = function(apiurl) {
             })
             .enter()
                 .append("td")
-                .attr("style", "font-family: Courier")
+                .attr("style", "font-family: monospace")
                 .html(function(d) { return amatyrlib.autoformat(d.column, d.value); });
+
+        $
     }
         
 
