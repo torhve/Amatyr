@@ -276,8 +276,10 @@ var amatyrlib = function() {
         }
         if (name == 'windspeed')
             return rivets.formatters.wind(value);
-        if (name == 'winddir')
-            return Number((value).toFixed(0)).pad(3) + ' °';
+        if (name == 'winddir') {
+            var degree = Number((value).toFixed(0))
+            return '<i title="'+degree+' °" class="icon-arrow-up" style="'+rivets.formatters.rotate(degree)+'"></i>';
+        }
 
         return value;
     }
