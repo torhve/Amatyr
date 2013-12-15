@@ -283,6 +283,7 @@ var AmatYr = function(apiurl) {
             return {
                 barometer: d3.mean(d, function(g) { return +g.barometer }),
                 windspeed: d3.mean(d, function(g) { return +g.windspeed }),
+                windgustmax: d3.max(d, function(g) { return +g.windgust}),
                 outtemp: d3.mean(d, function(g) { return +g.outtemp }),
                 tempmax: d3.max(d, function(g) { return +g.tempmax }),
                 tempmin: d3.min(d, function(g) { return +g.tempmin }),
@@ -304,12 +305,12 @@ var AmatYr = function(apiurl) {
                 monthname = d3.time.format('%Y %B')(new Date(values.date)),
                 header = monthname,
                 headertext = 
-                    ' Rain: ' + amatyrlib.autoformat('dayrain', values.dayrain) +
+                    ' Rain: <span class="blue">' + amatyrlib.autoformat('dayrain', values.dayrain) + '</span>' +
                     ' Avg Temp: ' + amatyrlib.autoformat('outtemp', values.outtemp) +
                     ' Min Temp: ' + amatyrlib.autoformat('outtemp', values.tempmin) +
                     ' Max Temp: ' + amatyrlib.autoformat('outtemp', values.tempmax) +
                     ' Avg Wind: ' + amatyrlib.autoformat('windspeed', values.windspeed) +
-                    ' Avg Pressure:' + amatyrlib.autoformat('barometer', values.barometer)
+                    ' Max Windgust: ' + amatyrlib.autoformat('windspeed', values.windgustmax)
                 ,
                 panel = d3.select('#accordion').append('div')
                 .classed('panel', true),
