@@ -188,7 +188,10 @@ var amatyrlib = function() {
     }
     /* Pad helper */
     Number.prototype.pad = function (len) {
+        if(this.toString().length < len) {
             return (new Array(len+1).join("0") + this).slice(-len);
+        }
+        return this;
     }
 
 
@@ -252,10 +255,11 @@ var amatyrlib = function() {
 
     /* Formatter helper */
     this.autoformat = function(name, value) {
+        if (name == undefined || value == undefined) return value;
         var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
         if (name == 'datetime') {
             var date = parseDate(value);
-            return date.getMonth().pad(2) + '.' + date.getDate().pad(2);
+            return d3.time.format('%b')(date) + ' ' + date.getDate().pad(2);
         }
         if (name == 'dayrain') {
             var val = Number((Number(value)).toFixed(0)).pad(1) + ' mm';
@@ -276,6 +280,8 @@ var amatyrlib = function() {
         }
         if (name == 'windspeed')
             return rivets.formatters.wind(value);
+        if (name == 'barometer')
+            return rivets.formatters.pressure(value);
         if (name == 'winddir') {
             var degree = Number((value).toFixed(0))
             return '<i title="'+degree+' °" class="icon-arrow-up" style="'+rivets.formatters.rotate(degree)+'"></i>';

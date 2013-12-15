@@ -264,39 +264,96 @@ var AmatYr = function(apiurl) {
         // Remove spinner
         $('#tabular .spinner').remove();
 
-        var table = d3.select('#tabular table'),
+        var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+
+        // Add d3 js date for each datum
+        data.forEach(function(d) {
+            d.date = parseDate(d.datetime);
+        });
+
+        // Group data by month
+        var monthdata = d3.nest()
+          .key(function(d) { return d.date.getMonth(); })
+          .map(data);
+
+        var aggdata =  d3.nest()
+          .key(function(d) { return d.date.getMonth(); })
+          .sortKeys(d3.ascending)
+          .rollup(function(d) { 
+            return {
+                barometer: d3.mean(d, function(g) { return +g.barometer }),
+                windspeed: d3.mean(d, function(g) { return +g.windspeed }),
+                outtemp: d3.mean(d, function(g) { return +g.outtemp }),
+                tempmax: d3.max(d, function(g) { return +g.tempmax }),
+                tempmin: d3.min(d, function(g) { return +g.tempmin }),
+                dayrain: d3.sum(d, function(g) { return +g.dayrain }),
+                date: d3.min(d, function(g) { return +g.date })
+            }
+          })
+          .entries(data)
+          .sort(function(a,b) { return parseInt(a.key,10)>parseInt(b.key) });
+
+          window.aggdata = aggdata;
+
+        var columns = ['datetime', 'dayrain', 'outtemp', 'windspeed', 'winddir'];
+        // Create a collapsible group for each month
+        aggdata.forEach(function (agg, i) {
+            console.log(agg, agg.values, agg.values.outtemp);
+            var month = agg.key,
+                values = agg.values,
+                monthname = d3.time.format('%Y %B')(new Date(values.date)),
+                header = monthname,
+                headertext = 
+                    ' Rain: ' + amatyrlib.autoformat('dayrain', values.dayrain) +
+                    ' Avg Temp: ' + amatyrlib.autoformat('outtemp', values.outtemp) +
+                    ' Min Temp: ' + amatyrlib.autoformat('outtemp', values.tempmin) +
+                    ' Max Temp: ' + amatyrlib.autoformat('outtemp', values.tempmax) +
+                    ' Avg Wind: ' + amatyrlib.autoformat('windspeed', values.windspeed) +
+                    ' Avg Pressure:' + amatyrlib.autoformat('barometer', values.barometer)
+                ,
+                panel = d3.select('#accordion').append('div')
+                .classed('panel', true),
+            heading = panel.append('div')
+                .classed('panel-heading', true),
+            h4 = heading.append('h4')
+                .html('<a data-toggle="collapse" data-parent="#accordion" href="#collapse-'+i+'">'+header+'</a><small>'+headertext+'</small>'),
+            collapse = panel.append('div')
+                .attr('id', 'collapse-'+i)
+                .classed('panel-collapse collapse', true),
+            body = collapse.append('div')
+                .classed('panel-body', true),
+            table = body.append('table')
+                .classed('table table-condensed', true),
             thead = table.append("thead"),
             tbody = table.append("tbody");
 
-        var columns = ['datetime', 'dayrain', 'outtemp', 'windspeed', 'winddir'];
 
-        // append the header row
-        thead.append("tr")
-            .selectAll("th")
-            .data(columns)
-            .enter()
-            .append("th")
+            // append the header row
+            thead.append("tr")
+                .selectAll("th")
+                .data(columns)
+                .enter()
+                .append("th")
                 .text(function(column) { return column; });
 
-        // create a row for each object in the data
-        var rows = tbody.selectAll("tr")
-            .data(data)
-            .enter()
-            .append("tr");
+            // create a row for each object in the data
+            var rows = tbody.selectAll("tr")
+                .data(monthdata[month])
+                .enter()
+                .append("tr");
 
-        // create a cell in each row for each column
-        var cells = rows.selectAll("td")
-            .data(function(row) {
-                return columns.map(function(column) {
-                    return {column: column, value: row[column]};
-                });
-            })
+            // create a cell in each row for each column
+            var cells = rows.selectAll("td")
+                .data(function(row) {
+                    return columns.map(function(column) {
+                        return {column: column, value: row[column]};
+                    });
+                })
             .enter()
                 .append("td")
                 .attr("style", "font-family: monospace")
                 .html(function(d) { return amatyrlib.autoformat(d.column, d.value); });
-
-        $
+        });
     }
         
 
