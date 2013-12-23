@@ -117,10 +117,10 @@ local function getDateConstrains(startarg, interval)
             start = "DATE 'yesterday'" 
             endpart = '1 days'
         elseif string.upper(startarg) == '3DAY' then
-            start = "NOW() - INTERVAL '3 days'"
+            start = "CURRENT_DATE - INTERVAL '3 days'"
             endpart = '3 days'
         elseif string.upper(startarg) == 'WEEK' then
-            start = "date(date_trunc('week', current_timestamp))"
+            start = "CURRENT_DATE - INTERVAL '1 week'"
             endpart = '1 week'
         elseif string.upper(startarg) == '7DAYS' then
             start = "CURRENT_DATE - INTERVAL '1 WEEK'"
