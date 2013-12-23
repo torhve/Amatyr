@@ -178,31 +178,30 @@ var temprain = function(el, data, width, height) {
       .attr("height", function(d) { return 0; })
       .on("mouseover", function(d,i){
           d3.select(this)
-          .attr("stroke-width", "3px");
+            .attr("stroke-width", "3px");
 
-      var x; var y;
-      if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
-          x = d3.event.pageX;
-          y = d3.event.pageY;
-      } else {
-          x = d3.event.clientX + document.body.scrollLeft +
-          document.documentElement.scrollLeft;
-      y = d3.event.clientY + document.body.scrollTop +
-          document.documentElement.scrollTop;
-      }
+          var x, y;
+          if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
+              x = d3.event.pageX;
+              y = d3.event.pageY;
+          } else {
+              x = d3.event.clientX + document.body.scrollLeft +
+                document.documentElement.scrollLeft;
+              y = d3.event.clientY + document.body.scrollTop +
+                document.documentElement.scrollTop;
+          }
 
-      var bubble_code = "<div id='tt' style='top:"
-          + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
-          + d.datetime + "</span><br>  Rain: <span class=value>" + Number(d.dayrain).toFixed(1) + "</span> mm</b><br />"
-          + "</div>";
-      $("body").append(bubble_code);
+          var bubble_code = "<div id='tt' style='top:"
+                + y + "px; left:" + ( x + 10 ) + "px;'><b>Date: <span class=value>"
+                + d.datetime + "</span><br>  Rain: <span class=value>" + Number(d.dayrain).toFixed(1) + "</span> mm</b><br />"
+                + "</div>";
+              $("body").append(bubble_code);
 
       }).on("mouseout", function(d,i){
           d3.select(this)
-          .attr("stroke-width", "1px");
-      $("#tt").remove();
+            .attr("stroke-width", "1px");
+          $("#tt").remove();
       })
-
       .transition().delay(function (d,i){ return 300;})
       .duration(150)
       .attr("y", function(d) { return timey(d.dayrain); })
@@ -227,11 +226,19 @@ var temprain = function(el, data, width, height) {
             .data(data)
             .enter().append("text")
             .attr("x", barxpos)
-            .attr("y", function(d){ return timey(d.dayrain) + 10 } )
+            .attr("y", function(d) { return timey(d.dayrain) + 10; })
             .attr("dx", (width/data.length)*0.4)
             .attr("dy", (width/data.length)*0.4)
             .attr("text-anchor", "middle")
-            .attr('class', 'score')
+            .attr('class', function(d) { 
+                // Hide score if it's below 0
+                var c ='score ';
+                var y = timey(d.dayrain) + 10;
+                if (y > height) {
+                    c += 'hidden';
+                }
+                return c;
+            })
             .style('font-size', fontSize+'px')
             .text(valfmt)
     }

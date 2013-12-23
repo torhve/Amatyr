@@ -299,7 +299,7 @@ var AmatYr = function(apiurl) {
         var columns = ['datetime', 'dayrain', 'outtemp', 'windspeed', 'winddir'];
         // Create a collapsible group for each month
         aggdata.forEach(function (agg, i) {
-            console.log(agg, agg.values, agg.values.outtemp);
+            //console.log(agg, agg.values, agg.values.outtemp);
             var month = agg.key,
                 values = agg.values,
                 monthname = d3.time.format('%Y %B')(new Date(values.date)),
