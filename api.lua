@@ -269,45 +269,66 @@ function day(match)
 end
 
 function year(match)
+    -- This function generates stats into a new table
+    -- which is updated max once a day
+    -- first it checks the latest record in the stats table
+    -- and if latest date is older than today
+    -- it will recreate the table
     local year = match[1]
     local syear = year .. '-01-01'
     local where = [[
         WHERE datetime BETWEEN DATE ']]..syear..[['
         AND DATE ']]..syear..[[' + INTERVAL '1 year'
     ]]
-    local json = dbreq([[
+
+
+    -- FIXME this will always fail if year != current year, so we should also 
+    -- check for that
+    local needsupdate = dbreq[[
         SELECT 
-            date_trunc('day', datetime) AS datetime,
-            AVG(outtemp) as outtemp,
-            MIN(outtemp) as tempmin,
-            MAX(outtemp) as tempmax,
-            AVG(dewpoint) as dewpoint,
-            AVG(rain) as rain,
-            MAX(b.dayrain) as dayrain,
-            AVG(windspeed) as windspeed,
-            MAX(windgust) as windgust,
-            AVG(winddir) as winddir,
-            AVG(barometer) as barometer,
-            AVG(outhumidity) as outhumidity,
-            AVG(outhumidity) as outhumidity,
-            AVG(intemp) as intemp,
-            AVG(inhumidity) as inhumidity,
-            AVG(heatindex) as heatindex,
-            AVG(windchill) as windchill
-        FROM ]]..conf.db.table..[[ AS a
-        LEFT OUTER JOIN 
-        (
+        MAX(datetime) < (NOW() - INTERVAL '24 hours') AS needsupdate
+        FROM days
+    ]]
+    needsupdate = cjson.decode(needsupdate)[1]['needsupdate'] == 't'
+    if needsupdate then
+        local gendays = dbreq([[
+        CREATE TABLE days AS
             SELECT 
-                DISTINCT date_trunc('day', datetime) AS hour, 
-                SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
-                FROM ]]..conf.db.table..' '..where..[[ ORDER BY 1
-        ) AS b
-        ON a.datetime = b.hour
-        ]]..where..[[
-        GROUP BY 1
-        ORDER BY datetime
-        ]])
-    return json
+                date_trunc('day', datetime) AS datetime,
+                AVG(outtemp) as outtemp,
+                MIN(outtemp) as tempmin,
+                MAX(outtemp) as tempmax,
+                AVG(dewpoint) as dewpoint,
+                AVG(rain) as rain,
+                MAX(b.dayrain) as dayrain,
+                AVG(windspeed) as windspeed,
+                MAX(windgust) as windgust,
+                AVG(winddir) as winddir,
+                AVG(barometer) as barometer,
+                AVG(outhumidity) as outhumidity,
+                AVG(intemp) as intemp,
+                AVG(inhumidity) as inhumidity,
+                AVG(heatindex) as heatindex,
+                AVG(windchill) as windchill
+            FROM ]]..conf.db.table..[[ AS a
+            LEFT OUTER JOIN 
+            (
+                SELECT 
+                    DISTINCT date_trunc('day', datetime) AS hour, 
+                    SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
+                    FROM ]]..conf.db.table..' '..where..[[ ORDER BY 1
+            ) AS b
+            ON a.datetime = b.hour
+            ]]..where..[[
+            GROUP BY 1
+            ORDER BY datetime
+            ]])
+    end
+    local sql = [[
+        SELECT *
+        FROM days 
+        ]]..where
+    return dbreq(sql)
 end
 
 function windhist(match)
