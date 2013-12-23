@@ -1,6 +1,6 @@
 /* D3 function for drawing temperatures and rain bars in same svg */
 var temprain = function(el, data, width, height) { 
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    var margin = {top: 20, right: 0, bottom: 20, left: 20},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
         interpolation = 'basis',
