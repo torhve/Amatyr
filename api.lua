@@ -289,7 +289,11 @@ function year(match)
         MAX(datetime) < (NOW() - INTERVAL '24 hours') AS needsupdate
         FROM days
     ]]
-    needsupdate = cjson.decode(needsupdate)[1]['needsupdate'] == 't'
+    if needsupdate == ngx.null or needsupdate[1] == nil then
+        needsupdate = true
+    else
+        needsupdate = cjson.decode(needsupdate)[1]['needsupdate'] == 't'
+    end
     if needsupdate then
         local gendays = dbreq([[
         CREATE TABLE days AS
