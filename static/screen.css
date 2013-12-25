@@ -299,6 +299,8 @@ svg g.tickmarks>text { font-size: 10px; fill: #888;}
 @media (max-width: 979px) {
     body {
         padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
     }
     /* Lesser stroke width for smaller screen */
     .line {
