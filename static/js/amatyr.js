@@ -279,7 +279,6 @@ var AmatYr = function(apiurl) {
 
         var aggdata =  d3.nest()
           .key(function(d) { return d.date.getMonth(); })
-          .sortKeys(d3.ascending)
           .rollup(function(d) { 
             return {
                 barometer: d3.mean(d, function(g) { return +g.barometer }),
@@ -293,7 +292,6 @@ var AmatYr = function(apiurl) {
             }
           })
           .entries(data)
-          .sort(function(a,b) { return parseInt(a.key,10)>parseInt(b.key) });
 
           window.aggdata = aggdata;
 
