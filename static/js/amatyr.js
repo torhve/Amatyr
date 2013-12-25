@@ -220,7 +220,6 @@ var AmatYr = function(apiurl) {
         // TODO dynamic
         var width = $('#main').css('width').split('px')[0];
         d3.json(apiurl + 'year/2013', function(json) { 
-            //drawcalender('#heat_calender', json, width);
             var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
             // Add d3 js date for each datum
@@ -253,6 +252,8 @@ var AmatYr = function(apiurl) {
                 scale: [1, 4, 6, 8]    // Custom threshold for the scale
             });
 
+            // The tabular data uses the same data source as calendar, so it is
+            // reused in that function
             updateTabularData(json);
 
         });
