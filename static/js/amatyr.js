@@ -77,6 +77,8 @@ var AmatYr = function(apiurl) {
                 draw(json);
             }); 
             drawWindrose(year); 
+            // Draw current year
+            getAndDrawYearData(year);
         });
         Path.map("/day/:day").to(function(){
             var day = this.params['day'];
@@ -216,7 +218,7 @@ var AmatYr = function(apiurl) {
     });
 
     /* Calendar generation */
-    var updateCalender = function(json) {
+    var updateCalender = function(json, year) {
         // TODO dynamic
         var width = $('#main').css('width').split('px')[0];
 
@@ -232,14 +234,15 @@ var AmatYr = function(apiurl) {
         // Remove spinner
         $('#cal-heatmap .spinner').remove();
         // Draw calendar
+        // TODO if current year:
+        //        set range to be current month
         cal.init({
             data: data,
-            start: new Date(new Date().getFullYear(),1), // TODO year selector
-            end: new Date(),
+            start: new Date(year,0), 
+            end: new Date(year,11),
             itemSelector : "#cal-heatmap",
             domain : "month",       // Group data by month
             subDomain : "day",      // Split each month by days
-            range : new Date().getMonth(),  // Only display up to current month
             highlight: "now",
             cellRadius : 2,
             itemName: ['mm', 'mm'],
@@ -342,24 +345,28 @@ var AmatYr = function(apiurl) {
                 .html(function(d) { return amatyrlib.autoformat(d.column, d.value); });
         });
     }
-    // Get the year data and use it for both calendar and tabular data
-    d3.json(apiurl + 'year/'+new Date().getFullYear(), function(json) { 
-        var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+    function getAndDrawYearData(year) {
+        // Get the year data and use it for both calendar and tabular data
+        d3.json(apiurl + 'year/'+year, function(json) { 
+            var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
-        // Add d3 js date for each datum
-        json.forEach(function(d) {
-            d.date = ""+(+parseDate(d.datetime))/1000;
+            // Add d3 js date for each datum
+            json.forEach(function(d) {
+                d.date = ""+(+parseDate(d.datetime))/1000;
+            });
+            
+            setTimeout(function() {
+                // The tabular data uses the same data source as calendar, so it is
+                // reused in that function
+                updateTabularData(json);
+            });
+            setTimeout(function() {
+                updateCalender(json, year);
+            });
         });
-        
-        setTimeout(function() {
-            // The tabular data uses the same data source as calendar, so it is
-            // reused in that function
-            updateTabularData(json);
-        });
-        setTimeout(function() {
-            updateCalender(json);
-        });
-    });
+    }
+    // Draw current year
+    getAndDrawYearData(new Date().getFullYear());
         
 
     // Auto update webcam
