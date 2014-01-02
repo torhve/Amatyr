@@ -216,55 +216,37 @@ var AmatYr = function(apiurl) {
     });
 
     /* Calendar generation */
-    var updateCalender = function() {
+    var updateCalender = function(json) {
         // TODO dynamic
         var width = $('#main').css('width').split('px')[0];
-        d3.json(apiurl + 'year/'+new Date().getFullYear(), function(json) { 
-            var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
-            // Add d3 js date for each datum
-            json.forEach(function(d) {
-                d.date = ""+(+parseDate(d.datetime))/1000;
-            });
-            
-            setTimeout(function() {
-                // The tabular data uses the same data source as calendar, so it is
-                // reused in that function
-                updateTabularData(json);
-            });
-
-            // Format data to how calheatmap likes it
-            var data = d3.nest()
-              .key(function(d) { return d.date; })
-              .rollup(function(d) { return d[0].dayrain; })
-              .map(json);
+        // Format data to how calheatmap likes it
+        var data = d3.nest()
+          .key(function(d) { return d.date; })
+          .rollup(function(d) { return d[0].dayrain; })
+          .map(json);
 
 
-            var cal = new CalHeatMap();
+        var cal = new CalHeatMap();
 
-            // Remove spinner
-            $('#cal-heatmap .spinner').remove();
-            // Draw calendar
-            cal.init({
-                data: data,
-                start: new Date(new Date().getFullYear(),1), // TODO year selector
-                end: new Date(),
-                itemSelector : "#cal-heatmap",
-                domain : "month",       // Group data by month
-                subDomain : "day",      // Split each month by days
-                range : new Date().getMonth(),  // Only display up to current month
-                highlight: "now",
-                cellRadius : 2,
-                itemName: ['mm', 'mm'],
-                weekStartOnMonday: true,
-                scale: [1, 4, 6, 8]    // Custom threshold for the scale
-            });
-
-
+        // Remove spinner
+        $('#cal-heatmap .spinner').remove();
+        // Draw calendar
+        cal.init({
+            data: data,
+            start: new Date(new Date().getFullYear(),1), // TODO year selector
+            end: new Date(),
+            itemSelector : "#cal-heatmap",
+            domain : "month",       // Group data by month
+            subDomain : "day",      // Split each month by days
+            range : new Date().getMonth(),  // Only display up to current month
+            highlight: "now",
+            cellRadius : 2,
+            itemName: ['mm', 'mm'],
+            weekStartOnMonday: true,
+            scale: [1, 4, 6, 8]    // Custom threshold for the scale
         });
-
-    };
-    updateCalender();
+    }
 
     var updateTabularData = function(data) {
         // Remove spinner
@@ -360,6 +342,24 @@ var AmatYr = function(apiurl) {
                 .html(function(d) { return amatyrlib.autoformat(d.column, d.value); });
         });
     }
+    // Get the year data and use it for both calendar and tabular data
+    d3.json(apiurl + 'year/'+new Date().getFullYear(), function(json) { 
+        var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+
+        // Add d3 js date for each datum
+        json.forEach(function(d) {
+            d.date = ""+(+parseDate(d.datetime))/1000;
+        });
+        
+        setTimeout(function() {
+            // The tabular data uses the same data source as calendar, so it is
+            // reused in that function
+            updateTabularData(json);
+        });
+        setTimeout(function() {
+            updateCalender(json);
+        });
+    });
         
 
     // Auto update webcam

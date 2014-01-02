@@ -44,7 +44,12 @@
                 <li class=""><a href="/day/yesterday">Yesterday</a></li>
                 <li class=""><a href="/hour/week">Week</a></li>
                 <li class=""><a href="/hour/month">Month</a></li>
-                <li class=""><a href="/year/2013">2013</a></li>
+                {% 
+                  local currentyear = tonumber(string.sub(ngx.today(),1,4))
+                  for i=currentyear,conf.firstyear,-1 do
+                  %}
+                  <li class=""><a href="/year/{{i}}">{{i}}</a></li>
+                {% end %}
             </ul>
             <ul class="nav pull-right">
                 <li>
