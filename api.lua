@@ -1,7 +1,7 @@
 ---
 -- SQL specific API view
 -- 
--- Copyright Tor Hveem <thveem> 2013
+-- Copyright Tor Hveem <thveem> 2013-2014
 -- 
 --
 local setmetatable = setmetatable
@@ -295,6 +295,9 @@ function year(match)
         needsupdate = cjson.decode(needsupdate)[1]['needsupdate'] == 't'
     end
     if needsupdate then
+        -- Remove existing cache. This could be improved to only add missing data
+        dbreq('DROP TABLE days')
+        -- Create new cached table
         local gendays = dbreq([[
         CREATE TABLE days AS
             SELECT 

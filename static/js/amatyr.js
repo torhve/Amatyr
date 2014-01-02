@@ -219,12 +219,18 @@ var AmatYr = function(apiurl) {
     var updateCalender = function() {
         // TODO dynamic
         var width = $('#main').css('width').split('px')[0];
-        d3.json(apiurl + 'year/2013', function(json) { 
+        d3.json(apiurl + 'year/'+new Date().getFullYear(), function(json) { 
             var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
             // Add d3 js date for each datum
             json.forEach(function(d) {
                 d.date = ""+(+parseDate(d.datetime))/1000;
+            });
+            
+            setTimeout(function() {
+                // The tabular data uses the same data source as calendar, so it is
+                // reused in that function
+                updateTabularData(json);
             });
 
             // Format data to how calheatmap likes it
@@ -232,6 +238,8 @@ var AmatYr = function(apiurl) {
               .key(function(d) { return d.date; })
               .rollup(function(d) { return d[0].dayrain; })
               .map(json);
+
+
             var cal = new CalHeatMap();
 
             // Remove spinner
@@ -239,7 +247,7 @@ var AmatYr = function(apiurl) {
             // Draw calendar
             cal.init({
                 data: data,
-                start: new Date(2013,1), // TODO year selector
+                start: new Date(new Date().getFullYear(),1), // TODO year selector
                 end: new Date(),
                 itemSelector : "#cal-heatmap",
                 domain : "month",       // Group data by month
@@ -252,9 +260,6 @@ var AmatYr = function(apiurl) {
                 scale: [1, 4, 6, 8]    // Custom threshold for the scale
             });
 
-            // The tabular data uses the same data source as calendar, so it is
-            // reused in that function
-            updateTabularData(json);
 
         });
 
