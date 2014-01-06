@@ -281,18 +281,19 @@ function year(match)
         AND DATE ']]..syear..[[' + INTERVAL '1 year'
     ]]
 
-
-    -- FIXME this will always fail if year != current year, so we should also 
-    -- check for that
-    local needsupdate = dbreq[[
+    local needsupdate = cjson.decode(dbreq[[
         SELECT 
         MAX(datetime) < (NOW() - INTERVAL '24 hours') AS needsupdate
         FROM days
-    ]]
+    ]])
     if needsupdate == ngx.null or needsupdate[1] == nil then
         needsupdate = true
     else
-        needsupdate = cjson.decode(needsupdate)[1]['needsupdate'] == 't'
+        if needsupdate[1]['needsupdate'] == 't' then
+            needsupdate = true
+        else
+            needsupdate = false
+        end
     end
     if needsupdate then
         -- Remove existing cache. This could be improved to only add missing data
@@ -323,10 +324,9 @@ function year(match)
                 SELECT 
                     DISTINCT date_trunc('day', datetime) AS hour, 
                     SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
-                    FROM ]]..conf.db.table..' '..where..[[ ORDER BY 1
+                    FROM ]]..conf.db.table..[[ ORDER BY 1
             ) AS b
             ON a.datetime = b.hour
-            ]]..where..[[
             GROUP BY 1
             ORDER BY datetime
             ]])
