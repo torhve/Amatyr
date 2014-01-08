@@ -228,26 +228,29 @@ var AmatYr = function(apiurl) {
           .rollup(function(d) { return d[0].dayrain; })
           .map(json);
 
-
         var cal = new CalHeatMap();
 
         // Remove spinner
         $('#cal-heatmap .spinner').remove();
+        // Remove existing heatmaps
+        $('#cal-heatmap svg').remove();
         // Draw calendar
-        // TODO if current year:
-        //        set range to be current month
+        var range = 12; // Default 12 months
+        if (year == new Date().getFullYear()) {
+            range = new Date().getMonth()+1;
+        }
         cal.init({
             data: data,
-            start: new Date(year,0), 
-            end: new Date(year,11),
             itemSelector : "#cal-heatmap",
             domain : "month",       // Group data by month
             subDomain : "day",      // Split each month by days
-            highlight: "now",
-            cellRadius : 2,
-            itemName: ['mm', 'mm'],
+            highlight : "now",
+            itemName : ['mm', 'mm'],
+            start : new Date(year, 0),
+            end : new Date(year, 11),
+            range : range,
             weekStartOnMonday: true,
-            scale: [1, 4, 6, 8]    // Custom threshold for the scale
+            legend: [1, 4, 6, 8]    // Custom threshold for the scale
         });
     }
 
@@ -259,16 +262,16 @@ var AmatYr = function(apiurl) {
 
         // Add d3 js date for each datum
         data.forEach(function(d) {
-            d.date = parseDate(d.datetime);
+            d.jsdate = parseDate(d.datetime);
         });
 
         // Group data by month
         var monthdata = d3.nest()
-          .key(function(d) { return d.date.getMonth(); })
+          .key(function(d) { return d.jsdate.getMonth(); })
           .map(data);
 
         var aggdata =  d3.nest()
-          .key(function(d) { return d.date.getMonth(); })
+          .key(function(d) { return d.jsdate.getMonth(); })
           .rollup(function(d) { 
             return {
                 barometer: d3.mean(d, function(g) { return +g.barometer }),
@@ -278,12 +281,10 @@ var AmatYr = function(apiurl) {
                 tempmax: d3.max(d, function(g) { return +g.tempmax }),
                 tempmin: d3.min(d, function(g) { return +g.tempmin }),
                 dayrain: d3.sum(d, function(g) { return +g.dayrain }),
-                date: d3.min(d, function(g) { return +g.date })
+                date: d3.min(d, function(g) { return +g.jsdate })
             }
           })
           .entries(data)
-
-          window.aggdata = aggdata;
 
         var columns = ['datetime', 'dayrain', 'outtemp', 'windspeed', 'winddir'];
         // Create a collapsible group for each month
@@ -355,14 +356,10 @@ var AmatYr = function(apiurl) {
                 d.date = ""+(+parseDate(d.datetime))/1000;
             });
             
-            setTimeout(function() {
-                // The tabular data uses the same data source as calendar, so it is
-                // reused in that function
-                updateTabularData(json);
-            });
-            setTimeout(function() {
-                updateCalender(json, year);
-            });
+            updateTabularData(json);
+            // The tabular data uses the same data source as calendar, so it is
+            // reused in that function
+            updateCalender(json, year);
         });
     }
     // Draw current year

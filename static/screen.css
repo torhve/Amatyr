@@ -333,20 +333,11 @@ svg g.tickmarks>text { font-size: 10px; fill: #888;}
 	background-color: #999;
 	fill: #999;
 }
-
-.q0
-{
-	background-color: #fff;
-	fill: #fff;
-	stroke: #ededed;
-}
-
 .q1
 {
 	background-color: #c6dbef;
 	fill: #c6dbef;
 }
-
 .q2
 {
 	background-color: #9ecae1;
@@ -371,3 +362,9 @@ svg g.tickmarks>text { font-size: 10px; fill: #888;}
 	fill: #6b6ecf;
 }
 
+.q0
+{
+	background-color: #ededed;
+	fill: #ededed;
+	stroke: #ededed;
+}

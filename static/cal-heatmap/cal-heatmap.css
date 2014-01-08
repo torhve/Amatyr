@@ -1,12 +1,12 @@
 /* Cal-HeatMap CSS */
 
+.cal-heatmap-container {
+	display: block;
+}
 
 .graph
 {
-	clear: both;
-	display: block;
 	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
-	overflow: hidden;
 }
 
 .graph-label
@@ -21,7 +21,7 @@
 
 .graph-rect
 {
-	fill: #ededed;
+	fill: #ededed
 }
 
 .graph-subdomain-group rect:hover
@@ -33,28 +33,25 @@
 .subdomain-text {
 	font-size: 8px;
 	fill: #999;
-	pointer-events: none;
+	pointer-events: none
 }
 
 .hover_cursor:hover {
-	cursor: pointer;
+	cursor: pointer
 }
 
 .qi {
 	background-color: #999;
-	fill: #999;
+	fill: #999
 }
 
 /*
+Remove comment to apply this style to date with value equal to 0
 .q0
 {
-
-	Remove comment to apply this style to date with value equal to 0
-
 	background-color: #fff;
 	fill: #fff;
 	stroke: #ededed
-
 }
 */
 
@@ -91,27 +88,58 @@
 rect.highlight
 {
 	stroke:#444;
-	stroke-width:1;
+	stroke-width:1
 }
 
 text.highlight
 {
-	fill: #444;
+	fill: #444
 }
 
 rect.now
 {
-	stroke: red;
+	stroke: red
 }
 
 text.now
 {
 	fill: red;
-	font-weight: 800;
+	font-weight: 800
 }
 
 .domain-background {
 	fill: none;
-	shape-rendering: crispedges;
+	shape-rendering: crispedges
 }
 
+.ch-tooltip {
+	padding: 10px;
+	background: #222;
+	color: #bbb;
+	font-size: 12px;
+	line-height: 1.4;
+	width: 140px;
+	position: absolute;
+	z-index: 99999;
+	text-align: center;
+	border-radius: 2px;
+	box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+	display: none;
+	box-sizing: border-box;
+}
+
+.ch-tooltip::after{
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: solid;
+	content: "";
+	padding: 0;
+	display: "block";
+	bottom: -6px;
+	left: 50%;
+	margin-left: -6px;
+    border-width: 6px 6px 0;
+    border-top-color: #222;
+}
