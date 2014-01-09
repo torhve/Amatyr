@@ -1,8 +1,8 @@
 ---
 -- SQL specific API view
--- 
+--
 -- Copyright Tor Hveem <thveem> 2013-2014
--- 
+--
 --
 local setmetatable = setmetatable
 local ngx = ngx
@@ -31,8 +31,8 @@ local function dbreq(sql)
     local ok, err = db:connect(
         {
             host=conf.db.host,
-            port=5432, 
-            database=conf.db.database, 
+            port=5432,
+            database=conf.db.database,
             user=conf.db.user,
             password=conf.db.password,
             compact=false
@@ -68,24 +68,24 @@ function max(match)
     if not keytest then ngx.exit(403) end
 
     local sql = [[
-		SELECT 
+		SELECT
 			date_trunc('day', datetime) AS datetime,
 			MAX(]]..key..[[) AS ]]..key..[[
 		FROM ]]..conf.db.table..[[
-		WHERE date_part('year', datetime) < 2013 
+		WHERE date_part('year', datetime) < 2013
 		GROUP BY 1
 	]]
-    
+
     return dbreq(sql)
 end
 
 -- Latest record in db
 function now(match)
-    return dbreq([[SELECT 
+    return dbreq([[SELECT
     *,
     (
-        SELECT SUM(rain) 
-        FROM ]]..conf.db.table..[[ 
+        SELECT SUM(rain)
+        FROM ]]..conf.db.table..[[
         WHERE datetime >= CURRENT_DATE
     )
     AS dayrain
@@ -95,11 +95,11 @@ end
 
 -- Last 60 samples from db
 function recent(match)
-    return dbreq([[SELECT 
+    return dbreq([[SELECT
     *,
     SUM(rain) OVER (ORDER by datetime) AS dayrain
     FROM ]]..conf.db.table..[[
-    ORDER BY datetime DESC 
+    ORDER BY datetime DESC
     LIMIT 60]])
 end
 
@@ -107,17 +107,17 @@ end
 local function getDateConstrains(startarg, interval)
     local where = ''
     local andwhere = ''
-    if startarg then 
+    if startarg then
         local start
         local endpart = "1 year"
         if string.upper(startarg) == 'TODAY' then
-            start = "CURRENT_DATE" 
+            start = "CURRENT_DATE"
             endpart = "1 DAY"
         elseif string.lower(startarg) == 'yesterday' then
-            start = "DATE 'yesterday'" 
+            start = "DATE 'yesterday'"
             endpart = '1 days'
         elseif string.upper(startarg) == '3DAY' then
-            start = "CURRENT_DATE - INTERVAL '3 days'"
+            start = "CURRENT_TIMESTAMP - INTERVAL '3 days'"
             endpart = '3 days'
         elseif string.upper(startarg) == 'WEEK' then
             start = "CURRENT_DATE - INTERVAL '1 week'"
@@ -127,7 +127,7 @@ local function getDateConstrains(startarg, interval)
             endpart = '1 WEEK'
         elseif string.upper(startarg) == 'MONTH' then
             -- old used this month, new version uses last 30 days
-            --start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')" 
+            --start = "to_date( to_char(current_date,'yyyy-MM') || '-01','yyyy-mm-dd')"
             start = "CURRENT_DATE - INTERVAL '1 MONTH'"
             endpart = "1 MONTH"
         elseif string.upper(startarg) == 'YEAR' then
@@ -147,7 +147,7 @@ local function getDateConstrains(startarg, interval)
         local wherepart = [[
         (
             datetime BETWEEN ]]..start..[[
-            AND 
+            AND
             ]]..start..[[ + INTERVAL ']]..endpart..[['
         )
         ]]
@@ -169,9 +169,9 @@ function record(match)
     if key == 'dayrain' and func == 'MAX' then
         -- Not valid with any other value than max
         sql = [[
-        SELECT 
-        DISTINCT date_trunc('day', datetime) AS datetime, 
-        SUM(rain) OVER (PARTITION BY date_trunc('day', datetime)) AS dayrain 
+        SELECT
+        DISTINCT date_trunc('day', datetime) AS datetime,
+        SUM(rain) OVER (PARTITION BY date_trunc('day', datetime)) AS dayrain
         FROM ]]..conf.db.table..[[
         ]]..where..[[
         ORDER BY dayrain DESC
@@ -180,32 +180,32 @@ function record(match)
     elseif func == 'SUM' then
         -- The SUM part doesn't need the datetime of the record since the datetime is effectively over the whole scope
         sql = [[
-            SELECT 
-            SUM(]]..key..[[) AS ]]..key..[[ 
+            SELECT
+            SUM(]]..key..[[) AS ]]..key..[[
             FROM ]]..conf.db.table..[[
             ]]..where..[[
         ]]
     else
         sql = [[
         SELECT
-            datetime, 
+            datetime,
 			date_trunc('second', age(NOW(), date_trunc('second', datetime))) AS age,
             ]]..key..[[
-        FROM ]]..conf.db.table..[[ 
+        FROM ]]..conf.db.table..[[
         WHERE
-        ]]..key..[[ = 
+        ]]..key..[[ =
         (
-            SELECT 
-                ]]..func..[[(]]..key..[[) 
+            SELECT
+                ]]..func..[[(]]..key..[[)
             FROM ]]..conf.db.table..[[
             ]]..where..[[
-            LIMIT 1 
+            LIMIT 1
         )
         ]]..andwhere..[[
         LIMIT 1
         ]]
     end
-    
+
     return dbreq(sql)
 end
 
@@ -222,7 +222,7 @@ function by_dateunit(match)
     -- get the date constraints
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     local sql = dbreq([[
-    SELECT  
+    SELECT
         date_trunc(']]..unit..[[', datetime) AS datetime,
         AVG(outtemp) as outtemp,
         MIN(outtemp) as tempmin,
@@ -241,10 +241,10 @@ function by_dateunit(match)
         AVG(windchill) as windchill
     FROM ]]..conf.db.table..[[ as a
     LEFT OUTER JOIN (
-        SELECT DISTINCT 
-            date_trunc(']]..unit..[[', datetime) AS unit, 
-            SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
-        FROM ]]..conf.db.table..[[ ]]..where..[[ 
+        SELECT DISTINCT
+            date_trunc(']]..unit..[[', datetime) AS unit,
+            SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain
+        FROM ]]..conf.db.table..[[ ]]..where..[[
         ORDER BY 1
     ) AS b
     ON a.datetime = b.unit
@@ -258,10 +258,10 @@ end
 function day(match)
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     local sql = dbreq([[
-    SELECT  
+    SELECT
         *,
         SUM(rain) OVER (ORDER by datetime) AS dayrain
-    FROM ]]..conf.db.table..[[ 
+    FROM ]]..conf.db.table..[[
     ]]..where..[[
     ORDER BY datetime
     ]])
@@ -282,7 +282,7 @@ function year(match)
     ]]
 
     local needsupdate = cjson.decode(dbreq[[
-        SELECT 
+        SELECT
         MAX(datetime) < (NOW() - INTERVAL '24 hours') AS needsupdate
         FROM days
     ]])
@@ -301,7 +301,7 @@ function year(match)
         -- Create new cached table
         local gendays = dbreq([[
         CREATE TABLE days AS
-            SELECT 
+            SELECT
                 date_trunc('day', datetime) AS datetime,
                 AVG(outtemp) as outtemp,
                 MIN(outtemp) as tempmin,
@@ -319,11 +319,11 @@ function year(match)
                 AVG(heatindex) as heatindex,
                 AVG(windchill) as windchill
             FROM ]]..conf.db.table..[[ AS a
-            LEFT OUTER JOIN 
+            LEFT OUTER JOIN
             (
-                SELECT 
-                    DISTINCT date_trunc('day', datetime) AS hour, 
-                    SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain 
+                SELECT
+                    DISTINCT date_trunc('day', datetime) AS hour,
+                    SUM(rain) OVER (PARTITION BY date_trunc('day', datetime) ORDER by datetime) AS dayrain
                     FROM ]]..conf.db.table..[[ ORDER BY 1
             ) AS b
             ON a.datetime = b.hour
@@ -333,7 +333,7 @@ function year(match)
     end
     local sql = [[
         SELECT *
-        FROM days 
+        FROM days
         ]]..where
     return dbreq(sql)
 end
@@ -342,7 +342,7 @@ function windhist(match)
     local where, andwhere = getDateConstrains(ngx.req.get_uri_args()['start'])
     return dbreq([[
         SELECT count(*), ((winddir/10)::int*10)+0 as d, avg(windspeed)*0.539956803  as avg
-        FROM ]]..conf.db.table..[[ 
+        FROM ]]..conf.db.table..[[
         ]]..where..[[
         GROUP BY 2
         ORDER BY 2
