@@ -47,6 +47,32 @@ var temprain = function(el, data, width, height) {
     }
     y.domain(ydomain);
 
+    // X Axis grid
+    var xrule = svg.selectAll("line.x")
+        .data(x.ticks(10))
+        .enter().append("g")
+        .attr("class", "x axis")
+      .append("svg:line")
+        .attr("class", "yLine")
+        .attr("x1", x)
+        .attr("x2", x)
+        .attr("y1", 0)
+        .attr("y2", height)
+        .style('stroke', function(d, i) { 
+            if(d.getHours() == 0) {
+                return '#ccc';
+            }
+            return '#ededed';
+        })
+        .attr("stroke-opacity", function(d, i) {
+            if(d.getHours() == 0) {
+                return '1';
+            }
+            return '0';
+        })
+        .style("shape-rendering", "crispEdges")
+        ;
+
 
     // Y Axis grid
     var yrule = svg.selectAll("g.y")
@@ -68,16 +94,19 @@ var temprain = function(el, data, width, height) {
         .style("shape-rendering", "crispEdges")
         ;
 
+
+    // X Axis legend
     svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
 
+
     // Y Axis legend
     svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
+      .call(yAxis);
       /*
     .append("text")
       .attr("transform", "rotate(-90)")
