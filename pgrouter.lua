@@ -34,7 +34,11 @@ for pattern, view in pairs(routes) do
     local match = ngx.re.match(ngx.var.uri, uri, "oj") -- regex mather in compile mode
     if match then
         local ret, exit = view(match) 
-        -- Print th returned res
+        local callback = ngx.req.get_uri_args()['callback']
+        if callback then
+            ret = callback .. '(' .. ret .. ');'
+        end
+        -- Print the returned res
         ngx.print(ret)
         -- If not given exit, then assume OK
         if not exit then exit = ngx.HTTP_OK end
