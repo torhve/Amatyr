@@ -47,6 +47,24 @@ var temprain = function(el, data, width, height) {
     }
     y.domain(ydomain);
 
+
+    // Temperature line coloring
+    // Thanks to http://bl.ocks.org/mbostock/3970883
+    d3.select("#temperature-gradient")
+        .attr("gradientUnits", "userSpaceOnUse")
+        .attr("x1", 0).attr("y1", y(-1))
+        .attr("x2", 0).attr("y2", y(1))
+      .selectAll("stop")
+        .data([
+                {offset: "0%", color: "steelblue"},
+                {offset: "50%", color: "steelblue"},
+                {offset: "50%", color: "#b5152b"},
+                {offset: "100%", color: "#b5152b"}
+                ])
+      .enter().append("stop")
+        .attr("offset", function(d) { return d.offset; })
+        .attr("stop-color", function(d) { return d.color; });
+
     // X Axis grid
     var xrule = svg.selectAll("line.x")
         .data(x.ticks(10))
@@ -91,6 +109,12 @@ var temprain = function(el, data, width, height) {
             }
             return '#ededed';
         })
+        .attr("stroke-opacity", function(d, i) {
+            if(d == 0) {
+                return '0.3'
+            }
+            return '1'
+        })
         .style("shape-rendering", "crispEdges")
         ;
 
@@ -125,6 +149,7 @@ var temprain = function(el, data, width, height) {
     var pathos = svg.append("path")
       .datum(data)
       .attr("class", "line avg")
+      .style("stroke", "url('#temperature-gradient')")
       .attr("d", line)
 
     // Check if key is available in source 

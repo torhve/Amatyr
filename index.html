@@ -15,7 +15,6 @@
     <link href="/static/cal-heatmap/cal-heatmap.css" rel="stylesheet">
     <link href="/static/screen.css" rel="stylesheet">
 
-
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -267,7 +266,7 @@
     </script>
     <div style="width:0;height:0">
         <svg xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink">
+        xmlns:xlink="http://www.w3.org/1999/xlink" id="gradientholder">
 
         <defs>
         <linearGradient id="myLinearGradient1"
@@ -276,6 +275,8 @@
         spreadMethod="pad">
         <stop offset="0%"   stop-color="#fafafa" stop-opacity="1"/>
         <stop offset="100%" stop-color="#f0f0f0" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="temperature-gradient"
         </linearGradient>
         </defs>
 
