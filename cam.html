@@ -154,7 +154,7 @@ setInterval(function () {
   newImg.src = imgElem.src.split("?")[0] + "?" + new Date().getTime();
   newImg.addEventListener("load", function (evt) {
     imgElem.src = newImg.src;
-    console.log(newImg.fileModifiedDate);
+    //console.log(newImg.fileModifiedDate);
     //updateDate();
   });
 }, 30000);

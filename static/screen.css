@@ -129,7 +129,7 @@ svg {
     font-size: 13px;
 }
 svg text {
-    color: #ccc;
+    fill: #666;
 }
 svg text.score {
     fill: white;
