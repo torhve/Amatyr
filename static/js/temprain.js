@@ -1,5 +1,15 @@
 /* D3 function for drawing temperatures and rain bars in same svg */
 var temprain = function(el, data, width, height) { 
+    var addLineAnimation = function(path) {
+        var totalLength = path.node().getTotalLength();
+        path
+          .attr("stroke-dasharray", totalLength + " " + totalLength)
+          .attr("stroke-dashoffset", totalLength)
+          .transition()
+            .duration(2000)
+            .ease("linear")
+            .attr("stroke-dashoffset", 0);
+    }
     var margin = {top: 20, right: 0, bottom: 20, left: 20},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
@@ -151,7 +161,9 @@ var temprain = function(el, data, width, height) {
       .datum(data)
       .attr("class", "line avg")
       .style("stroke", "url('#temperature-gradient')")
-      .attr("d", line)
+      .attr("d", line);
+
+    addLineAnimation(pathos);
 
     // Check if key is available in source 
     if (data[0].tempmin != undefined) {
@@ -164,7 +176,7 @@ var temprain = function(el, data, width, height) {
           .datum(data)
           .attr("class", "line min")
           .attr("stroke-dasharray", "5,5")
-          .attr("d", line)
+          .attr("d", line);
     }
     // Check if key is available in source 
     if (data[0].tempmax != undefined) {
@@ -177,7 +189,7 @@ var temprain = function(el, data, width, height) {
           .datum(data)
           .attr("class", "line high")
           .attr("stroke-dasharray", "5,5")
-          .attr("d", line)
+          .attr("d", line);
     }
 
     /* Pressure section */
@@ -200,6 +212,7 @@ var temprain = function(el, data, width, height) {
       .attr("class", "line pressure")
       .attr("stroke-opacity", "0.5")
       .attr("d", line)
+    addLineAnimation(pathospressure);
 
 
     /* Rain bar section */
@@ -258,7 +271,7 @@ var temprain = function(el, data, width, height) {
           $("#tt").remove();
       })
       .transition().delay(function (d,i){ return 300;})
-      .duration(150)
+      .duration(2000)
       .attr("y", function(d) { return timey(d.dayrain); })
       .attr("height", function(d) { return height - timey(d.dayrain); })
       ;
