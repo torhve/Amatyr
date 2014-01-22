@@ -97,7 +97,7 @@ end
 function recent(match)
     return dbreq([[SELECT
     *,
-    SUM(rain) OVER (ORDER by datetime) AS dayrain
+    SUM(rain) OVER (PARTITION by datetime ORDER by datetime DESC) AS dayrain
     FROM ]]..conf.db.table..[[
     ORDER BY datetime DESC
     LIMIT 60]])
