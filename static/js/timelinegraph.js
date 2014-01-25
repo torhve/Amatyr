@@ -3,7 +3,7 @@
  * Ref http://bost.ocks.org/mike/chart/
  */
 function timeSeriesChart() {
-  var margin = {top: 20, right: 20, bottom: 20, left: 50},
+  var margin = {top: 20, right: 20, bottom: 20, left: 20},
       width = 760,
       height = 120,
       xValue = function(d) { return d[0]; },
@@ -83,6 +83,32 @@ function timeSeriesChart() {
            .attr("x2", width-margin.right-margin.left)
            .attr("y1", yScale)
            .attr("y2", yScale);
+
+      // Draw x grid lines
+      g.selectAll("g.x")
+          .data(xScale.ticks(10))
+            .enter().append("g")
+            .attr("class", "x axis")
+          .append("svg:line")
+            .attr("class", "yLine")
+            .attr("x1", xScale)
+            .attr("x2", xScale)
+            .attr("y1", 0)
+            .attr("y2", height)
+            .style('stroke', function(d, i) { 
+                if(d.getHours() == 0) {
+                    return '#ccc';
+                }
+                return '#ededed';
+            })
+            .attr("stroke-opacity", function(d, i) {
+                if(d.getHours() == 0) {
+                    return '1';
+                }
+                return '0';
+            })
+            .style("shape-rendering", "crispEdges")
+            ;
 
       // Update the x-axis.
       g.select(".x.axis")

@@ -60,11 +60,17 @@ path {
 .pressure, #pressuresparkline path  {
     stroke: #5c8843;
 }
-#graphtabs .outhumidity path.line, .humidity path.line  {
+#graphtabs .intemp path.line, #graphtabs .outtemp path.line, #graphtabs .dewpoint path.line,#graphtabs .heatindex path.line,#graphtabs .windchill path.line  {
+    stroke: #b5152b;
+}
+#graphtabs .outhumidity path.line, .inhumidity path.line  {
     stroke: #4d8fc8;
 }
-#graphtabs .wind path.line, .wind path.line, #winddir path.line  {
-    stroke: #b5152b;
+#graphtabs .windspeed path.line, .windgust path.line, #graphtabs .winddir path.line  {
+    stroke: #8c52e2;
+}
+#graphtabs .barometer path.line {
+    stroke: #5c8843;
 }
 
 #current_weather.row-fluid {
