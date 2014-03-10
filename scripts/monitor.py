@@ -50,7 +50,7 @@ if time_d.total_seconds() > 3600:
 
     # Alert.
     msg = MIMEText("Please help me.")
-    msg["From"] = "amatyr@%s" %BASEURL
+    msg["From"] = "amatyr@%s" %sys.argv[1]
     msg["To"] = sys.argv[2] 
     msg["Subject"] = "AmatYr stopped %s ago" %time_d 
     p = Popen(["/usr/sbin/sendmail", "-t"], stdin=PIPE)
