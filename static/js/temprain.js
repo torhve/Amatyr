@@ -10,7 +10,7 @@ var temprain = function(el, data, width, height) {
             .ease("linear")
             .attr("stroke-dashoffset", 0);
     }
-    var margin = {top: 20, right: 0, bottom: 20, left: 20},
+    var margin = {top: 20, right: 0, bottom: 20, left: 25},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
         interpolation = 'basis',

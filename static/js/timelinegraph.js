@@ -3,7 +3,7 @@
  * Ref http://bost.ocks.org/mike/chart/
  */
 function timeSeriesChart() {
-  var margin = {top: 20, right: 20, bottom: 20, left: 20},
+  var margin = {top: 20, right: 20, bottom: 20, left: 30},
       width = 760,
       height = 120,
       xValue = function(d) { return d[0]; },
