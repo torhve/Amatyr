@@ -340,5 +340,15 @@ var amatyrlib = function() {
             return el.textContent = value != null ? value : '';
         }
     }
+    this.addLineAnimation = function(path) {
+        var totalLength = path.node().getTotalLength();
+        path
+          .attr("stroke-dasharray", totalLength + " " + totalLength)
+          .attr("stroke-dashoffset", totalLength)
+          .transition()
+            .duration(2000)
+            .ease("linear")
+            .attr("stroke-dashoffset", 0);
+    }
     return this;
 }

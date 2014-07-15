@@ -1,15 +1,5 @@
 /* D3 function for drawing temperatures and rain bars in same svg */
 var temprain = function(el, data, width, height) { 
-    var addLineAnimation = function(path) {
-        var totalLength = path.node().getTotalLength();
-        path
-          .attr("stroke-dasharray", totalLength + " " + totalLength)
-          .attr("stroke-dashoffset", totalLength)
-          .transition()
-            .duration(2000)
-            .ease("linear")
-            .attr("stroke-dashoffset", 0);
-    }
     var margin = {top: 20, right: 0, bottom: 20, left: 25},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom,
@@ -163,7 +153,7 @@ var temprain = function(el, data, width, height) {
       .style("stroke", "url('#temperature-gradient')")
       .attr("d", line);
 
-    addLineAnimation(pathos);
+    amatyrlib.addLineAnimation(pathos);
 
     // Check if key is available in source 
     if (data[0].tempmin != undefined) {
@@ -212,7 +202,7 @@ var temprain = function(el, data, width, height) {
       .attr("class", "line pressure")
       .attr("stroke-opacity", "0.5")
       .attr("d", line)
-    addLineAnimation(pathospressure);
+    amatyrlib.addLineAnimation(pathospressure);
 
 
     /* Rain bar section */

@@ -24,6 +24,9 @@ var sparkline = function(id, data, key, width, height, interpolation, animate, t
         .interpolate(interpolation)
 
     this.graph.append("svg:path").attr("d", this.line(data));
+    if (animate) {
+        amatyrlib.addLineAnimation(this.graph.selectAll("path"));
+    }
 
     this.redrawWithAnimation = function() {
         // Get the element width to be used by SVG
