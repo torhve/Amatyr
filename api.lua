@@ -42,6 +42,10 @@ local function dbreq(sql)
     end
     --ngx.log(ngx.ERR, '___ SQL ___'..sql)
     local res, err = db:query(sql)
+    if not res then
+        ngx.log(ngx.ERR, 'Failed SQL query:' ..sql)
+        res = {error=err}
+    end
     db:set_keepalive(0,10)
     return cjson.encode(res)
 end
@@ -286,7 +290,7 @@ function year(match)
         MAX(datetime) < (NOW() - INTERVAL '24 hours') AS needsupdate
         FROM days
     ]])
-    if needsupdate == ngx.null or needsupdate[1] == nil then
+    if needsupdate == ngx.null or needsupdate[1] == nil or needsupdate.error ~= nil then
         needsupdate = true
     else
         if needsupdate[1]['needsupdate'] == 't' then
