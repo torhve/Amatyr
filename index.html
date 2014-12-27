@@ -9,7 +9,7 @@
 
     <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/fa/css/font-awesome.min.css" rel="stylesheet">
     <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
 
     <link href="/static/cal-heatmap/cal-heatmap.css" rel="stylesheet">
@@ -35,7 +35,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/"><i class="icon-cloud"></i> AmatYR</a>
+          <a class="brand" href="/"><i class="fa fa-cloud"></i> AmatYR</a>
           <div class="nav-collapse collapse">
             <ul id="main_nav" class="nav">
                 <li class=""><a href="/">3 day</a></li>
@@ -52,7 +52,7 @@
             </ul>
             <ul class="nav pull-right">
                 <li>
-                    <a class="" href="{{conf.station.url}}"><i class="icon-globe"></i> {{ conf.station.name }}</a>
+                    <a class="" href="{{conf.station.url}}"><i class="fa fa-globe"></i> {{ conf.station.name }}</a>
                 </li>
             </ul>
           </div>
@@ -68,7 +68,7 @@
                 <h6>From <span class="" data-text='first.datetime'></span> to <span class="" data-text='current.datetime'></span>
                 </h6>
                 -->
-                <div class="svgholder" id="temp"><i class="icon-spin icon-spinner"></i>Loading data...</div>
+                <div class="svgholder" id="temp"><i class="fa fa-spin fa fa-spinner"></i>Loading data...</div>
                 <h5>
                     Legend:
                     <span class="high">High</span>, <span class="avg">avg</span>, <span class="min">min</span> temperature. <span class="rain">Rain</span> in mm. <span class="pressure">Pressure</span>
@@ -131,7 +131,7 @@
         <div class="row-fluid">
             <div class="span12" id="cal-heatmap">
                 <h3>Rain calendar <small>Intensity by rain amount</small></h3>
-                <div class="spinner"><i class="icon-spinner icon-spin"></i> Loading calendar data... </div>
+                <div class="spinner"><i class="fa fa-spinner fa fa-spin"></i> Loading calendar data... </div>
             </div>
         </div>
     </div>
@@ -157,7 +157,7 @@
         <div class="row-fluid">
             <div class="span12" id="tabular"> 
                 <h3>Aggregated monthly data</a> <small></small> </h3>
-                <div class="spinner"><i class="icon-spinner icon-spin"></i> Loading calendar data... </div>
+                <div class="spinner"><i class="fa fa-spinner fa fa-spin"></i> Loading calendar data... </div>
                 <div class="panel-group" id="accordion"></div>
             </div>
         </div>
@@ -168,9 +168,9 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <footer class="footer">
-            <a class="brand" href="https://github.com/torhve/Amatyr"><i class="icon-cloud"></i> AmatYR</a>
+            <a class="brand" href="https://github.com/torhve/Amatyr"><i class="fa fa-cloud"></i> AmatYR</a>
             is a personal weather site. The source is free software written by 
-            <span class="muted">&copy; 2013</span> <a href="http://hveem.no/">Tor Hveem</a> 
+            <span class="muted">&copy; 2013-2015</span> <a href="http://hveem.no/">Tor Hveem</a> 
              <p class="pull-right">Find the source over at <a  href="https://github.com/torhve/Amatyr">GitHub</a>.</p>
             </footer>
         </div>
@@ -181,15 +181,15 @@
                 <th>
                    Date 
                 </th>
-                <th><i class="icon-time"></i></th>
+                <th><i class="fa fa-clock-o"></i></th>
                 <th data-text="d.datetime | date"></th>
             </tr>
             <tr class="avg"><td>Temperature </td><td><i class="icon-met icon-temp"></i></td><td data-text="d.outtemp | temp"></td></tr>
-                <tr class="rain"><td>Daily rain </td><td><i class="icon-tint"></i></td><td data-text="d.dayrain | rain"></td></tr>
+                <tr class="rain"><td>Daily rain </td><td><i class="fa fa-tint"></i></td><td data-text="d.dayrain | rain"></td></tr>
                 <tr class="wind"><td>Wind speed </td><td><i class="icon-met icon-wind"></i></td><td data-text="d.windspeed | wind"></td></tr>
                 <tr class="wind"><td>Wind direction </td><td><i class="icon-met icon-compass"></i></td><td data-text="d.winddir | degree"></td></tr>
-            <tr class="pressure"><td>Pressure</td><td><i class="icon-signal"></i></td><td data-text="d.barometer | pressure"></td></tr>
-                <tr class="hum"><td>Humidity</td><td><i class="icon-dashboard"></i></td><td data-text="d.outhumidity | percent"></td></tr>
+            <tr class="pressure"><td>Pressure</td><td><i class="fa fa-signal"></i></td><td data-text="d.barometer | pressure"></td></tr>
+                <tr class="hum"><td>Humidity</td><td><i class="fa fa-dashboard"></i></td><td data-text="d.outhumidity | percent"></td></tr>
         </table>
     </div>
 
@@ -204,63 +204,63 @@
             </tr>
             <tr>
                 <td>Highest temperature</td>
-                <td data-text='current.maxouttempvalue | temp'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxouttempdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxouttempage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxouttempvalue | temp'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxouttempdate'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxouttempage'><i class="fa fa-spinner fa fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Lowest temperature</td>
-                <td data-text='current.minouttempvalue | temp'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.minouttempdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.minouttempage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.minouttempvalue | temp'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.minouttempdate'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.minouttempage'><i class="fa fa-spinner fa fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Lowest wind chill</td>
-                <td data-text='current.minwindchillvalue | temp'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.minwindchilldate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.minwindchillage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.minwindchillvalue | temp'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.minwindchilldate'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.minwindchillage'><i class="fa fa-spinner fa fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest heat index</td>
-                <td data-text='current.maxheatindexvalue | temp'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxheatindexdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxheatindexage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxheatindexvalue | temp'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxheatindexdate'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxheatindexage'><i class="fa fa-spinner fa fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest avg wind speed</td>
-                <td data-text='current.maxwindspeedvalue | wind'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxwindspeeddate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxwindspeedage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxwindspeedvalue | wind'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxwindspeeddate'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxwindspeedage'><i class="fa fa-spinner fa fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest wind gust speed</td>
-                <td data-text='current.maxwindgustvalue | wind'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxwindgustdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxwindgustage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxwindgustvalue | wind'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxwindgustdate'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.maxwindgustage'><i class="fa fa-spinner fa fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Amount of rain in period</td>
-                <td data-text='current.sumrainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.sumraindate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.sumrainage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.sumrainvalue | rain'><i class="fa fa-spinner fa fa-spin"></i></td>
+                <td data-text='current.sumraindate'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.sumrainage'><i class="fa fa-spinner fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest daily rain</td>
-                <td data-text='current.maxdayrainvalue | rain'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxdayraindate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxdayrainage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxdayrainvalue | rain'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.maxdayraindate'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.maxdayrainage'><i class="fa fa-spinner fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Highest pressure</td>
-                <td data-text='current.maxbarometervalue | pressure'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxbarometerdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.maxbarometerage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.maxbarometervalue | pressure'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.maxbarometerdate'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.maxbarometerage'><i class="fa fa-spinner fa-spin"></i></td>
             </tr>
             <tr>
                 <td>Lowest pressure</td>
-                <td data-text='current.minbarometervalue | pressure'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.minbarometerdate'><i class="icon-spinner icon-spin"></i></td>
-                <td data-text='current.minbarometerage'><i class="icon-spinner icon-spin"></i></td>
+                <td data-text='current.minbarometervalue | pressure'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.minbarometerdate'><i class="fa fa-spinner fa-spin"></i></td>
+                <td data-text='current.minbarometerage'><i class="fa fa-spinner fa-spin"></i></td>
             </tr>
         </table>
     </script>
@@ -282,7 +282,7 @@
 
         </svg>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="/static/js/path.min.js"></script>
     <script src="/static/js/watch.js"></script>
     <script src="/static/js/rivets.min.js"></script>

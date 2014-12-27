@@ -158,6 +158,17 @@ svg text.score {
     stroke: #d4d4d4;
 }
 
+.axis.hours text {
+  fill: #ccc;
+  font-size:2rem;
+  opacity: 0.8;
+  font-family: "FontAwesome";
+}
+.axis.hours path {
+  fill: none;
+  stroke: none;
+}
+
 .bar {
     fill: steelblue;
     /*
@@ -322,6 +333,7 @@ svg g.tickmarks>text { font-size: 10px; fill: #888;}
 
 /* Meteo icons */
 .icon-met {
+    font-style: normal;
     font-family: 'MeteoconsRegular'
 }
 .icon-compass:before {
@@ -374,3 +386,5 @@ svg g.tickmarks>text { font-size: 10px; fill: #888;}
 	fill: #ededed;
 	stroke: #ededed;
 }
+
+

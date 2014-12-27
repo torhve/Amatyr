@@ -284,7 +284,7 @@ var amatyrlib = function() {
             return rivets.formatters.pressure(value);
         if (name == 'winddir') {
             var degree = Number((value).toFixed(0))
-            return '<i title="'+degree+' °" class="icon-arrow-up" style="'+rivets.formatters.rotate(degree)+'"></i>';
+            return '<i title="'+degree+' °" class="fa fa-arrow-up" style="'+rivets.formatters.rotate(degree)+'"></i>';
         }
 
         return value;

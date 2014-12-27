@@ -131,15 +131,41 @@ var temprain = function(el, data, width, height) {
     // Y Axis legend
     svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis);
+      .call(yAxis)
       /*
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text(yaxisleg);
+      .text('asdf');
       */
+    var hours = svg.selectAll("text.x")
+        .data(x.ticks(10))
+        .enter().append("g")
+        .attr("class", "x hours")
+      .append("text")
+        .attr("class", "hours")
+        .attr("x", function(d) {return x(d)})
+        .attr("y", 10)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .text(function(d) {
+            var hours = d.getHours();
+            if (hours === 6) {
+                return '☀';
+                return '\uf185';
+                return '';
+            }
+            else if (hours === 18) {
+                return '☽';
+                return '🌙';
+                return '\uf118';
+                return '';
+            }
+        });
+        //.attr('font-family', 'FontAwesome')
+
 
     // Temp line
     var line = d3.svg.line()

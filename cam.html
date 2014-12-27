@@ -2,25 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <head>
-        <title>{{ conf.station.name}} - Cam </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="Tor Hveem">
+    <title>{{ conf.station.name}} - Cam </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Tor Hveem">
 
-        <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-        <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
-        <link rel="shortcut icon" href="/static/favicon.png">
-        <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
-        <link href="/static/screen.css" rel="stylesheet">
+    <link href="/static/fa/css/font-awesome.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/static/favicon.png">
+    <link href="/static/meteocons-font/FONT/Font-face/stylesheet.css" rel="stylesheet">
+    <link href="/static/screen.css" rel="stylesheet">
 
-        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-        <style type="text/css">
+    <style type="text/css">
+            html, body, .cam {
+              height: 100%;
+            }
             .cam * {
               -webkit-transform: translate3d(0,0,0);
               transform: translate3d(0,0,0);
@@ -29,15 +29,19 @@
                 margin: 0;
                 padding: 0;
                 width: 100%;
-                position: relative;
-                left: 0;
-                top: 0;
+                height: 100%;
+                min-height: 100%;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: 50% 50%;
             }
             .cam img {
                 border: 1px solid #000;
                 position: relative;
                 top: 0;
                 left: 0;
+                width: auto;
+                height: 100%;
             }
             .cam .sidebar {
                 position: absolute;
@@ -47,19 +51,14 @@
                 height: 100%;
             }
             body {
-                /*background: #111;*/
                 background: #c9c9c9;
                 background: #222426;
-                font-family: Verdana;
-                font-weight: 50;
+                background: #111;
                 margin: 0;
                 padding: 0;
                 text-align: center;
                 text-shadow: 1px 1px black;
-            }
-            .navbar-inner {
-                background: inherit;
-                border: 0;
+                font-size: 100%;
             }
             #current_weather .span1 {
                 border: 0;
@@ -73,21 +72,24 @@
             body, .sparkline path, h5, .high, .avg, .min, .wind, .temp, .pressure, .hum, .rain, #pressuresparkline path, #windsparkline path, #sparkline path {
                 color: #ededed;
                 stroke: rgba(255, 255, 255, 1);
-                font-size:2vw;
+                font-size:1.5vw;
                 line-height: 1;
+                font-weight: 800;
             }
             .unit {
-              color: 666;
+              /* color: 666; */
+              background: rgba(0,0,0,0.5);
             }
             #current_weather i {
                 font-size: 3vw;
-                line-height: 1;
+            }
+            .widget h5 {
+              margin: 10px;
+              /*background: rgba(0,0,0,0.2);*/
             }
             .widget {
                 text-align: center;
                 width: 8vw;
-                background: rgba(0,0,0,0.2);
-                padding: 0.1vw;
             }
             .blue {
               color: #4d8fc8;
@@ -105,31 +107,34 @@
               color: #5c8843;
             }
 
-        </style>
+      </style>
     </head>
     <body>
         <div class="cam" id="current_weather">
-            <img src="{{conf.webcam.url}}?nocache=1">
+          <!--<img src="{{conf.webcam.url}}?nocache=1">-->
+          <script>
+var src="{{conf.webcam.url}}";
+          </script>
             <div class="sidebar">
               <div title="Time of latest weather data from weather station" class="widget blue">
-                  <h5><i class="blue icon-time"></i></h5>
-                  <h5 data-texttransition="current.datetime | date"></h5>
+                  <h5><i class="blue fa fa-clock-o"></i></h5>
+                  <h5 class="unit" data-texttransition="current.datetime | date"></h5>
               </div>
               <div title="Temperature" class="widget">
                   <h5><i class="red avg icon-met icon-temp"></i></h5>
-                  <h5 title="Temperature" class="avg" data-texttransition="current.outtemp | temp"></h5>
+                  <h5 class="unit avg" title="Temperature" data-texttransition="current.outtemp | temp"></h5>
               </div>
               <div title="Rain" class="widget">
-                  <h5><i class="blue icon-tint"></i> </h5>
-                  <h5 class="rain" title="Daily rain" data-texttransition="current.dayrain | rain"></h5>
+                  <h5><i class="blue fa fa-tint"></i> </h5>
+                  <h5 class="unit rain" title="Daily rain" data-texttransition="current.dayrain | rain"></h5>
               </div>
               <div title="Wind speed" class="widget">
                   <h5><i class="purple icon-met icon-wind"></i></h5>
-                  <h5 class="avg" title="Average wind speeds" data-texttransition="current.windspeed | wind"></h5>
+                  <h5 class="avg unit" title="Average wind speeds" data-texttransition="current.windspeed | wind"></h5>
               </div>
               <div title="Wind direction" class="widget">
-                  <h5><i class="purple icon-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
-                  <h5 class="high" title="Wind direction" data-texttransition="current.winddir | degree">
+                  <h5><i class="purple fa fa-arrow-up" title="Wind direction" data-style="current.winddir | rotate"></i></h5>
+                  <h5 class="high unit" title="Wind direction" data-texttransition="current.winddir | degree">
                   </h5>
               </div>
             <div>
@@ -152,16 +157,22 @@ function updateDate() {
 };
 //updateDate();
 
-setInterval(function () {
-  var imgElem = document.querySelectorAll("img")[0];
+var imgSwap = function () {
   var newImg = new Image();
-  newImg.src = imgElem.src.split("?")[0] + "?" + new Date().getTime();
+  var url = src + "?" + new Date().getTime();
+  newImg.src = url;
+    var el = document.querySelector('.cam');
+    console.log(url);
+    el.style['background-image'] = 'url("'+url+'")';
   newImg.addEventListener("load", function (evt) {
-    imgElem.src = newImg.src;
+    var el = document.querySelector('.cam');
+    el.style['background-image'] = 'url("'+newImg.src+'")';
     //console.log(newImg.fileModifiedDate);
     //updateDate();
   });
-}, 30000);
+};
+imgSwap();
+setInterval(imgSwap, 30000);
 </script>
 <script>
 var amatyr = {
