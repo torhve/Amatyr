@@ -79,9 +79,8 @@ var draw = function(source) {
     // Add d3 js date for each datum
     source.forEach(function(d) {
         d.date = parseDate(d.datetime);
-        // also fix wind speed to be in m/s
-        d.windspeed = d.windspeed/3.6;
-        d.windgust = d.windgust/3.6;
+        d.windspeed = d.windspeed;
+        d.windgust = d.windgust;
     });
     var width = $('#main').css('width').split('px')[0];
     var height = width/4;
@@ -213,7 +212,7 @@ var amatyrlib = function() {
     }
     rivets.formatters.wind = function(value) {
         if (value)
-            return Number(value/3.6).toFixed(1) + ' m/s';
+            return Number(value).toFixed(1) + ' m/s';
         return '0 m/s'
     }
     rivets.formatters.degree = function(value) {
